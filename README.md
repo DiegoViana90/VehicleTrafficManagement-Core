@@ -15,7 +15,7 @@ It includes a backend built with .NET 6 and a frontend built with TypeScript and
 - Fuel Management: Record fuel logs and generate reports for vehicles.
 
 # Table of Contents
-- Installation
+- [Installation](Readme.md)
 
 - Backend Setup
 
