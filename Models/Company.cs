@@ -12,9 +12,7 @@ namespace VehicleTrafficManagement.Models
         public string TradeName { get; set; }
         public string CNPJ { get; set; }
         public string Observations { get; set; }
-        public bool IsOpen { get; set; }
+        public bool IsOpen { get; set; } 
 
-        public ICollection<Vehicle> Vehicles { get; set; }
-        public ICollection<Contract> Contracts { get; set; }
     }
 }
