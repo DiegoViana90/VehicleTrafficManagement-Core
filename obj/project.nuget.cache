@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KdbNTx1w6hpcDkQDoM9aLCGZB14KTy4hUpfz0M/UeOOMPNnAjKYwMIX2wz8QjnVZ1hRtSbxhjc9jcTcdsZfgcw==",
+  "dgSpecHash": "dBvEv7lc3VXN9tIO+lCL6Umlu5iYG4Lsd88rgvmLzSFkOf8gMbeZ3oDNRhuiyn6/+1dSXDtqA3DkgSs1Kt58bg==",
   "success": true,
   "projectFilePath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj",
   "expectedPackageFiles": [
@@ -26,16 +26,28 @@
     "C:\\Users\\suporteti\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
-    "C:\\Users\\suporteti\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\suporteti\\.nuget\\packages\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\npgsql\\6.0.0\\npgsql.6.0.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\6.0.0\\npgsql.entityframeworkcore.postgresql.6.0.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
-    "C:\\Users\\suporteti\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
-    "C:\\Users\\suporteti\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "C:\\Users\\suporteti\\.nuget\\packages\\swashbuckle.aspnetcore.annotations\\6.6.1\\swashbuckle.aspnetcore.annotations.6.6.1.nupkg.sha512",
+    "C:\\Users\\suporteti\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.1\\swashbuckle.aspnetcore.swagger.6.6.1.nupkg.sha512",
+    "C:\\Users\\suporteti\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.1\\swashbuckle.aspnetcore.swaggergen.6.6.1.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\system.collections.immutable\\6.0.0\\system.collections.immutable.6.0.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.0\\system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "VehicleTrafficManagement depende de Swashbuckle.AspNetCore.Annotations (>= 6.5.1), mas Swashbuckle.AspNetCore.Annotations 6.5.1 não foi encontrado. A melhor correspondência aproximada de Swashbuckle.AspNetCore.Annotations 6.6.1 foi resolvida.",
+      "libraryId": "Swashbuckle.AspNetCore.Annotations",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

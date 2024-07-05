@@ -6,7 +6,6 @@ namespace VehicleTrafficManagement.Dto
         public string Name { get; set; }
         public string TradeName { get; set; }
         public string CNPJ { get; set; }
-        public string Observations { get; set; }
-        public bool IsOpen { get; set; }
+        public CompanyInformationDto CompanyInformation { get; set; }
     }
 }

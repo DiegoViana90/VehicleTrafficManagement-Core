@@ -15,6 +15,7 @@ C:\Users\suporteti\Documents\desenvolvimento\VehicleTrafficManagement-Core\bin\D
 C:\Users\suporteti\Documents\desenvolvimento\VehicleTrafficManagement-Core\bin\Debug\net6.0\Microsoft.OpenApi.dll
 C:\Users\suporteti\Documents\desenvolvimento\VehicleTrafficManagement-Core\bin\Debug\net6.0\Npgsql.dll
 C:\Users\suporteti\Documents\desenvolvimento\VehicleTrafficManagement-Core\bin\Debug\net6.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Users\suporteti\Documents\desenvolvimento\VehicleTrafficManagement-Core\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll
 C:\Users\suporteti\Documents\desenvolvimento\VehicleTrafficManagement-Core\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\suporteti\Documents\desenvolvimento\VehicleTrafficManagement-Core\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\suporteti\Documents\desenvolvimento\VehicleTrafficManagement-Core\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll

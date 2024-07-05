@@ -1,59 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using VehicleTrafficManagement.Data;
-using VehicleTrafficManagement.Models;
-using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
-
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen(c =>
+namespace VehicleTrafficManagement
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VehicleTrafficManagement", Version = "v1" });
-});
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VehicleTrafficManagement v1"));
-
-
-    var url = "https://localhost:7053/swagger/index.html"; 
-    var process = new Process
+    public class Program
     {
-        StartInfo = new ProcessStartInfo
+        public static void Main(string[] args)
         {
-            FileName = url,
-            UseShellExecute = true
+            CreateHostBuilder(args).Build().Run();
         }
-    };
-    process.Start();
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
-
-app.Run();
