@@ -20,7 +20,7 @@ namespace VehicleTrafficManagement.Controllers
 
         [HttpGet("GetAllCompanies")]
         [SwaggerOperation(Summary = "Busca todas as empresas",
-                           Description = "Recupera uma lista de todas as empresas.")]
+        Description = "Recupera uma lista de todas as empresas.")]
         [SwaggerResponse(200, "Success", typeof(IEnumerable<CompanyDto>))]
         public async Task<IEnumerable<CompanyDto>> GetAllCompanies()
         {
@@ -29,7 +29,7 @@ namespace VehicleTrafficManagement.Controllers
 
         [HttpGet("GetCompanyById/{id}")]
         [SwaggerOperation(Summary = "Busca empresa por ID",
-                           Description = "Recupera uma empresa específica pelo ID.")]
+        Description = "Recupera uma empresa específica pelo ID.")]
         [SwaggerResponse(200, "Success", typeof(CompanyDto))]
         [SwaggerResponse(404, "Company not found")]
         public async Task<IActionResult> GetCompanyByID(int id)
@@ -53,10 +53,21 @@ namespace VehicleTrafficManagement.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var companyId = await _companyService.AddCompany(companyDto);
+            var message = "Empresa inserida na base com sucesso!";
+            var responseDto = new
+            {
+                message,
+                TradeName = companyDto.TradeName,
+                CNPJ = companyDto.CNPJ
+            };
 
-            return CreatedAtAction(nameof(GetAllCompanies), new { id = companyId }, companyDto);
+            return CompanyCreatedResponse(companyId, responseDto);
+        }
+
+        private IActionResult CompanyCreatedResponse(int companyId, object data)
+        {
+            return CreatedAtAction(nameof(GetCompanyByID), new { id = companyId }, new { data });
         }
 
         [HttpPut("UpdateCompany/{id}")]
@@ -73,7 +84,7 @@ namespace VehicleTrafficManagement.Controllers
 
         [HttpDelete("DeleteCompany/{id}")]
         [SwaggerOperation(Summary = "Deleta empresa por ID",
-                           Description = "Deleta uma empresa pelo ID.")]
+        Description = "Deleta uma empresa pelo ID.")]
         [SwaggerResponse(200, "Empresa deletada com sucesso")]
         [SwaggerResponse(404, "Empresa não encontrada")]
         public async Task<IActionResult> DeleteCompanyByID(int id)
