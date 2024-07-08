@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
@@ -18,13 +19,18 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpGet("GetAllCompanies")]
+        [SwaggerOperation(Summary = "Busca todas as empresas.", Description = "Recupera uma lista de todas as empresas.")]
+        [SwaggerResponse(200, "Success", typeof(IEnumerable<CompanyDTOResult>))]
         public async Task<ActionResult<IEnumerable<CompanyDTOResult>>> GetAllCompanies()
         {
             var companies = await _companyService.GetAllCompanies();
             return Ok(companies);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetCompanyById")]
+        [SwaggerOperation(Summary = "Busca empresa por ID.", Description = "Recupera uma empresa específica pelo ID.")]
+        [SwaggerResponse(200, "Success", typeof(CompanyDto))]
+        [SwaggerResponse(404, "Company not found")]
         public async Task<ActionResult<CompanyDto>> GetCompanyById(int id)
         {
             var company = await _companyService.GetCompanyById(id);
@@ -36,7 +42,25 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(company);
         }
 
-        [HttpGet("GetCompanyByCnpj/")]
+        [HttpGet("GetCompanyByName")]
+        [SwaggerOperation(Summary = "Busca empresa por nome.", Description = "Recupera uma empresa específica pelo nome.")]
+        [SwaggerResponse(200, "Success", typeof(CompanyDto))]
+        [SwaggerResponse(404, "Company not found")]
+        public async Task<ActionResult<CompanyDto>> GetCompanyByName(string name)
+        {
+            var company = await _companyService.GetCompanyByName(name);
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(company);
+        }
+
+        [HttpGet("GetCompanyByCnpj")]
+        [SwaggerOperation(Summary = "Busca empresa por CNPJ.", Description = "Recupera uma empresa específica pelo CNPJ.")]
+        [SwaggerResponse(200, "Success", typeof(CompanyDTOResult))]
+        [SwaggerResponse(404, "Company not found")]
         public async Task<ActionResult<CompanyDTOResult>> GetCompanyByCnpj(string CNPJ)
         {
             var company = await _companyService.GetCompanyByCnpjAsync(CNPJ);
@@ -49,6 +73,9 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpPost("AddCompany")]
+        [SwaggerOperation(Summary = "Adiciona uma nova empresa.", Description = "Adiciona uma nova empresa ao sistema.")]
+        [SwaggerResponse(200, "Company created successfully.")]
+        [SwaggerResponse(400, "Invalid request.")]
         public async Task<ActionResult<int>> AddCompany(InsertCompanyRequestDto companyDto)
         {
             var companyId = await _companyService.AddCompany(companyDto);
@@ -56,6 +83,10 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Atualiza uma empresa por Id.", Description = "Atualiza uma empresa existente no sistema.")]
+        [SwaggerResponse(200, "Company updated successfully")]
+        [SwaggerResponse(404, "Company not found")]
+        [SwaggerResponse(400, "Invalid request")]
         public async Task<ActionResult> UpdateCompany(int id, CompanyDto companyDto)
         {
             try
@@ -70,6 +101,9 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Deleta uma empresa.", Description = "Deleta uma empresa pelo Id.")]
+        [SwaggerResponse(200, "Company deleted successfully")]
+        [SwaggerResponse(404, "Company not found")]
         public async Task<ActionResult> DeleteCompany(int id)
         {
             try
