@@ -1,11 +1,11 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace VehicleTrafficManagement.Models
 {
     public class Company
     {
-        public int Id { get; set; }
+        [Key]
+        public int CompaniesId { get; set; }
 
         [Required]
         public string Name { get; set; }

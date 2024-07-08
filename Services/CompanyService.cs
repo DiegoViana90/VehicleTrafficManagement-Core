@@ -3,68 +3,90 @@ using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
+using Microsoft.EntityFrameworkCore;
+using VehicleTrafficManagement.Data;
+using VehicleTrafficManagement.Repositories;
 
 namespace VehicleTrafficManagement.Services
 {
     public class CompanyService : ICompanyService
     {
+        private readonly ApplicationDbContext _context;
         private readonly ICompanyRepository _companyRepository;
 
-        public CompanyService(ICompanyRepository companyRepository)
+        public CompanyService(ApplicationDbContext context, ICompanyRepository companyRepository)
         {
+            _context = context;
             _companyRepository = companyRepository;
         }
 
-        public Task<IEnumerable<CompanyDto>> GetAllCompanies()
+        public async Task<IEnumerable<CompanyDTOResult>> GetAllCompanies()
         {
-            // Implementar lógica para obter todas as empresas do repositório
-            throw new System.NotImplementedException();
+            var companies = await _companyRepository.GetAllCompanies();
+
+            return companies;
         }
 
-        public Task<CompanyDto> GetCompanyById(int id)
+        public async Task<CompanyDto> GetCompanyById(int id)
         {
-            // Implementar lógica para obter uma empresa pelo ID do repositório
-            throw new System.NotImplementedException();
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                return null;
+            }
+
+            return new CompanyDto
+            {
+                Id = company.CompaniesId,
+                TradeName = company.TradeName,
+                CNPJ = company.CNPJ,
+            };
+        }
+
+        public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
+        {
+            return await _companyRepository.GetCompanyByCnpjAsync(CNPJ);
         }
 
         public async Task<int> AddCompany(InsertCompanyRequestDto companyDto)
         {
             var company = new Company
             {
-                Name = companyDto.Name,
                 TradeName = companyDto.TradeName,
                 CNPJ = companyDto.CNPJ,
-                CompanyInformation = new CompanyInformation
-                {
-                    CEP = companyDto.CEP,
-                    Street = companyDto.Street,
-                    PropertyNumber = companyDto.PropertyNumber,
-                    District = companyDto.District,
-                    City = companyDto.City,
-                    State = companyDto.State,
-                    Country = companyDto.Country,
-                    AdressComplement = companyDto.AdressComplement,
-                    PhoneNumber = companyDto.PhoneNumber,
-                    Email = companyDto.Email,
-                    Observations = companyDto.Observations,
-                    CompanyStatus = companyDto.CompanyStatus
-                },
             };
 
-            await _companyRepository.AddCompany(company);
-            return company.Id;
+            _context.Companies.Add(company);
+            await _context.SaveChangesAsync();
+
+            return company.CompaniesId;
         }
 
-        public Task UpdateCompany(int id, CompanyDto companyDto)
+        public async Task UpdateCompany(int id, CompanyDto companyDto)
         {
-            // Implementar lógica para atualizar uma empresa no repositório
-            throw new System.NotImplementedException();
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                throw new KeyNotFoundException("Empresa não encontrada.");
+            }
+
+            company.TradeName = companyDto.TradeName;
+            company.CNPJ = companyDto.CNPJ;
+
+            _context.Companies.Update(company);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteCompany(int id)
+        public async Task DeleteCompany(int id)
         {
-            // Implementar lógica para excluir uma empresa do repositório
-            throw new System.NotImplementedException();
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                throw new KeyNotFoundException("Empresa não encontrada.");
+            }
+
+            _context.Companies.Remove(company);
+            await _context.SaveChangesAsync();
         }
     }
 }

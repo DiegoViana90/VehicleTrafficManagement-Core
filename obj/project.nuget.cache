@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "dBvEv7lc3VXN9tIO+lCL6Umlu5iYG4Lsd88rgvmLzSFkOf8gMbeZ3oDNRhuiyn6/+1dSXDtqA3DkgSs1Kt58bg==",
+  "dgSpecHash": "NtLBkn62awh1qUIBiePjVnxh/hDoBEZxrZionq15HkzdGuTQD4enBr1wkgxapp7OxKQQ5tx4Xd1AIcliOap+Ng==",
   "success": true,
-  "projectFilePath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj",
+  "projectFilePath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\suporteti\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.0\\microsoft.aspnetcore.cryptography.internal.6.0.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\6.0.0\\microsoft.aspnetcore.cryptography.keyderivation.6.0.0.nupkg.sha512",
@@ -38,16 +39,5 @@
     "C:\\Users\\suporteti\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.0\\system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512",
     "C:\\Users\\suporteti\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "VehicleTrafficManagement depende de Swashbuckle.AspNetCore.Annotations (>= 6.5.1), mas Swashbuckle.AspNetCore.Annotations 6.5.1 não foi encontrado. A melhor correspondência aproximada de Swashbuckle.AspNetCore.Annotations 6.6.1 foi resolvida.",
-      "libraryId": "Swashbuckle.AspNetCore.Annotations",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  "logs": []
 }

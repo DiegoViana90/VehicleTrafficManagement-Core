@@ -1,54 +1,34 @@
-
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using VehicleTrafficManagement.Dto;
+using Dapper;
 using VehicleTrafficManagement.Data;
-using VehicleTrafficManagement.Interfaces;
-using VehicleTrafficManagement.Models;
 
 namespace VehicleTrafficManagement.Repositories
 {
     public class CompanyRepository : ICompanyRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DapperContext _dapperContext;
 
-        public CompanyRepository(ApplicationDbContext context)
+        public CompanyRepository(DapperContext dapperContext)
         {
-            _context = context;
+            _dapperContext = dapperContext;
         }
 
-        public async Task<IEnumerable<Company>> GetAllCompanies()
+        public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
         {
-            return await _context.Companies
-                .Include(c => c.CompanyInformation)
-                .ToListAsync();
+            var parameters = new Dictionary<string, dynamic> { { "paramCNPJ", CNPJ } };
+            var company = _dapperContext.ExecuteWithSingleResult<CompanyDTOResult>("public.getcompanybycnpj", parameters);
+
+            return company;
         }
 
-        public async Task<Company> GetCompanyById(int id)
+        public async Task<IEnumerable<CompanyDTOResult>> GetAllCompanies()
         {
-            return await _context.Companies
-                .Include(c => c.CompanyInformation)
-                .FirstOrDefaultAsync(c => c.Id == id);
+            var companies = _dapperContext.ExecuteWithMultipleResults<CompanyDTOResult>("public.GetAllCompanies",
+             new Dictionary<string, dynamic>());
+            return companies;
         }
 
-        public async Task AddCompany(Company company)
-        {
-            await _context.Companies.AddAsync(company);
-            await _context.SaveChangesAsync();
-        }
 
-        public async Task UpdateCompany(Company company)
-        {
-            _context.Companies.Update(company);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteCompany(int id)
-        {
-            var company = await _context.Companies.FindAsync(id);
-            if (company != null)
-            {
-                _context.Companies.Remove(company);
-                await _context.SaveChangesAsync();
-            }
-        }
     }
 }

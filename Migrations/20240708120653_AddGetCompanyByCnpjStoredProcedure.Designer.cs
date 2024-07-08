@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VehicleTrafficManagement.Data;
@@ -11,9 +12,10 @@ using VehicleTrafficManagement.Data;
 namespace VehicleTrafficManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240708120653_AddGetCompanyByCnpjStoredProcedure")]
+    partial class AddGetCompanyByCnpjStoredProcedure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +26,11 @@ namespace VehicleTrafficManagement.Migrations
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.Company", b =>
                 {
-                    b.Property<int>("CompaniesId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CompaniesId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CNPJ")
                         .IsRequired()
@@ -45,7 +47,7 @@ namespace VehicleTrafficManagement.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("CompaniesId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CompanyInformationId");
 
@@ -54,11 +56,11 @@ namespace VehicleTrafficManagement.Migrations
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.CompanyInformation", b =>
                 {
-                    b.Property<int>("CompanyInformationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CompanyInformationId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdressComplement")
                         .IsRequired()
@@ -107,7 +109,7 @@ namespace VehicleTrafficManagement.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("CompanyInformationId");
+                    b.HasKey("Id");
 
                     b.ToTable("CompanyInformation");
                 });

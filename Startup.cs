@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Services;
 using VehicleTrafficManagement.Repositories;
@@ -28,10 +27,12 @@ namespace VehicleTrafficManagement
         {
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
-            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<ICompanyService, CompanyService>(); 
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<DapperContext>();
 
             services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -52,18 +53,11 @@ namespace VehicleTrafficManagement
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VehicleTrafficManagement v1"));
-
-                var url = "https://localhost:7053/swagger/index.html";
-                var process = new Process
+                app.UseSwaggerUI(c => 
                 {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = url,
-                        UseShellExecute = true
-                    }
-                };
-                process.Start();
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "VehicleTrafficManagement v1");
+                    c.RoutePrefix = string.Empty;  // Faz o Swagger UI ser exibido na raiz da aplicação
+                });
             }
             else
             {

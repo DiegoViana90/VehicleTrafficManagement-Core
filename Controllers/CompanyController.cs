@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
@@ -7,8 +6,8 @@ using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -19,78 +18,69 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpGet("GetAllCompanies")]
-        [SwaggerOperation(Summary = "Busca todas as empresas",
-        Description = "Recupera uma lista de todas as empresas.")]
-        [SwaggerResponse(200, "Success", typeof(IEnumerable<CompanyDto>))]
-        public async Task<IEnumerable<CompanyDto>> GetAllCompanies()
+        public async Task<ActionResult<IEnumerable<CompanyDTOResult>>> GetAllCompanies()
         {
-            return await _companyService.GetAllCompanies();
+            var companies = await _companyService.GetAllCompanies();
+            return Ok(companies);
         }
 
-        [HttpGet("GetCompanyById/{id}")]
-        [SwaggerOperation(Summary = "Busca empresa por ID",
-        Description = "Recupera uma empresa específica pelo ID.")]
-        [SwaggerResponse(200, "Success", typeof(CompanyDto))]
-        [SwaggerResponse(404, "Company not found")]
-        public async Task<IActionResult> GetCompanyByID(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CompanyDto>> GetCompanyById(int id)
         {
             var company = await _companyService.GetCompanyById(id);
             if (company == null)
             {
                 return NotFound();
             }
+
+            return Ok(company);
+        }
+
+        [HttpGet("GetCompanyByCnpj/")]
+        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByCnpj(string CNPJ)
+        {
+            var company = await _companyService.GetCompanyByCnpjAsync(CNPJ);
+            if (company == null)
+            {
+                return NotFound();
+            }
+
             return Ok(company);
         }
 
         [HttpPost("AddCompany")]
-        [SwaggerOperation(Summary = "Adiciona uma nova empresa",
-        Description = "Adiciona uma nova empresa ao sistema.")]
-        [SwaggerResponse(201, "Empresa criada com sucesso.")]
-        [SwaggerResponse(400, "Requisição inválida.")]
-        public async Task<IActionResult> AddCompany([FromBody] InsertCompanyRequestDto companyDto)
+        public async Task<ActionResult<int>> AddCompany(InsertCompanyRequestDto companyDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var companyId = await _companyService.AddCompany(companyDto);
-            var message = "Empresa inserida na base com sucesso!";
-            var responseDto = new
+            return Ok(companyId);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateCompany(int id, CompanyDto companyDto)
+        {
+            try
             {
-                message,
-                TradeName = companyDto.TradeName,
-                CNPJ = companyDto.CNPJ
-            };
-
-            return CompanyCreatedResponse(companyId, responseDto);
+                await _companyService.UpdateCompany(id, companyDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
-        private IActionResult CompanyCreatedResponse(int companyId, object data)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCompany(int id)
         {
-            return CreatedAtAction(nameof(GetCompanyByID), new { id = companyId }, new { data });
-        }
-
-        [HttpPut("UpdateCompany/{id}")]
-        [SwaggerOperation(Summary = "Atualiza empresa por ID",
-        Description = "Atualiza uma empresa existente no sistema.")]
-        [SwaggerResponse(200, "Empresa atualizada com sucesso")]
-        [SwaggerResponse(404, "Empresa não encontrada")]
-        [SwaggerResponse(400, "Requisição inválida")]
-        public async Task<IActionResult> UpdateCompanyByID(int id, [FromBody] CompanyDto companyDto)
-        {
-            await _companyService.UpdateCompany(id, companyDto);
-            return Ok();
-        }
-
-        [HttpDelete("DeleteCompany/{id}")]
-        [SwaggerOperation(Summary = "Deleta empresa por ID",
-        Description = "Deleta uma empresa pelo ID.")]
-        [SwaggerResponse(200, "Empresa deletada com sucesso")]
-        [SwaggerResponse(404, "Empresa não encontrada")]
-        public async Task<IActionResult> DeleteCompanyByID(int id)
-        {
-            await _companyService.DeleteCompany(id);
-            return Ok();
+            try
+            {
+                await _companyService.DeleteCompany(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }

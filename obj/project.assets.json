@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "Dapper/2.1.35": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Dapper.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Dapper.dll": {}
+        }
+      },
       "Humanizer.Core/2.8.26": {
         "type": "package",
         "compile": {
@@ -429,6 +438,27 @@
     }
   },
   "libraries": {
+    "Dapper/2.1.35": {
+      "sha512": "YKRwjVfrG7GYOovlGyQoMvr1/IJdn+7QzNXJxyMh0YfFF5yvDmTYaJOVYWsckreNjGsGSEtrMTpnzxTUq/tZQw==",
+      "type": "package",
+      "path": "dapper/2.1.35",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Dapper.png",
+        "dapper.2.1.35.nupkg.sha512",
+        "dapper.nuspec",
+        "lib/net461/Dapper.dll",
+        "lib/net461/Dapper.xml",
+        "lib/net5.0/Dapper.dll",
+        "lib/net5.0/Dapper.xml",
+        "lib/net7.0/Dapper.dll",
+        "lib/net7.0/Dapper.xml",
+        "lib/netstandard2.0/Dapper.dll",
+        "lib/netstandard2.0/Dapper.xml",
+        "readme.md"
+      ]
+    },
     "Humanizer.Core/2.8.26": {
       "sha512": "OiKusGL20vby4uDEswj2IgkdchC1yQ6rwbIkZDVBPIR6al2b7n3pC91elBul9q33KaBgRKhbZH3+2Ur4fnWx2A==",
       "type": "package",
@@ -1344,12 +1374,13 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Dapper >= 2.1.35",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 6.0.0",
       "Microsoft.EntityFrameworkCore >= 6.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.0",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 6.0.0",
       "Swashbuckle.AspNetCore >= 6.5.0",
-      "Swashbuckle.AspNetCore.Annotations >= 6.5.1"
+      "Swashbuckle.AspNetCore.Annotations >= 6.6.1"
     ]
   },
   "packageFolders": {
@@ -1358,11 +1389,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj",
+      "projectUniqueName": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj",
       "projectName": "VehicleTrafficManagement",
-      "projectPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj",
+      "projectPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj",
       "packagesPath": "C:\\Users\\suporteti\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\obj\\",
+      "outputPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\suporteti\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1389,6 +1420,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "Dapper": {
+            "target": "Package",
+            "version": "[2.1.35, )"
+          },
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
             "target": "Package",
             "version": "[6.0.0, )"
@@ -1413,7 +1448,7 @@
           },
           "Swashbuckle.AspNetCore.Annotations": {
             "target": "Package",
-            "version": "[6.5.1, )"
+            "version": "[6.6.1, )"
           }
         },
         "imports": [
@@ -1437,17 +1472,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.131\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "VehicleTrafficManagement depende de Swashbuckle.AspNetCore.Annotations (>= 6.5.1), mas Swashbuckle.AspNetCore.Annotations 6.5.1 não foi encontrado. A melhor correspondência aproximada de Swashbuckle.AspNetCore.Annotations 6.6.1 foi resolvida.",
-      "libraryId": "Swashbuckle.AspNetCore.Annotations",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  }
 }
