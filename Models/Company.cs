@@ -1,10 +1,19 @@
-namespace VehicleTrafficManagement.Models;
+using System.ComponentModel.DataAnnotations;
 
-public class Company
+namespace VehicleTrafficManagement.Models
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string TradeName { get; set; }
-    public string CNPJ { get; set; }
-    public string Notes { get; set; }
+    public class Company
+    {
+        [Key]
+        public int CompaniesId { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+        
+        public string TradeName { get; set; }
+        
+        public string CNPJ { get; set; }
+
+        public CompanyInformation CompanyInformation { get; set; }
+    }
 }

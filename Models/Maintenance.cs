@@ -11,8 +11,8 @@ namespace VehicleTrafficManagement.Models
         public int VehicleId { get; set; }
         public Vehicle Vehicle { get; set; }
 
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime EntryDate { get; set; }
+        public DateTime? ExitDate { get; set; }
         public string Observations { get; set; }
     }
 }

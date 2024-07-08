@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
 using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -16,37 +17,70 @@ namespace VehicleTrafficManagement.Controllers
             _companyService = companyService;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<CompanyDto>> Get()
+        [HttpGet("GetAllCompanies")]
+        public async Task<ActionResult<IEnumerable<CompanyDTOResult>>> GetAllCompanies()
         {
-            return await _companyService.GetAllCompanies();
+            var companies = await _companyService.GetAllCompanies();
+            return Ok(companies);
         }
 
         [HttpGet("{id}")]
-        public async Task<CompanyDto> Get(int id)
+        public async Task<ActionResult<CompanyDto>> GetCompanyById(int id)
         {
-            return await _companyService.GetCompanyById(id);
+            var company = await _companyService.GetCompanyById(id);
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(company);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CompanyDto companyDto)
+        [HttpGet("GetCompanyByCnpj/")]
+        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByCnpj(string CNPJ)
         {
-            await _companyService.AddCompany(companyDto);
-            return Ok();
+            var company = await _companyService.GetCompanyByCnpjAsync(CNPJ);
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(company);
+        }
+
+        [HttpPost("AddCompany")]
+        public async Task<ActionResult<int>> AddCompany(InsertCompanyRequestDto companyDto)
+        {
+            var companyId = await _companyService.AddCompany(companyDto);
+            return Ok(companyId);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] CompanyDto companyDto)
+        public async Task<ActionResult> UpdateCompany(int id, CompanyDto companyDto)
         {
-            await _companyService.UpdateCompany(id, companyDto);
-            return Ok();
+            try
+            {
+                await _companyService.UpdateCompany(id, companyDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteCompany(int id)
         {
-            await _companyService.DeleteCompany(id);
-            return Ok();
+            try
+            {
+                await _companyService.DeleteCompany(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }

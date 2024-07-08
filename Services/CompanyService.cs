@@ -2,40 +2,91 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
 using VehicleTrafficManagement.Interfaces;
+using VehicleTrafficManagement.Models;
+using Microsoft.EntityFrameworkCore;
+using VehicleTrafficManagement.Data;
+using VehicleTrafficManagement.Repositories;
 
 namespace VehicleTrafficManagement.Services
 {
     public class CompanyService : ICompanyService
     {
-        public Task<IEnumerable<CompanyDto>> GetAllCompanies()
+        private readonly ApplicationDbContext _context;
+        private readonly ICompanyRepository _companyRepository;
+
+        public CompanyService(ApplicationDbContext context, ICompanyRepository companyRepository)
         {
-            // Implementar lógica
-            throw new System.NotImplementedException();
+            _context = context;
+            _companyRepository = companyRepository;
         }
 
-        public Task<CompanyDto> GetCompanyById(int id)
+        public async Task<IEnumerable<CompanyDTOResult>> GetAllCompanies()
         {
-            // Implementar lógica
-            throw new System.NotImplementedException();
+            var companies = await _companyRepository.GetAllCompanies();
+
+            return companies;
         }
 
-        public Task AddCompany(CompanyDto companyDto)
+        public async Task<CompanyDto> GetCompanyById(int id)
         {
-            // Implementar lógica
-            throw new System.NotImplementedException();
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                return null;
+            }
+
+            return new CompanyDto
+            {
+                Id = company.CompaniesId,
+                TradeName = company.TradeName,
+                CNPJ = company.CNPJ,
+            };
         }
 
-        public Task UpdateCompany(int id, CompanyDto companyDto)
+        public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
         {
-            // Implementar lógica
-            throw new System.NotImplementedException();
+            return await _companyRepository.GetCompanyByCnpjAsync(CNPJ);
         }
 
-        public Task DeleteCompany(int id)
+        public async Task<int> AddCompany(InsertCompanyRequestDto companyDto)
         {
-            // Implementar lógica
-            throw new System.NotImplementedException();
+            var company = new Company
+            {
+                TradeName = companyDto.TradeName,
+                CNPJ = companyDto.CNPJ,
+            };
+
+            _context.Companies.Add(company);
+            await _context.SaveChangesAsync();
+
+            return company.CompaniesId;
+        }
+
+        public async Task UpdateCompany(int id, CompanyDto companyDto)
+        {
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                throw new KeyNotFoundException("Empresa não encontrada.");
+            }
+
+            company.TradeName = companyDto.TradeName;
+            company.CNPJ = companyDto.CNPJ;
+
+            _context.Companies.Update(company);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteCompany(int id)
+        {
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                throw new KeyNotFoundException("Empresa não encontrada.");
+            }
+
+            _context.Companies.Remove(company);
+            await _context.SaveChangesAsync();
         }
     }
 }
-

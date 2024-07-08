@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj": {}
+    "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj": {}
   },
   "projects": {
-    "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj": {
+    "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj",
+        "projectUniqueName": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj",
         "projectName": "VehicleTrafficManagement",
-        "projectPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj",
+        "projectPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj",
         "packagesPath": "C:\\Users\\suporteti\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement-Core\\obj\\",
+        "outputPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\suporteti\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -38,6 +38,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.35, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.0, )"
@@ -59,6 +63,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.Annotations": {
+              "target": "Package",
+              "version": "[6.6.1, )"
             }
           },
           "imports": [

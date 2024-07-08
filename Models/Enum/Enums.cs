@@ -19,3 +19,9 @@ namespace VehicleTrafficManagement.Enum;
         Inactive = 1,
         Paused = 2
     }
+
+        public enum CompanyStatus
+    {
+        Active = 0,
+        Inactive = 1
+    }
