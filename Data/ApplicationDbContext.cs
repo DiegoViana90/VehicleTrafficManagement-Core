@@ -13,6 +13,7 @@ namespace VehicleTrafficManagement.Data
         }
 
         public DbSet<Company> Companies { get; set; }
+        public DbSet<CompanyInformation> CompanyInformation { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<TrafficLog> TrafficLogs { get; set; }
         public DbSet<Driver> Drivers { get; set; }

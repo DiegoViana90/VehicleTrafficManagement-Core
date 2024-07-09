@@ -19,8 +19,8 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpGet("GetAllCompanies")]
-        [SwaggerOperation(Summary = "Busca todas as empresas.", 
-        Description = "Recupera uma lista de todas as empresas.")]
+        [SwaggerOperation(Summary = "Busca todas as empresas.",
+        Description = "Recupera uma lista de todas as empresas. FLUXO OK")]
         [SwaggerResponse(200, "Success", typeof(IEnumerable<CompanyDTOResult>))]
         public async Task<ActionResult<IEnumerable<CompanyDTOResult>>> GetAllCompanies()
         {
@@ -29,8 +29,8 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpGet("GetCompanyById")]
-        [SwaggerOperation(Summary = "Busca empresa por ID.", 
-        Description = "Recupera uma empresa específica pelo ID.")]
+        [SwaggerOperation(Summary = "Busca empresa por ID.",
+        Description = "Recupera uma empresa específica pelo ID. FLUXO OK")]
         [SwaggerResponse(200, "Success", typeof(CompanyDto))]
         [SwaggerResponse(404, "Company not found")]
         public async Task<ActionResult<CompanyDto>> GetCompanyById(int id)
@@ -45,8 +45,8 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpGet("GetCompanyByName")]
-        [SwaggerOperation(Summary = "Busca empresa por nome.", 
-        Description = "Recupera uma empresa específica pelo nome.")]
+        [SwaggerOperation(Summary = "Busca empresa por nome.",
+        Description = "Recupera uma empresa específica pelo nome. FLUXO OK")]
         [SwaggerResponse(200, "Success", typeof(CompanyDto))]
         [SwaggerResponse(404, "Company not found")]
         public async Task<ActionResult<CompanyDto>> GetCompanyByName(string name)
@@ -54,7 +54,7 @@ namespace VehicleTrafficManagement.Controllers
             var company = await _companyService.GetCompanyByName(name);
             if (company == null)
             {
-                return NotFound();
+                return NotFound("Empresa não encontrada.");
             }
 
             return Ok(company);
@@ -62,7 +62,7 @@ namespace VehicleTrafficManagement.Controllers
 
         [HttpGet("GetCompanyByCnpj")]
         [SwaggerOperation(Summary = "Busca empresa por CNPJ.",
-         Description = "Recupera uma empresa específica pelo CNPJ.")]
+         Description = "Recupera uma empresa específica pelo CNPJ. FLUXO OK")]
         [SwaggerResponse(200, "Success", typeof(CompanyDTOResult))]
         [SwaggerResponse(404, "Company not found")]
         public async Task<ActionResult<CompanyDTOResult>> GetCompanyByCnpj(string CNPJ)
@@ -76,15 +76,16 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(company);
         }
 
-        [HttpPost("AddCompany")]
-        [SwaggerOperation(Summary = "Adiciona uma nova empresa.", 
-        Description = "Adiciona uma nova empresa ao sistema.")]
+        [HttpPost("InsertCompany")]
+        [SwaggerOperation(Summary = "Adiciona uma nova empresa.",
+        Description = "Adiciona uma nova empresa ao sistema.  FLUXO OK")]
         [SwaggerResponse(200, "Company created successfully.")]
         [SwaggerResponse(400, "Invalid request.")]
-        public async Task<ActionResult<int>> AddCompany(InsertCompanyRequestDto companyDto)
+        public async Task<ActionResult<string>> InsertCompany(InsertCompanyRequestDto companyDto)
         {
-            var companyId = await _companyService.AddCompany(companyDto);
-            return Ok(companyId);
+            var companyName = await _companyService.InsertCompany(companyDto);
+            var message = $"A empresa {companyName} foi cadastrada com sucesso.";
+            return Ok(new { Message = message });
         }
 
         [HttpPut("{id}")]
@@ -107,7 +108,7 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Deleta uma empresa.", 
+        [SwaggerOperation(Summary = "Deleta uma empresa.",
         Description = "Deleta uma empresa pelo Id.")]
         [SwaggerResponse(200, "Company deleted successfully")]
         [SwaggerResponse(404, "Company not found")]

@@ -8,10 +8,10 @@ namespace VehicleTrafficManagement.Interfaces
     {
         Task<IEnumerable<CompanyDTOResult>> GetAllCompanies();
         Task<CompanyDto> GetCompanyById(int id);
-        Task<int> AddCompany(InsertCompanyRequestDto companyDto);
+        Task<string> InsertCompany(InsertCompanyRequestDto companyDto);
         Task UpdateCompany(int id, CompanyDto companyDto);
         Task DeleteCompany(int id);
         Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ);
-        Task<CompanyDto> GetCompanyByName(string name);
+        Task<CompanyDTOResult> GetCompanyByName(string name);
     }
 }
