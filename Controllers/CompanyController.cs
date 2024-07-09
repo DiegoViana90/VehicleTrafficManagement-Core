@@ -20,7 +20,7 @@ namespace VehicleTrafficManagement.Controllers
 
         [HttpGet("GetAllCompanies")]
         [SwaggerOperation(Summary = "Busca todas as empresas.",
-        Description = "Recupera uma lista de todas as empresas.")]
+        Description = "Recupera uma lista de todas as empresas. FLUXO OK")]
         [SwaggerResponse(200, "Success", typeof(IEnumerable<CompanyDTOResult>))]
         public async Task<ActionResult<IEnumerable<CompanyDTOResult>>> GetAllCompanies()
         {
@@ -30,7 +30,7 @@ namespace VehicleTrafficManagement.Controllers
 
         [HttpGet("GetCompanyById")]
         [SwaggerOperation(Summary = "Busca empresa por ID.",
-        Description = "Recupera uma empresa específica pelo ID.")]
+        Description = "Recupera uma empresa específica pelo ID. FLUXO OK")]
         [SwaggerResponse(200, "Success", typeof(CompanyDto))]
         [SwaggerResponse(404, "Company not found")]
         public async Task<ActionResult<CompanyDto>> GetCompanyById(int id)
@@ -46,7 +46,7 @@ namespace VehicleTrafficManagement.Controllers
 
         [HttpGet("GetCompanyByName")]
         [SwaggerOperation(Summary = "Busca empresa por nome.",
-        Description = "Recupera uma empresa específica pelo nome.")]
+        Description = "Recupera uma empresa específica pelo nome. FLUXO OK")]
         [SwaggerResponse(200, "Success", typeof(CompanyDto))]
         [SwaggerResponse(404, "Company not found")]
         public async Task<ActionResult<CompanyDto>> GetCompanyByName(string name)
