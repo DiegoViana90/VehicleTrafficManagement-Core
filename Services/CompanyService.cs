@@ -23,13 +23,28 @@ namespace VehicleTrafficManagement.Services
         public async Task<IEnumerable<CompanyDTOResult>> GetAllCompanies()
         {
             var companies = await _companyRepository.GetAllCompanies();
-
             return companies;
         }
 
         public async Task<CompanyDto> GetCompanyById(int id)
         {
             var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                return null;
+            }
+
+            return new CompanyDto
+            {
+                Id = company.CompaniesId,
+                TradeName = company.TradeName,
+                CNPJ = company.CNPJ,
+            };
+        }
+
+        public async Task<CompanyDto> GetCompanyByName(string name)
+        {
+            var company = await _companyRepository.GetCompanyByName(name);
             if (company == null)
             {
                 return null;
@@ -58,7 +73,6 @@ namespace VehicleTrafficManagement.Services
 
             _context.Companies.Add(company);
             await _context.SaveChangesAsync();
-
             return company.CompaniesId;
         }
 
