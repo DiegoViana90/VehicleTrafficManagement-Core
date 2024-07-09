@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
-using Microsoft.EntityFrameworkCore;
 using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.Repositories;
+using VehicleTrafficManagement.Util;
 
 namespace VehicleTrafficManagement.Services
 {
@@ -42,38 +40,77 @@ namespace VehicleTrafficManagement.Services
             };
         }
 
-        public async Task<CompanyDto> GetCompanyByName(string name)
+        public async Task<CompanyDTOResult> GetCompanyByName(string name)
         {
-            var company = await _companyRepository.GetCompanyByName(name);
+            CompanyDTOResult company = await _companyRepository.GetCompanyByName(name);
             if (company == null)
             {
                 return null;
             }
 
-            return new CompanyDto
-            {
-                Id = company.CompaniesId,
-                TradeName = company.TradeName,
-                CNPJ = company.CNPJ,
-            };
+            return company;
         }
 
         public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
         {
+            CNPJ = Formatter.RemoveMaskCnpj(CNPJ);
+            bool isCNPJValid = CnpjValidator.IsCNPJ(CNPJ);
+
+            if (!isCNPJValid)
+            {
+                throw new ArgumentException("CNPJ Inválido!");
+            }
+
             return await _companyRepository.GetCompanyByCnpjAsync(CNPJ);
         }
 
-        public async Task<int> AddCompany(InsertCompanyRequestDto companyDto)
+        public async Task<string> InsertCompany(InsertCompanyRequestDto insertCompanyRequestDto)
         {
+
+            bool cnpjExists = await CNPJExists(insertCompanyRequestDto.CNPJ);
+
+            if (cnpjExists)
+            {
+                throw new ArgumentException("CNPJ já cadastrado na base!");
+            }
+
+            var companyInformation = new CompanyInformation
+            {
+                CEP = insertCompanyRequestDto.CEP,
+                Street = insertCompanyRequestDto.Street,
+                PropertyNumber = insertCompanyRequestDto.PropertyNumber,
+                District = insertCompanyRequestDto.District,
+                City = insertCompanyRequestDto.City,
+                State = insertCompanyRequestDto.State,
+                Country = insertCompanyRequestDto.Country,
+                AdressComplement = insertCompanyRequestDto.AdressComplement,
+                PhoneNumber = insertCompanyRequestDto.PhoneNumber,
+                Email = insertCompanyRequestDto.Email,
+                Observations = insertCompanyRequestDto.Observations,
+                CompanyStatus = insertCompanyRequestDto.CompanyStatus
+            };
+
+            _context.CompanyInformation.Add(companyInformation);
+            await _context.SaveChangesAsync();
+
             var company = new Company
             {
-                TradeName = companyDto.TradeName,
-                CNPJ = companyDto.CNPJ,
+                Name = insertCompanyRequestDto.Name,
+                TradeName = insertCompanyRequestDto.TradeName,
+                CNPJ = insertCompanyRequestDto.CNPJ,
+                CompanyInformationId = companyInformation.CompanyInformationId
             };
 
             _context.Companies.Add(company);
             await _context.SaveChangesAsync();
-            return company.CompaniesId;
+
+            return company.Name;
+        }
+
+        private async Task<bool> CNPJExists(string CNPJ)
+        {
+            var company = await GetCompanyByCnpjAsync(CNPJ);
+            return company != null;
         }
 
         public async Task UpdateCompany(int id, CompanyDto companyDto)

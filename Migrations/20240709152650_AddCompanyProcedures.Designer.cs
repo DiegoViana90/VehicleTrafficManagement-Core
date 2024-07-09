@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VehicleTrafficManagement.Data;
@@ -11,9 +12,10 @@ using VehicleTrafficManagement.Data;
 namespace VehicleTrafficManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240709152650_AddCompanyProcedures")]
+    partial class AddCompanyProcedures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +51,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasIndex("CompanyInformationId");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.CompanyInformation", b =>
@@ -109,7 +111,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasKey("CompanyInformationId");
 
-                    b.ToTable("CompanyInformation", (string)null);
+                    b.ToTable("CompanyInformation");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.Contract", b =>
@@ -144,7 +146,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasIndex("ServiceProviderCompanyId");
 
-                    b.ToTable("Contracts", (string)null);
+                    b.ToTable("Contracts");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.Driver", b =>
@@ -173,7 +175,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drivers", (string)null);
+                    b.ToTable("Drivers");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.Fine", b =>
@@ -201,7 +203,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Fines", (string)null);
+                    b.ToTable("Fines");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.FuelLog", b =>
@@ -228,7 +230,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("FuelLogs", (string)null);
+                    b.ToTable("FuelLogs");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.Maintenance", b =>
@@ -256,7 +258,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Maintenances", (string)null);
+                    b.ToTable("Maintenances");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.TrafficLog", b =>
@@ -288,7 +290,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("TrafficLogs", (string)null);
+                    b.ToTable("TrafficLogs");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.Vehicle", b =>
@@ -337,7 +339,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasIndex("ContractId");
 
-                    b.ToTable("Vehicles", (string)null);
+                    b.ToTable("Vehicles");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.Company", b =>
