@@ -10,7 +10,7 @@ public class User
     public string Password { get; set; }
     public string Email { get; set; }
     public UserType UserType { get; set; } 
-    public bool IsFirstAcess { get; set; } = true;
-    public int CompanyId { get; set; }
+    public bool IsFirstAccess { get; set; } = true;
+    public int CompaniesId { get; set; }
     public Company Company { get; set; }
 }

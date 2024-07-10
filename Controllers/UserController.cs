@@ -73,8 +73,8 @@ namespace VehicleTrafficManagement.Controllers
                 Password = userCreationRequest.Password,
                 Email = userCreationRequest.Email,
                 UserType = userCreationRequest.UserType,
-                IsFirstAcess = true,
-                CompanyId = userCreationRequest.CompanyId
+                IsFirstAccess = true,
+                CompaniesId = userCreationRequest.CompanyId
             };
             await _userService.InsertUser(user);
             return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, user);
