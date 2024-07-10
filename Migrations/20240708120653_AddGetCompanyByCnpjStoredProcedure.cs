@@ -8,6 +8,16 @@ namespace VehicleTrafficManagement.Migrations
 {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
+            migrationBuilder.RenameColumn(
+                name: "Id",
+                table: "CompanyInformation",
+                newName: "CompanyInformationId");
+
+            migrationBuilder.RenameColumn(
+                name: "Id",
+                table: "Companies",
+                newName: "CompaniesId");
+
         var sql = @"
         CREATE OR REPLACE FUNCTION public.getcompanybycnpj(
             ""paramCNPJ"" text)
@@ -65,6 +75,16 @@ namespace VehicleTrafficManagement.Migrations
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
+            migrationBuilder.RenameColumn(
+                name: "CompanyInformationId",
+                table: "CompanyInformation",
+                newName: "Id");
+
+            migrationBuilder.RenameColumn(
+                name: "CompaniesId",
+                table: "Companies",
+                newName: "Id");
+                
         var sql = @"
         DROP FUNCTION IF EXISTS public.getcompanybycnpj;
         ";

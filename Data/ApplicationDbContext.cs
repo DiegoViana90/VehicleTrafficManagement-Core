@@ -5,11 +5,8 @@ namespace VehicleTrafficManagement.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DapperContext DapperContext { get; }
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            DapperContext = new DapperContext(this);
         }
 
         public DbSet<Company> Companies { get; set; }
@@ -21,6 +18,7 @@ namespace VehicleTrafficManagement.Data
         public DbSet<Fine> Fines { get; set; }
         public DbSet<FuelLog> FuelLogs { get; set; }
         public DbSet<Maintenance> Maintenances { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
