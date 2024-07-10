@@ -20,7 +20,7 @@ namespace VehicleTrafficManagement.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User> GetUserById(string id)
+        public async Task<User> GetUserById(int id)
         {
             return await _context.Users.FindAsync(id);
         }
@@ -42,7 +42,7 @@ namespace VehicleTrafficManagement.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteUser(string id)
+        public async Task DeleteUser(int id)
         {
             var user = await GetUserById(id);
             if (user != null)

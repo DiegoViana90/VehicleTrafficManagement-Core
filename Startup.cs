@@ -29,9 +29,6 @@ namespace VehicleTrafficManagement
 
             services.AddScoped<DapperContext>();
 
-            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
 
             services.AddControllers();
 

@@ -22,7 +22,7 @@ namespace VehicleTrafficManagement.Services
             return await _userRepository.GetAllUsers();
         }
 
-        public async Task<User> GetUserById(string id)
+        public async Task<User> GetUserById(int id)
         {
             return await _userRepository.GetUserById(id);
         }
@@ -43,7 +43,7 @@ namespace VehicleTrafficManagement.Services
             await _userRepository.UpdateUser(user);
         }
 
-        public async Task DeleteUser(string id)
+        public async Task DeleteUser(int id)
         {
             await _userRepository.DeleteUser(id);
         }

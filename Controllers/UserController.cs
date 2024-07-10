@@ -3,7 +3,6 @@ using Swashbuckle.AspNetCore.Annotations;
 using VehicleTrafficManagement.Dto;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
-using VehicleTrafficManagement.Enum;
 
 namespace VehicleTrafficManagement.Controllers
 {
@@ -28,12 +27,12 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(users);
         }
 
-        [HttpGet("GetUserById/{id}")]
+        [HttpGet("GetUserById/")]
         [SwaggerOperation(Summary = "Busca usuário por ID.", 
         Description = "Recupera um usuário específico pelo ID.")]
         [SwaggerResponse(200, "Success", typeof(User))]
         [SwaggerResponse(404, "User not found")]
-        public async Task<ActionResult<User>> GetUserById(string id)
+        public async Task<ActionResult<User>> GetUserById(int id)
         {
             var user = await _userService.GetUserById(id);
             if (user == null)
@@ -77,6 +76,7 @@ namespace VehicleTrafficManagement.Controllers
                 CompaniesId = userCreationRequest.CompanyId
             };
             await _userService.InsertUser(user);
+
             return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, user);
         }
 
@@ -86,7 +86,7 @@ namespace VehicleTrafficManagement.Controllers
         // [SwaggerResponse(200, "User updated successfully")]
         // [SwaggerResponse(400, "Invalid request")]
         // [SwaggerResponse(404, "User not found")]
-        // public async Task<ActionResult> UpdateUser(string id, User user)
+        // public async Task<ActionResult> UpdateUser(int id, User user)
         // {
         //     if (id != user.UserId)
         //     {
@@ -97,15 +97,15 @@ namespace VehicleTrafficManagement.Controllers
         //     return NoContent();
         // }
 
-        [HttpDelete("DeleteUser")]
-        [SwaggerOperation(Summary = "Deleta um usuário.", 
-        Description = "Delete um usuário pelo Id.")]
-        [SwaggerResponse(200, "User deleted successfully")]
-        [SwaggerResponse(404, "User not found")]
-        public async Task<ActionResult> DeleteUser(string id)
-        {
-            await _userService.DeleteUser(id);
-            return NoContent();
-        }
+        // [HttpDelete("DeleteUser")]
+        // [SwaggerOperation(Summary = "Deleta um usuário.", 
+        // Description = "Delete um usuário pelo Id.")]
+        // [SwaggerResponse(200, "User deleted successfully")]
+        // [SwaggerResponse(404, "User not found")]
+        // public async Task<ActionResult> DeleteUser(int id)
+        // {
+        //     await _userService.DeleteUser(id);
+        //     return NoContent();
+        // }
     }
 }
