@@ -64,21 +64,14 @@ namespace VehicleTrafficManagement.Controllers
         Description = "Adiciona um novo usuário ao sistema.")]
         [SwaggerResponse(201, "User created successfully.")]
         [SwaggerResponse(400, "Invalid request.")]
-        public async Task<ActionResult> InsertUser(UserCreationRequest userCreationRequest)
+        public async Task<ActionResult<string>> InsertUser(UserCreationRequest userCreationRequest)
         {
-            User user = new User
-            {
-                FullName = userCreationRequest.FullName,
-                Password = userCreationRequest.Password,
-                Email = userCreationRequest.Email,
-                UserType = userCreationRequest.UserType,
-                IsFirstAccess = true,
-                CompaniesId = userCreationRequest.CompanyId
-            };
-            await _userService.InsertUser(user);
+            await _userService.InsertUser(userCreationRequest);
 
-            return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, user);
+            var message = $"Usuário {userCreationRequest.FullName} foi cadastrada com sucesso.";
+            return Ok(new { Message = message });
         }
+
 
         // [HttpPut("UpdateUser")]
         // [SwaggerOperation(Summary = "Atualiza um usuário por Id.", 

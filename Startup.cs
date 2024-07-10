@@ -23,6 +23,10 @@ namespace VehicleTrafficManagement
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
@@ -48,7 +52,7 @@ namespace VehicleTrafficManagement
                 app.UseSwaggerUI(c => 
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "VehicleTrafficManagement v1");
-                    c.RoutePrefix = string.Empty;  // Faz o Swagger UI ser exibido na raiz da aplicação
+                    c.RoutePrefix = string.Empty; 
                 });
             }
             else
