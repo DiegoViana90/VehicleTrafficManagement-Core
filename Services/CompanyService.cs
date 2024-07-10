@@ -40,16 +40,17 @@ namespace VehicleTrafficManagement.Services
             };
         }
 
-        public async Task<CompanyDTOResult> GetCompanyByName(string name)
+        public async Task<IEnumerable<CompanyDTOResult>> GetCompanyByName(string name)
         {
-            CompanyDTOResult company = await _companyRepository.GetCompanyByName(name);
-            if (company == null)
+            var companies = await _companyRepository.GetCompanyByName(name);
+            if (companies == null || !companies.Any())
             {
-                return null;
+                return Enumerable.Empty<CompanyDTOResult>();
             }
 
-            return company;
+            return companies;
         }
+
 
         public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
         {

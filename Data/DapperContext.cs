@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace VehicleTrafficManagement.Data
@@ -16,7 +15,7 @@ namespace VehicleTrafficManagement.Data
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<IEnumerable<T>> ExecuteWithMultipleResultsAsync<T>(string procName, IDictionary<string, dynamic> parameters)
+        public async Task<IEnumerable<T>> ExecuteWithListResultAsync<T>(string procName, IDictionary<string, dynamic> parameters)
         {
             using (var connection = new Npgsql.NpgsqlConnection(_connectionString))
             {
