@@ -1,0 +1,76 @@
+
+using Microsoft.AspNetCore.Identity;
+using VehicleTrafficManagement.Dto;
+using VehicleTrafficManagement.Interfaces;
+using VehicleTrafficManagement.Models;
+using VehicleTrafficManagement.Repositories;
+
+namespace VehicleTrafficManagement.Services
+{
+    public class UserService : IUserService
+    {
+        private readonly IUserRepository _userRepository;
+        private readonly IPasswordHasher<User> _passwordHasher;
+
+        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
+        {
+            _userRepository = userRepository;
+            _passwordHasher = passwordHasher;
+        }
+
+        public async Task<IEnumerable<User>> GetAllUsers()
+        {
+            return await _userRepository.GetAllUsers();
+        }
+
+        public async Task<User> GetUserById(int id)
+        {
+            return await _userRepository.GetUserById(id);
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _userRepository.GetUserByEmail(email);
+        }
+
+        public async Task InsertUser(UserCreationRequest userCreationRequest)
+        {
+            bool alreadyRegistered = await AlreadyRegistered(userCreationRequest.Email);
+
+            if (alreadyRegistered)
+            {
+                throw new ArgumentException("Usuário já cadastrado na base!");
+            }
+
+            User user = new User
+            {
+                FullName = userCreationRequest.FullName,
+                Password = userCreationRequest.Password,
+                Email = userCreationRequest.Email,
+                CompaniesId = userCreationRequest.CompanyId,
+                UserType = 0,
+                IsFirstAccess = true,
+                IsBlocked = false
+            };
+
+            user.Password = _passwordHasher.HashPassword(user, user.Password);
+            await _userRepository.InsertUser(user);
+        }
+
+        private async Task<bool> AlreadyRegistered(string email)
+        {
+            var user = await _userRepository.GetUserByEmail(email);
+            return user != null;
+        }
+
+        public async Task UpdateUser(User user)
+        {
+            await _userRepository.UpdateUser(user);
+        }
+
+        public async Task DeleteUser(int id)
+        {
+            await _userRepository.DeleteUser(id);
+        }
+    }
+}

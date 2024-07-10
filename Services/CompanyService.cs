@@ -40,16 +40,17 @@ namespace VehicleTrafficManagement.Services
             };
         }
 
-        public async Task<CompanyDTOResult> GetCompanyByName(string name)
+        public async Task<IEnumerable<CompanyDTOResult>> GetCompanyByName(string name)
         {
-            CompanyDTOResult company = await _companyRepository.GetCompanyByName(name);
-            if (company == null)
+            var companies = await _companyRepository.GetCompanyByName(name);
+            if (companies == null || !companies.Any())
             {
-                return null;
+                return Enumerable.Empty<CompanyDTOResult>();
             }
 
-            return company;
+            return companies;
         }
+
 
         public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
         {
@@ -92,12 +93,14 @@ namespace VehicleTrafficManagement.Services
 
             _context.CompanyInformation.Add(companyInformation);
             await _context.SaveChangesAsync();
-
+            
+            string CNPJ = Formatter.RemoveMaskCnpj(insertCompanyRequestDto.CNPJ);
+            
             var company = new Company
             {
                 Name = insertCompanyRequestDto.Name,
                 TradeName = insertCompanyRequestDto.TradeName,
-                CNPJ = insertCompanyRequestDto.CNPJ,
+                CNPJ = CNPJ,
                 CompanyInformationId = companyInformation.CompanyInformationId
             };
 

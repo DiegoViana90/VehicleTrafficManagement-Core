@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VehicleTrafficManagement.Data;
@@ -11,9 +12,10 @@ using VehicleTrafficManagement.Data;
 namespace VehicleTrafficManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240710020424_AddUserTable")]
+    partial class AddUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -299,7 +301,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
-                    b.Property<int?>("CompaniesId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Email")
@@ -310,10 +312,7 @@ namespace VehicleTrafficManagement.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsBlocked")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsFirstAccess")
+                    b.Property<bool>("IsFirstAcess")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Password")
@@ -325,7 +324,7 @@ namespace VehicleTrafficManagement.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("CompaniesId");
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Users");
                 });
@@ -465,7 +464,9 @@ namespace VehicleTrafficManagement.Migrations
                 {
                     b.HasOne("VehicleTrafficManagement.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompaniesId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Company");
                 });

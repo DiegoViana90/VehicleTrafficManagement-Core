@@ -2,22 +2,22 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace VehicleTrafficManagement.Data
 {
     public class DapperContext
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly string _connectionString;
 
-        public DapperContext(ApplicationDbContext dbContext)
+        public DapperContext(IConfiguration configuration)
         {
-            _dbContext = dbContext;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<IEnumerable<T>> ExecuteWithMultipleResultsAsync<T>(string procName, IDictionary<string, dynamic> parameters)
+        public async Task<IEnumerable<T>> ExecuteWithListResultAsync<T>(string procName, IDictionary<string, dynamic> parameters)
         {
-            using (var connection = _dbContext.Database.GetDbConnection())
+            using (var connection = new Npgsql.NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 return await connection.QueryAsync<T>(procName, new DynamicParameters(parameters), commandType: CommandType.StoredProcedure);
@@ -26,7 +26,7 @@ namespace VehicleTrafficManagement.Data
 
         public async Task<T> ExecuteWithSingleResultAsync<T>(string procName, IDictionary<string, dynamic> parameters)
         {
-            using (var connection = _dbContext.Database.GetDbConnection())
+            using (var connection = new Npgsql.NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 return await connection.QueryFirstOrDefaultAsync<T>(procName, new DynamicParameters(parameters), commandType: CommandType.StoredProcedure);
@@ -35,7 +35,7 @@ namespace VehicleTrafficManagement.Data
 
         public async Task ExecuteWithNoResultAsync(string procName, IDictionary<string, dynamic> parameters)
         {
-            using (var connection = _dbContext.Database.GetDbConnection())
+            using (var connection = new Npgsql.NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 await connection.ExecuteAsync(procName, new DynamicParameters(parameters), commandType: CommandType.StoredProcedure);

@@ -12,6 +12,6 @@ namespace VehicleTrafficManagement.Interfaces
         Task UpdateCompany(int id, CompanyDto companyDto);
         Task DeleteCompany(int id);
         Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ);
-        Task<CompanyDTOResult> GetCompanyByName(string name);
+        Task<IEnumerable<CompanyDTOResult>>  GetCompanyByName(string name);
     }
 }

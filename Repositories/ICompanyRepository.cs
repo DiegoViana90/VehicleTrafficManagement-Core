@@ -8,6 +8,6 @@ namespace VehicleTrafficManagement.Repositories
     {
         Task<CompanyDTOResult> GetCompanyByCnpjAsync(string cnpj);
         Task<IEnumerable<CompanyDTOResult>> GetAllCompanies();
-        Task<CompanyDTOResult> GetCompanyByName(string name);  
+        Task<IEnumerable<CompanyDTOResult>> GetCompanyByName(string name); 
     }
 }

@@ -27,7 +27,7 @@ namespace VehicleTrafficManagement.Controllers
             return await _vehicleService.GetAllVehicles();
         }
 
-        [HttpGet("GetVehicleById/{id}")]
+        [HttpGet("GetVehicleById")]
         [SwaggerOperation(Summary = "Busca veículo por ID.", 
         Description = "Recupera um veículo específico pelo ID.")]
         [SwaggerResponse(200, "Success", typeof(VehicleDto))]
@@ -44,7 +44,7 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(400, "Invalid request.")]
         public async Task<IActionResult> AddVehicle([FromBody] InsertVehicleRequestDto requestDto)
         {
-            var vehicleDto = new VehicleDto
+            VehicleDto vehicleDto = new VehicleDto
             {
                 LicensePlate = requestDto.LicensePlate,
                 Chassis = requestDto.Chassis,
@@ -59,7 +59,7 @@ namespace VehicleTrafficManagement.Controllers
             return CreatedAtAction(nameof(GetVehicleById), new { id = vehicleDto.Id }, vehicleDto);
         }
 
-        [HttpPut("UpdateVehicle/{id}")]
+        [HttpPut("UpdateVehicle")]
         [SwaggerOperation(Summary = "Atualiza um veículo por Id.",
          Description = "Atualiza um veículo existente no sistema.")]
         [SwaggerResponse(200, "Vehicle updated successfully")]
@@ -71,7 +71,7 @@ namespace VehicleTrafficManagement.Controllers
             return Ok();
         }
 
-        [HttpDelete("DeleteVehicle/{id}")]
+        [HttpDelete("DeleteVehicle")]
         [SwaggerOperation(Summary = "Deleta um veículo.", 
         Description = "Delete um veículo pelo Id.")]
         [SwaggerResponse(200, "Vehicle deleted successfully")]

@@ -23,15 +23,15 @@ namespace VehicleTrafficManagement.Repositories
 
         public async Task<IEnumerable<CompanyDTOResult>> GetAllCompanies()
         {
-            var companies = await _dapperContext.ExecuteWithMultipleResultsAsync<CompanyDTOResult>("public.GetAllCompanies", new Dictionary<string, dynamic>());
+            var companies = await _dapperContext.ExecuteWithListResultAsync<CompanyDTOResult>("public.GetAllCompanies", new Dictionary<string, dynamic>());
             return companies;
         }
 
-        public async Task<CompanyDTOResult> GetCompanyByName(string name)
+        public async Task<IEnumerable<CompanyDTOResult>> GetCompanyByName(string name)
         {
             var parameters = new Dictionary<string, dynamic> { { "paramName", name } };
-            var company = await _dapperContext.ExecuteWithSingleResultAsync<CompanyDTOResult>("public.getcompanybyname", parameters);
-            return company;
+            var companies = await _dapperContext.ExecuteWithListResultAsync<CompanyDTOResult>("public.getcompanybyname", parameters);
+            return companies;
         }
     }
 }
