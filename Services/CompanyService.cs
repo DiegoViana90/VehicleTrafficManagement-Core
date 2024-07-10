@@ -93,12 +93,14 @@ namespace VehicleTrafficManagement.Services
 
             _context.CompanyInformation.Add(companyInformation);
             await _context.SaveChangesAsync();
-
+            
+            string CNPJ = Formatter.RemoveMaskCnpj(insertCompanyRequestDto.CNPJ);
+            
             var company = new Company
             {
                 Name = insertCompanyRequestDto.Name,
                 TradeName = insertCompanyRequestDto.TradeName,
-                CNPJ = insertCompanyRequestDto.CNPJ,
+                CNPJ = CNPJ,
                 CompanyInformationId = companyInformation.CompanyInformationId
             };
 
