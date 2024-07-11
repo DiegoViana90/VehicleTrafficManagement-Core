@@ -4,6 +4,7 @@ using VehicleTrafficManagement.Dto;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
 using VehicleTrafficManagement.Repositories;
+using VehicleTrafficManagement.Util;
 
 namespace VehicleTrafficManagement.Services
 {
@@ -40,6 +41,13 @@ namespace VehicleTrafficManagement.Services
             if (alreadyRegistered)
             {
                 throw new ArgumentException("Usuário já cadastrado na base!");
+            }
+
+            bool isPasswordValid = Validator.IsPasswordValid(userCreationRequest.Password);
+            
+            if (!isPasswordValid)
+            {
+                throw new ArgumentException("Senha inválida, utilizar pelo menos 6 caracteres.");
             }
 
             User user = new User

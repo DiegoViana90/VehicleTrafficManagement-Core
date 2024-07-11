@@ -21,6 +21,7 @@ namespace VehicleTrafficManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IAuthService, AuthService>();
             // services.AddScoped<IVehicleRepository, VehicleRepository();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyService, CompanyService>();
