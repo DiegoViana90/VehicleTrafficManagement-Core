@@ -8,23 +8,23 @@ namespace VehicleTrafficManagement.Models
     public class Vehicle
     {
         public int Id { get; set; }
-
+        
         [Required]
-        public string LicensePlate { get; set; }
+        [ForeignKey("VehicleModel")]
+        public int VehicleModelId { get; set; }
+        [Required]
+        public VehicleModel VehicleModel { get; set; }
 
+        public string? LicensePlate { get; set; }
         public string Chassis { get; set; }
         public string Color { get; set; }
-        public string Brand { get; set; }
-        public string Model { get; set; }
+        public FuelType FuelType { get; set; }
         public int Mileage { get; set; }
-        public string Observations { get; set; }
-
-        public VehicleStatus Status { get; set; }
+        public VehicleStatus Status { get; set; } = 0;
 
         [ForeignKey("Contract")]
         public int? ContractId { get; set; }
-        public Contract Contract { get; set; }
-
-        public ICollection<Maintenance> Maintenances { get; set; }
+        public Contract? Contract { get; set; }
+        public ICollection<Maintenance>? Maintenances { get; set; }
     }
 }

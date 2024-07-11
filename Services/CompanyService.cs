@@ -4,6 +4,7 @@ using VehicleTrafficManagement.Models;
 using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.Repositories;
 using VehicleTrafficManagement.Util;
+using VehicleTrafficManagement.DTOs.Request;
 
 namespace VehicleTrafficManagement.Services
 {

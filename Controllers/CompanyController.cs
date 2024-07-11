@@ -3,6 +3,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
+using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
@@ -81,9 +82,9 @@ namespace VehicleTrafficManagement.Controllers
         Description = "Adiciona uma nova empresa ao sistema.  FLUXO OK")]
         [SwaggerResponse(200, "Company created successfully.")]
         [SwaggerResponse(400, "Invalid request.")]
-        public async Task<ActionResult<string>> InsertCompany(InsertCompanyRequestDto companyDto)
+        public async Task<ActionResult<string>> InsertCompany(InsertCompanyRequestDto insertCompanyRequestDto)
         {
-            var companyName = await _companyService.InsertCompany(companyDto);
+            var companyName = await _companyService.InsertCompany(insertCompanyRequestDto);
             var message = $"A empresa {companyName} foi cadastrada com sucesso.";
             return Ok(new { Message = message });
         }

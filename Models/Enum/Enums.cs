@@ -25,3 +25,14 @@ namespace VehicleTrafficManagement.Enum;
         Active = 0,
         Inactive = 1
     }
+
+        public enum FuelType
+    {
+        Ethanol = 0,
+        Gasoline = 1,
+        Flex = 2,
+        Diesel = 3,
+        Hybrid = 4,
+        Eletric = 5,
+        Others = 6
+    }
