@@ -42,8 +42,8 @@ namespace VehicleTrafficManagement.Services
                 throw new Exception("Usuário não encontrado");
             }
 
-            PasswordVerificationResult passwordVerificationResult = 
-            _passwordHasher.VerifyHashedPassword(user, user.Password, password);
+            PasswordVerificationResult passwordVerificationResult =
+                _passwordHasher.VerifyHashedPassword(user, user.Password, password);
 
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {
@@ -56,10 +56,10 @@ namespace VehicleTrafficManagement.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.UserType.ToString())
-                }),
+            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.UserType.ToString()),
+        }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -79,19 +79,19 @@ namespace VehicleTrafficManagement.Services
             };
         }
 
-         public async Task<TempPasswordResponseDto> GenerateTemporaryPassword(int userId)
+        public async Task<TempPasswordResponseDto> GenerateTemporaryPassword(int userId)
         {
             User user = await _userService.GetUserById(userId);
             if (user == null)
             {
                 throw new Exception("Usuário não encontrado");
             }
-            
+
             Random randomPassword = new Random();
             string randonGeneratedPassword = randomPassword.Next(100000, 999999).ToString();
 
             user.Password = _passwordHasher.HashPassword(user, randonGeneratedPassword);
-            
+
             user.IsFirstAccess = true;
 
             _context.Users.Update(user);
@@ -99,8 +99,8 @@ namespace VehicleTrafficManagement.Services
 
             return new TempPasswordResponseDto
             {
-               Message = "Nova senha gerada com sucesso.",
-               RandomPassword = randonGeneratedPassword
+                Message = "Nova senha gerada com sucesso.",
+                RandomPassword = randonGeneratedPassword
             };
         }
 
@@ -108,7 +108,7 @@ namespace VehicleTrafficManagement.Services
         {
 
             bool isPasswordValid = Validator.IsPasswordValid(newPassword);
-            
+
             if (!isPasswordValid)
             {
                 throw new ArgumentException("Senha inválida, utilizar pelo menos 6 caracteres.");
@@ -119,11 +119,11 @@ namespace VehicleTrafficManagement.Services
             {
                 throw new Exception("Usuário não encontrado");
             }
-            
-            if (user.IsFirstAccess == true) 
+
+            if (user.IsFirstAccess == true)
             {
-            user.Password = _passwordHasher.HashPassword(user, newPassword);
-            user.IsFirstAccess = false;
+                user.Password = _passwordHasher.HashPassword(user, newPassword);
+                user.IsFirstAccess = false;
             }
 
             _context.Users.Update(user);

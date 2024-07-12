@@ -34,9 +34,14 @@ namespace VehicleTrafficManagement.Services
             return await _userRepository.GetUserByEmail(email);
         }
 
+        public async Task<User> GetUserByEmailAndCompanyId(string email, int companyId)
+        {
+            return await _userRepository.GetUserByEmail(email);
+        }
+
         public async Task InsertUser(UserCreationRequest userCreationRequest)
         {
-            bool alreadyRegistered = await AlreadyRegistered(userCreationRequest.Email);
+            bool alreadyRegistered = await AlreadyRegistered(userCreationRequest.Email, userCreationRequest.CompanyId);
 
             if (alreadyRegistered)
             {
@@ -44,7 +49,7 @@ namespace VehicleTrafficManagement.Services
             }
 
             bool isPasswordValid = Validator.IsPasswordValid(userCreationRequest.Password);
-            
+
             if (!isPasswordValid)
             {
                 throw new ArgumentException("Senha inválida, utilizar pelo menos 6 caracteres.");
@@ -65,11 +70,18 @@ namespace VehicleTrafficManagement.Services
             await _userRepository.InsertUser(user);
         }
 
-        private async Task<bool> AlreadyRegistered(string email)
+        private async Task<bool> AlreadyRegistered(string email, int companyId)
         {
-            var user = await _userRepository.GetUserByEmail(email);
-            return user != null;
+            User user = await _userRepository.GetUserByEmailAndCompanyId(email, companyId);
+
+            if (user != null && user.Email == email && user.CompaniesId == companyId)
+            {
+                return true;
+            }
+
+            return false; 
         }
+
 
         public async Task UpdateUser(User user)
         {

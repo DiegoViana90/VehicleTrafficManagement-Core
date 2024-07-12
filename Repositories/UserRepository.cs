@@ -31,6 +31,12 @@ namespace VehicleTrafficManagement.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<User> GetUserByEmailAndCompanyId(string email, int companyId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.CompaniesId == companyId);
+        }
+
+
         public async Task InsertUser(User user)
         {
             _context.Users.Add(user);

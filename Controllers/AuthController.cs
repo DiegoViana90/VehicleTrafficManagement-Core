@@ -22,7 +22,7 @@ namespace VehicleTrafficManagement.Controllers
         /// </summary>
         /// <param name="request">Dados de autenticação do usuário.</param>
         /// <returns>Token JWT e detalhes do usuário se a autenticação for bem-sucedida.</returns>
-        [HttpPost("login")]
+        [HttpPost("Login")]
         [SwaggerOperation("Autenticação de Usuário")]
         [SwaggerResponse(200, "Token JWT gerado com sucesso")]
         [SwaggerResponse(401, "Usuário não autorizado")]

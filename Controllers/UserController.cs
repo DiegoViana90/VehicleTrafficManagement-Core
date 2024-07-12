@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using VehicleTrafficManagement.Dto;
@@ -7,6 +8,7 @@ using VehicleTrafficManagement.Models;
 namespace VehicleTrafficManagement.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Master")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -58,7 +60,7 @@ namespace VehicleTrafficManagement.Controllers
 
             return Ok(user);
         }
-
+        
         [HttpPost("InsertUser")]
         [SwaggerOperation(Summary = "Adiciona um novo usuário.", 
         Description = "Adiciona um novo usuário ao sistema.")]
