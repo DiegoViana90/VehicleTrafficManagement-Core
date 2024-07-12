@@ -8,6 +8,7 @@ using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.DTOs.Response;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
+using VehicleTrafficManagement.Util;
 
 namespace VehicleTrafficManagement.Services
 {
@@ -18,12 +19,11 @@ namespace VehicleTrafficManagement.Services
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
 
-        public AuthService
-        (
-        ApplicationDbContext context,
-        IConfiguration configuration,
-        IPasswordHasher<User> passwordHasher,
-        IUserService userService
+        public AuthService(
+            ApplicationDbContext context,
+            IConfiguration configuration,
+            IPasswordHasher<User> passwordHasher,
+            IUserService userService
         )
         {
             _context = context;
@@ -36,7 +36,7 @@ namespace VehicleTrafficManagement.Services
         {
             Console.WriteLine($"Tentando autenticar usuário com email: {email}");
 
-            User user = await _userService.GetUserByEmail(email);await _userService.GetUserByEmail(email);
+            User user = await _userService.GetUserByEmail(email);
             if (user == null)
             {
                 throw new Exception("Usuário não encontrado");
@@ -78,10 +78,57 @@ namespace VehicleTrafficManagement.Services
                 CompaniesId = user.CompaniesId
             };
         }
-        // public async Task<AuthResponse> UpdateFirstAccessPassword(string userId, string Newpassword)
-        // {
-        //     await await Ok("ok")
-        //     return Ok()
-        // }
+
+         public async Task<TempPasswordResponseDto> GenerateTemporaryPassword(int userId)
+        {
+            User user = await _userService.GetUserById(userId);
+            if (user == null)
+            {
+                throw new Exception("Usuário não encontrado");
+            }
+            
+            Random randomPassword = new Random();
+            string randonGeneratedPassword = randomPassword.Next(100000, 999999).ToString();
+
+            user.Password = _passwordHasher.HashPassword(user, randonGeneratedPassword);
+            
+            user.IsFirstAccess = true;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return new TempPasswordResponseDto
+            {
+               Message = "Nova senha gerada com sucesso.",
+               RandomPassword = randonGeneratedPassword
+            };
+        }
+
+        public async Task UpdateFirstPassword(int userId, string newPassword)
+        {
+
+            bool isPasswordValid = Validator.IsPasswordValid(newPassword);
+            
+            if (!isPasswordValid)
+            {
+                throw new ArgumentException("Senha inválida, utilizar pelo menos 6 caracteres.");
+            }
+
+            User user = await _userService.GetUserById(userId);
+            if (user == null)
+            {
+                throw new Exception("Usuário não encontrado");
+            }
+            
+            if (user.IsFirstAccess == true) 
+            {
+            user.Password = _passwordHasher.HashPassword(user, newPassword);
+            }
+
+            user.IsFirstAccess = false;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

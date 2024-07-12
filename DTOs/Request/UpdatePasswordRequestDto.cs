@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace VehicleTrafficManagement.DTOs.Request
 {
-    public class FirstPasswordUpdateRequest
+    public class UpdateFirstPasswordRequestDto
     {
       public int UserId { get; set; }
       public string NewPassword { get; set; }
