@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VehicleTrafficManagement.Dto;
+using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.Models;
 
 namespace VehicleTrafficManagement.Interfaces
