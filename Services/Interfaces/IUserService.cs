@@ -10,6 +10,7 @@ namespace VehicleTrafficManagement.Interfaces
         Task<IEnumerable<User>> GetAllUsers();
         Task<User> GetUserById(int id);
         Task<User> GetUserByEmail(string email);
+        Task<User> GetUserByEmailAndCompanyId(string email, int companyId);
         Task InsertUser(UserCreationRequest userCreationRequest);
         Task UpdateUser(User user);
         Task DeleteUser(int id);

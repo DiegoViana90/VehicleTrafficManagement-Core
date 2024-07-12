@@ -4,6 +4,7 @@ using VehicleTrafficManagement.Models;
 using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.Repositories;
 using VehicleTrafficManagement.Util;
+using VehicleTrafficManagement.DTOs.Request;
 
 namespace VehicleTrafficManagement.Services
 {
@@ -55,7 +56,7 @@ namespace VehicleTrafficManagement.Services
         public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
         {
             CNPJ = Formatter.RemoveMaskCnpj(CNPJ);
-            bool isCNPJValid = CnpjValidator.IsCNPJ(CNPJ);
+            bool isCNPJValid = Validator.IsCNPJ(CNPJ);
 
             if (!isCNPJValid)
             {

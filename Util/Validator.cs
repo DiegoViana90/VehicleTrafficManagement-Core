@@ -2,7 +2,7 @@ using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Util
 {
-    public static class CnpjValidator
+    public static class Validator
     {
         public static bool IsCNPJ(string CNPJ)
         {
@@ -37,6 +37,12 @@ namespace VehicleTrafficManagement.Util
                 remainder = 11 - remainder;
             digit = digit + remainder.ToString();
             return CNPJ.EndsWith(digit);
+        }
+        public static bool IsPasswordValid(string password)
+        {
+            {
+                return !string.IsNullOrEmpty(password) && password.Length >= 6;
+            }
         }
     }
 }
