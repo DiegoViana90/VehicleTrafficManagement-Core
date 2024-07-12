@@ -123,9 +123,8 @@ namespace VehicleTrafficManagement.Services
             if (user.IsFirstAccess == true) 
             {
             user.Password = _passwordHasher.HashPassword(user, newPassword);
-            }
-
             user.IsFirstAccess = false;
+            }
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
