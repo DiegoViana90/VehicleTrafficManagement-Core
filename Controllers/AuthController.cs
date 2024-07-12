@@ -17,11 +17,6 @@ namespace VehicleTrafficManagement.Controllers
             _authService = authService;
         }
 
-        /// <summary>
-        /// Realiza o login de um usuário e retorna um token JWT válido.
-        /// </summary>
-        /// <param name="request">Dados de autenticação do usuário.</param>
-        /// <returns>Token JWT e detalhes do usuário se a autenticação for bem-sucedida.</returns>
         [HttpPost("Login")]
         [SwaggerOperation("Autenticação de Usuário")]
         [SwaggerResponse(200, "Token JWT gerado com sucesso")]
@@ -37,11 +32,6 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(authResponse);
         }
 
-        /// <summary>
-        /// Realiza geração de uma senha temporária para um usuário específico.
-        /// </summary>
-        /// <param name="request">Dados de autenticação do usuário.</param>
-        /// <returns>A nova senha do usuário.</returns>
         [HttpPost("GenerateTemporaryPassword")]
         [SwaggerOperation("Gera nova senha de usuário para primeiro Usuário")]
         [SwaggerResponse(200, "Nova senha atualizada com sucesso")]
@@ -52,12 +42,6 @@ namespace VehicleTrafficManagement.Controllers
              return passwordResponse;
         }
 
-    
-        /// <summary>
-        /// Atuliza senha de primeiro acesso do Usuário.
-        /// </summary>
-        /// <param name="request">Dados do usuário.</param>
-        /// <returns> se a autenticação for bem-sucedida.</returns>
         [HttpPost("UpdateFirstPassword")]
         [SwaggerOperation("Atuliza senha de primeiro acesso Usuário")]
         [SwaggerResponse(200, "Nova senha atualizada com sucesso")]

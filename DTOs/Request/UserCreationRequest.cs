@@ -1,6 +1,6 @@
 
 
-namespace VehicleTrafficManagement.Dto
+namespace VehicleTrafficManagement.DTOs.Request
 {
     public class UserCreationRequest
     {

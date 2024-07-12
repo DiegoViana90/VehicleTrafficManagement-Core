@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using VehicleTrafficManagement.Dto;
+using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
 
@@ -48,7 +48,7 @@ namespace VehicleTrafficManagement.Controllers
         [HttpGet("GetUserByEmail")]
         [SwaggerOperation(Summary = "Busca usuário por email.", 
         Description = "Recupera um usuário específico pelo email.")]
-        [SwaggerResponse(200, "Success", typeof(User))]
+        [SwaggerResponse(200, "Success")]
         [SwaggerResponse(404, "User not found")]
         public async Task<ActionResult<User>> GetUserByEmail(string email)
         {

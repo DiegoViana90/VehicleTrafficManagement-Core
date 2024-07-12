@@ -1,6 +1,6 @@
 
 using Microsoft.AspNetCore.Identity;
-using VehicleTrafficManagement.Dto;
+using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
 using VehicleTrafficManagement.Repositories;
