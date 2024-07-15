@@ -1,8 +1,13 @@
+using System;
+using System.Drawing;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.DTOs.Request;
+using VehicleTrafficManagement.DTOs.Response;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
+using VehicleTrafficManagement.Util;
 
 namespace VehicleTrafficManagement.Services
 {
@@ -15,106 +20,128 @@ namespace VehicleTrafficManagement.Services
             _dbContext = dbContext;
         }
 
-        public async Task InsertVehicleModel (InsertVehicleModelRequestDto insertVehicleModelRequestDto)
+        public async Task InsertVehicleModel(InsertVehicleModelRequestDto insertVehicleModelRequestDto)
         {
-            VehicleModel NewVehicleModel = new VehicleModel
+            var existingModel = await _dbContext.VehicleModel
+                .FirstOrDefaultAsync(vm => vm.ModelName == insertVehicleModelRequestDto.ModelName);
+
+            if (existingModel != null)
+            {
+                throw new Exception($"Já existe um modelo de veículo com o nome '{insertVehicleModelRequestDto.ModelName}'.");
+            }
+
+            VehicleModel newVehicleModel = new VehicleModel
             {
                 ModelName = insertVehicleModelRequestDto.ModelName,
                 Manufacturer = insertVehicleModelRequestDto.Manufacturer,
                 Observations = insertVehicleModelRequestDto.Observations
             };
 
-            _dbContext.VehicleModel.Add(NewVehicleModel);
+            _dbContext.VehicleModel.Add(newVehicleModel);
             await _dbContext.SaveChangesAsync();
         }
-//         public async Task<IEnumerable<VehicleDto>> GetAllVehicles()
-//         {
-//             var vehicles = await _dbContext.Vehicles
-//                 .Select(v => new VehicleDto
-//                 {
-//                     Id = v.Id,
-//                     LicensePlate = v.LicensePlate,
-//                     Chassis = v.Chassis,
-//                     Color = v.Color,
-//                     Brand = v.Brand,
-//                     Model = v.Model,
-//                     Mileage = v.Mileage,
-//                     Notes = v.Observations
-//                 })
-//                 .ToListAsync();
 
-//             return vehicles;
-//         }
+        public async Task<NewVehicleResponseDTO> InsertVehicle(InsertVehicleRequestDto insertVehicleRequestDto)
+        {
+            bool isChassisValid = Validator.IsChassisValid(insertVehicleRequestDto.Chassis);
+            if (!isChassisValid)
+            {
+                throw new Exception($"Chassi {insertVehicleRequestDto.Chassis} Inválido.");
+            }
+            var existingVehicle = await _dbContext.Vehicles
+                .FirstOrDefaultAsync(v => v.Chassis == insertVehicleRequestDto.Chassis);
 
-//         public async Task<VehicleDto> GetVehicleById(int id)
-//         {
-//             var vehicle = await _dbContext.Vehicles
-//                 .Where(v => v.Id == id)
-//                 .Select(v => new VehicleDto
-//                 {
-//                     Id = v.Id,
-//                     LicensePlate = v.LicensePlate,
-//                     Chassis = v.Chassis,
-//                     Color = v.Color,
-//                     Brand = v.Brand,
-//                     Model = v.Model,
-//                     Mileage = v.Mileage,
-//                     Notes = v.Observations
-//                 })
-//                 .FirstOrDefaultAsync();
+            if (existingVehicle != null)
+            {
+                throw new Exception($"Veículo com chassi {insertVehicleRequestDto.Chassis} já existe.");
+            }
 
-//             return vehicle;
-//         }
+            // Gerar o QR code
+            string qrCodeBase64 = QrGenerator.GenerateQRCode(insertVehicleRequestDto.Chassis);
 
-//         public async Task AddVehicle(VehicleDto vehicleDto)
-//         {
-//             var newVehicle = new Vehicle
-//             {
-//                 LicensePlate = vehicleDto.LicensePlate,
-//                 Chassis = vehicleDto.Chassis,
-//                 Color = vehicleDto.Color,
-//                 Brand = vehicleDto.Brand,
-//                 Model = vehicleDto.Model,
-//                 Mileage = vehicleDto.Mileage,
-//                 Observations = vehicleDto.Notes
-//                 // Preencher outros campos conforme necessário
-//             };
+            var newVehicle = new Vehicle
+            {
+                VehicleModelId = insertVehicleRequestDto.VehicleModelId,
+                LicensePlate = insertVehicleRequestDto.LicensePlate,
+                Chassis = insertVehicleRequestDto.Chassis,
+                Color = insertVehicleRequestDto.Color,
+                FuelType = insertVehicleRequestDto.FuelType,
+                Mileage = insertVehicleRequestDto.Mileage,
+                Status = insertVehicleRequestDto.Status,
+                ContractId = insertVehicleRequestDto.ContractId,
+                StringQRCODE = qrCodeBase64
+            };
 
-//             _dbContext.Vehicles.Add(newVehicle);
-//             await _dbContext.SaveChangesAsync();
-//         }
+            _dbContext.Vehicles.Add(newVehicle);
+            await _dbContext.SaveChangesAsync();
 
-//         public async Task UpdateVehicle(int id, VehicleDto vehicleDto)
-//         {
-//             var existingVehicle = await _dbContext.Vehicles.FindAsync(id);
+            NewVehicleResponseDTO newVehicleResponseDto = new NewVehicleResponseDTO
+            {
+                Message = "Veículo cadastrado com sucesso",
+                LicensePlate = newVehicle.LicensePlate,
+                StringQRCODE = newVehicle.StringQRCODE
+            };
 
-//             if (existingVehicle == null)
-//             {
-//                 throw new Exception($"Veículo com ID {id} não encontrado.");
-//             }
+            return newVehicleResponseDto;
+        }
 
-//             existingVehicle.LicensePlate = vehicleDto.LicensePlate;
-//             existingVehicle.Chassis = vehicleDto.Chassis;
-//             existingVehicle.Color = vehicleDto.Color;
-//             existingVehicle.Brand = vehicleDto.Brand;
-//             existingVehicle.Model = vehicleDto.Model;
-//             existingVehicle.Mileage = vehicleDto.Mileage;
-//             existingVehicle.Observations = vehicleDto.Notes;
+        public async Task<GetVehicleDto> GetVehicleByQRCode(string QRCode)
+         {         
+            string chassi = QrGenerator.DecodeQRCode(QRCode);
+            GetVehicleDto vehicleDto = await GetVehicleByChassis(chassi);
+            return vehicleDto;
+         }
 
-//             await _dbContext.SaveChangesAsync();
-//         }
+        public async Task<GetVehicleDto> GetVehicleById(int id)
+        {
+            var vehicle = await _dbContext.Vehicles
+                .Where(v => v.Id == id)
+                .Select(v => new GetVehicleDto
+                {
+                    Id = v.Id,
+                    VehicleModelId = v.VehicleModelId,
+                    LicensePlate = v.LicensePlate,
+                    Chassis = v.Chassis,
+                    Color = v.Color,
+                    FuelType = v.FuelType,
+                    Mileage = v.Mileage,
+                    Status = v.Status,
+                    ContractId = v.ContractId
+                })
+                .FirstOrDefaultAsync();
 
-//         public async Task DeleteVehicle(int id)
-//         {
-//             var vehicleToDelete = await _dbContext.Vehicles.FindAsync(id);
+            if (vehicle == null)
+            {
+                throw new Exception($"Veículo com ID {id} não encontrado.");
+            }
 
-//             if (vehicleToDelete == null)
-//             {
-//                 throw new Exception($"Veículo com ID {id} não encontrado.");
-//             }
+            return vehicle;
+        }
 
-//             _dbContext.Vehicles.Remove(vehicleToDelete);
-//             await _dbContext.SaveChangesAsync();
-//         }
+        public async Task<GetVehicleDto> GetVehicleByChassis(string chassis)
+        {
+            var vehicle = await _dbContext.Vehicles
+                .Where(v => v.Chassis == chassis)
+                .Select(v => new GetVehicleDto
+                {
+                    Id = v.Id,
+                    VehicleModelId = v.VehicleModelId,
+                    LicensePlate = v.LicensePlate,
+                    Chassis = v.Chassis,
+                    Color = v.Color,
+                    FuelType = v.FuelType,
+                    Mileage = v.Mileage,
+                    Status = v.Status,
+                    ContractId = v.ContractId
+                })
+                .FirstOrDefaultAsync();
+
+            if (vehicle == null)
+            {
+                throw new Exception($"Veículo com chassi {chassis} não encontrado.");
+            }
+
+            return vehicle;
+        }
     }
 }

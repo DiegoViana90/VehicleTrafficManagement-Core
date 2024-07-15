@@ -44,5 +44,13 @@ namespace VehicleTrafficManagement.Util
                 return !string.IsNullOrEmpty(password) && password.Length >= 6;
             }
         }
+
+        public static bool IsChassisValid(string chassis)
+        {
+            if (string.IsNullOrEmpty(chassis) || chassis.Length != 17)
+                return false;
+
+            return true;
+        }
     }
 }

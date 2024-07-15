@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
 using VehicleTrafficManagement.Interfaces;
 
@@ -28,9 +30,9 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ContractDto contractDto)
+        public async Task<IActionResult> InsertContract([FromBody] InsertContractRequestDto contractRequestDto)
         {
-            await _contractService.AddContract(contractDto);
+            await _contractService.InsertContract(contractRequestDto);
             return Ok();
         }
 
