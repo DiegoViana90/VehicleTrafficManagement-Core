@@ -117,7 +117,7 @@ namespace VehicleTrafficManagement.Services
             return company != null;
         }
 
-        public async Task UpdateCompany(int id, CompanyDto companyDto)
+        public async Task UpdateCompanById(int id, CompanyDto companyDto)
         {
             var company = await _context.Companies.FindAsync(id);
             if (company == null)
@@ -132,7 +132,7 @@ namespace VehicleTrafficManagement.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteCompany(int id)
+        public async Task DeleteCompanyById(int id)
         {
             var company = await _context.Companies.FindAsync(id);
             if (company == null)

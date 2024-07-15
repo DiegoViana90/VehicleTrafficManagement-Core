@@ -8,8 +8,8 @@ namespace VehicleTrafficManagement.Interfaces
     {
         Task<IEnumerable<FineDto>> GetAllFines();
         Task<FineDto> GetFineById(int id);
-        Task AddFine(FineDto fineDto);
-        Task UpdateFine(int id, FineDto fineDto);
-        Task DeleteFine(int id);
+        Task InsertFine(FineDto fineDto);
+        Task UpdateFineById(int id, FineDto fineDto);
+        Task DeleteFineById(int id);
     }
 }

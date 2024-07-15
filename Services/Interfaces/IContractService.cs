@@ -8,8 +8,8 @@ namespace VehicleTrafficManagement.Interfaces
     {
         Task<IEnumerable<ContractDto>> GetAllContracts();
         Task<ContractDto> GetContractById(int id);
-        Task AddContract(ContractDto contractDto);
+        Task InsertContract(InsertContractRequestDto contractRequestDto);
         Task UpdateContract(int id, ContractDto contractDto);
-        Task DeleteContract(int id);
+        Task DeleteContractById(int id);
     }
 }

@@ -19,10 +19,8 @@ namespace VehicleTrafficManagement.Models
         public Company ClientCompany { get; set; }
 
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public ContractStatus Status { get; set; }
-        public bool IsOpen { get; set; }
-
         public ICollection<Vehicle> Vehicles { get; set; }
     }
 }

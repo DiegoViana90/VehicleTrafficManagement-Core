@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using VehicleTrafficManagement.Data;
+using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.DTOs.Response;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Models;
@@ -104,26 +105,36 @@ namespace VehicleTrafficManagement.Services
             };
         }
 
-        public async Task UpdateFirstPassword(int userId, string newPassword)
+        public async Task UpdateFirstPassword
+        (UpdateFirstPasswordRequestDto updateFirstPasswordRequestDto)
         {
 
-            bool isPasswordValid = Validator.IsPasswordValid(newPassword);
+            bool isPasswordValid = Validator.IsPasswordValid(updateFirstPasswordRequestDto.NewPassword);
 
             if (!isPasswordValid)
             {
                 throw new ArgumentException("Senha inválida, utilizar pelo menos 6 caracteres.");
             }
 
-            User user = await _userService.GetUserById(userId);
+            User user = await _userService.GetUserById(updateFirstPasswordRequestDto.UserId);
             if (user == null)
             {
                 throw new Exception("Usuário não encontrado");
             }
 
+
             if (user.IsFirstAccess == true)
             {
-                user.Password = _passwordHasher.HashPassword(user, newPassword);
+                PasswordVerificationResult passwordVerificationResult =
+                    _passwordHasher.VerifyHashedPassword
+                    (user, user.Password, updateFirstPasswordRequestDto.RandomPassword);
+
+                if (passwordVerificationResult == PasswordVerificationResult.Failed)
+                {
+                    throw new Exception("Senha incorreta");
+                }
                 user.IsFirstAccess = false;
+                user.Password = updateFirstPasswordRequestDto.NewPassword;
             }
 
             _context.Users.Update(user);

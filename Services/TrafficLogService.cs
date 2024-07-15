@@ -17,19 +17,19 @@ namespace VehicleTrafficManagement.Services
             throw new System.NotImplementedException();
         }
 
-        public Task AddTrafficLog(TrafficLogDto trafficLogDto)
+        public Task InsertTrafficLog(TrafficLogDto trafficLogDto)
         {
             // Implementar lógica
             throw new System.NotImplementedException();
         }
 
-        public Task UpdateTrafficLog(int id, TrafficLogDto trafficLogDto)
+        public Task UpdateTrafficLogById(int id, TrafficLogDto trafficLogDto)
         {
             // Implementar lógica
             throw new System.NotImplementedException();
         }
 
-        public Task DeleteTrafficLog(int id)
+        public Task DeleteTrafficLogById(int id)
         {
             // Implementar lógica
             throw new System.NotImplementedException();

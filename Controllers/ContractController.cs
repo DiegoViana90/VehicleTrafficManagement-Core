@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using VehicleTrafficManagement.Dto;
 using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("controller")]
     public class ContractController : ControllerBase
     {
         private readonly IContractService _contractService;
@@ -15,36 +16,71 @@ namespace VehicleTrafficManagement.Controllers
             _contractService = contractService;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<ContractDto>> Get()
+        [HttpGet("GetAllContracts")]
+        [SwaggerOperation(
+            Summary = "Obtém todos os contratos.",
+            Description = "Recupera uma lista de todos os contratos no sistema."
+        )]
+        [SwaggerResponse(200, "Contratos recuperados com sucesso.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<IEnumerable<ContractDto>> GetAllContracts()
         {
             return await _contractService.GetAllContracts();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ContractDto> Get(int id)
+        [HttpGet("GetContractById")]
+        [SwaggerOperation(
+            Summary = "Obtém um contrato pelo ID.",
+            Description = "Recupera um contrato específico pelo ID."
+        )]
+        [SwaggerResponse(200, "Contrato recuperado com sucesso.")]
+        [SwaggerResponse(404, "Contrato não encontrado.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<ContractDto> GetContractById(int id)
         {
             return await _contractService.GetContractById(id);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ContractDto contractDto)
+        [HttpPost("InsertContract")]
+        [SwaggerOperation(
+            Summary = "Insere um novo contrato.",
+            Description = "Adiciona um novo contrato ao sistema."
+        )]
+        [SwaggerResponse(201, "Contrato criado com sucesso.")]
+        [SwaggerResponse(400, "Requisição inválida.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<IActionResult> InsertContract([FromBody] InsertContractRequestDto contractRequestDto)
         {
-            await _contractService.AddContract(contractDto);
+            await _contractService.InsertContract(contractRequestDto);
             return Ok();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] ContractDto contractDto)
+        [HttpPut("UpdateContract")]
+        [SwaggerOperation(
+            Summary = "Atualiza um contrato.",
+            Description = "Atualiza um contrato existente no sistema."
+        )]
+        [SwaggerResponse(200, "Contrato atualizado com sucesso.")]
+        [SwaggerResponse(400, "Requisição inválida.")]
+        [SwaggerResponse(404, "Contrato não encontrado.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<IActionResult> UpdateContract(int id, [FromBody] ContractDto contractDto)
         {
             await _contractService.UpdateContract(id, contractDto);
             return Ok();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("DeleteContractById")]
+        [SwaggerOperation(
+            Summary = "Exclui um contrato.",
+            Description = "Remove um contrato existente do sistema."
+        )]
+        [SwaggerResponse(200, "Contrato excluído com sucesso.")]
+        [SwaggerResponse(404, "Contrato não encontrado.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<IActionResult> DeleteContractById(int id)
         {
-            await _contractService.DeleteContract(id);
+            await _contractService.DeleteContractById(id);
             return Ok();
         }
     }

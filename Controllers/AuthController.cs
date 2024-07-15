@@ -6,7 +6,7 @@ using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("controller")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -46,11 +46,13 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerOperation("Atuliza senha de primeiro acesso Usuário")]
         [SwaggerResponse(200, "Nova senha atualizada com sucesso")]
         [SwaggerResponse(401, "Senha não atualizada")]
-        public async Task<IActionResult> UpdateFirstPassword([FromBody]UpdateFirstPasswordRequestDto UpdateFirstPasswordRequestDto)
+        public async Task<IActionResult> UpdateFirstPassword([FromBody]
+        UpdateFirstPasswordRequestDto UpdateFirstPasswordRequestDto)
         {
             try
             {
-             await _authService.UpdateFirstPassword(UpdateFirstPasswordRequestDto.UserId, UpdateFirstPasswordRequestDto.NewPassword);
+            await _authService.UpdateFirstPassword (UpdateFirstPasswordRequestDto);
+
              return Ok ("Senha atualizada com sucesso.");
             }
 

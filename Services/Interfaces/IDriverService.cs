@@ -9,8 +9,8 @@ namespace VehicleTrafficManagement.Interfaces
     {
         Task<IEnumerable<DriverDto>> GetAllDrivers();
         Task<DriverDto> GetDriverById(int id);
-        Task AddDriver(DriverDto driverDto);
-        Task UpdateDriver(int id, DriverDto driverDto);
-        Task DeleteDriver(int id);
+        Task InsertDriver(DriverDto driverDto);
+        Task UpdateDriverById(int id, DriverDto driverDto);
+        Task DeleteDriverById(int id);
     }
 }
