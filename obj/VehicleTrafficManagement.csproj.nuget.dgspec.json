@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj": {}
+    "C:\\dev\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj": {}
   },
   "projects": {
-    "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj": {
+    "C:\\dev\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj",
+        "projectUniqueName": "C:\\dev\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj",
         "projectName": "VehicleTrafficManagement",
-        "projectPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\VehicleTrafficManagement.csproj",
-        "packagesPath": "C:\\Users\\suporteti\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\suporteti\\Documents\\desenvolvimento\\VehicleTrafficManagement\\obj\\",
+        "projectPath": "C:\\dev\\VehicleTrafficManagement-Core\\VehicleTrafficManagement.csproj",
+        "packagesPath": "C:\\Users\\Diego\\.nuget\\packages\\",
+        "outputPath": "C:\\dev\\VehicleTrafficManagement-Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\suporteti\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Diego\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,6 +34,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -64,6 +71,10 @@
               "target": "Package",
               "version": "[6.0.0, )"
             },
+            "QRCoder": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
@@ -76,9 +87,17 @@
               "target": "Package",
               "version": "[8.0.2, )"
             },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[6.11.0, )"
+            },
+            "ZXing.Net": {
+              "target": "Package",
+              "version": "[0.16.6, )"
             }
           },
           "imports": [
@@ -87,7 +106,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -99,7 +119,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.131\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205\\RuntimeIdentifierGraph.json"
         }
       }
     }
