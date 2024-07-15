@@ -8,7 +8,7 @@ using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("controller")]
     [ApiController]
     public class CompanyController : ControllerBase
     {
@@ -89,17 +89,17 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(new { Message = message });
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateCompanById")]
         [SwaggerOperation(Summary = "Atualiza uma empresa por Id.",
          Description = "Atualiza uma empresa existente no sistema.")]
         [SwaggerResponse(200, "Company updated successfully")]
         [SwaggerResponse(404, "Company not found")]
         [SwaggerResponse(400, "Invalid request")]
-        public async Task<ActionResult> UpdateCompany(int id, CompanyDto companyDto)
+        public async Task<ActionResult> UpdateCompanById(int id, CompanyDto companyDto)
         {
             try
             {
-                await _companyService.UpdateCompany(id, companyDto);
+                await _companyService.UpdateCompanById(id, companyDto);
                 return NoContent();
             }
             catch (KeyNotFoundException)
@@ -108,16 +108,16 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteCompanyById")]
         [SwaggerOperation(Summary = "Deleta uma empresa.",
         Description = "Deleta uma empresa pelo Id.")]
         [SwaggerResponse(200, "Company deleted successfully")]
         [SwaggerResponse(404, "Company not found")]
-        public async Task<ActionResult> DeleteCompany(int id)
+        public async Task<ActionResult> DeleteCompanyById(int id)
         {
             try
             {
-                await _companyService.DeleteCompany(id);
+                await _companyService.DeleteCompanyById(id);
                 return NoContent();
             }
             catch (KeyNotFoundException)

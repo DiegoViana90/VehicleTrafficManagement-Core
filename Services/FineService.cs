@@ -17,19 +17,19 @@ namespace VehicleTrafficManagement.Services
             throw new System.NotImplementedException();
         }
 
-        public Task AddFine(FineDto fineDto)
+        public Task InsertFine(FineDto fineDto)
         {
             // Implementar lógica
             throw new System.NotImplementedException();
         }
 
-        public Task UpdateFine(int id, FineDto fineDto)
+        public Task UpdateFineById(int id, FineDto fineDto)
         {
             // Implementar lógica
             throw new System.NotImplementedException();
         }
 
-        public Task DeleteFine(int id)
+        public Task DeleteFineById(int id)
         {
             // Implementar lógica
             throw new System.NotImplementedException();

@@ -8,8 +8,8 @@ namespace VehicleTrafficManagement.Interfaces
     {
         Task<IEnumerable<FuelLogDto>> GetAllFuelLogs();
         Task<FuelLogDto> GetFuelLogById(int id);
-        Task AddFuelLog(FuelLogDto fuelLogDto);
-        Task UpdateFuelLog(int id, FuelLogDto fuelLogDto);
-        Task DeleteFuelLog(int id);
+        Task InsertFuelLog(FuelLogDto fuelLogDto);
+        Task UpdateFuelLogById(int id, FuelLogDto fuelLogDto);
+        Task DeleteFuelLogById(int id);
     }
 }

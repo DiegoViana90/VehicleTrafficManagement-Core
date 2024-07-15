@@ -7,7 +7,7 @@ using VehicleTrafficManagement.Models;
 
 namespace VehicleTrafficManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("controller")]
     [Authorize(Roles = "Master")]
     [ApiController]
     public class UserController : ControllerBase
@@ -29,7 +29,7 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(users);
         }
 
-        [HttpGet("GetUserById/")]
+        [HttpGet("GetUserById")]
         [SwaggerOperation(Summary = "Busca usuário por ID.", 
         Description = "Recupera um usuário específico pelo ID.")]
         [SwaggerResponse(200, "Success", typeof(User))]

@@ -10,6 +10,6 @@ namespace VehicleTrafficManagement.Interfaces
         Task<ContractDto> GetContractById(int id);
         Task InsertContract(InsertContractRequestDto contractRequestDto);
         Task UpdateContract(int id, ContractDto contractDto);
-        Task DeleteContract(int id);
+        Task DeleteContractById(int id);
     }
 }

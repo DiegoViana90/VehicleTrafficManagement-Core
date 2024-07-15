@@ -60,7 +60,7 @@ namespace VehicleTrafficManagement.Services
             throw new System.NotImplementedException();
         }
 
-        public async Task DeleteContract(int id)
+        public async Task DeleteContractById(int id)
         {
             // Implementar lógica
             throw new System.NotImplementedException();

@@ -19,19 +19,19 @@ namespace VehicleTrafficManagement.Services
             throw new System.NotImplementedException();
         }
 
-        public Task AddFuelLog(FuelLogDto fuelLogDto)
+        public Task InsertFuelLog(FuelLogDto fuelLogDto)
         {
             // Implementar lógica
             throw new System.NotImplementedException();
         }
 
-        public Task UpdateFuelLog(int id, FuelLogDto fuelLogDto)
+        public Task UpdateFuelLogById(int id, FuelLogDto fuelLogDto)
         {
             // Implementar lógica
             throw new System.NotImplementedException();
         }
 
-        public Task DeleteFuelLog(int id)
+        public Task DeleteFuelLogById(int id)
         {
             // Implementar lógica
             throw new System.NotImplementedException();

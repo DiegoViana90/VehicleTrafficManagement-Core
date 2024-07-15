@@ -56,7 +56,6 @@ namespace VehicleTrafficManagement.Services
                 throw new Exception($"Veículo com chassi {insertVehicleRequestDto.Chassis} já existe.");
             }
 
-            // Gerar o QR code
             string qrCodeBase64 = QrGenerator.GenerateQRCode(insertVehicleRequestDto.Chassis);
 
             var newVehicle = new Vehicle
@@ -86,11 +85,37 @@ namespace VehicleTrafficManagement.Services
         }
 
         public async Task<GetVehicleDto> GetVehicleByQRCode(string QRCode)
-         {         
+        {
             string chassi = QrGenerator.DecodeQRCode(QRCode);
             GetVehicleDto vehicleDto = await GetVehicleByChassis(chassi);
             return vehicleDto;
-         }
+        }
+
+       public async Task<GetVehicleDto> GetVehicleByLicensePlate(string licensePlate)
+        {
+            var vehicle = await _dbContext.Vehicles
+                .Where(v => v.LicensePlate == licensePlate)
+                .Select(v => new GetVehicleDto
+                {
+                    Id = v.Id,
+                    VehicleModelId = v.VehicleModelId,
+                    LicensePlate = v.LicensePlate,
+                    Chassis = v.Chassis,
+                    Color = v.Color,
+                    FuelType = v.FuelType,
+                    Mileage = v.Mileage,
+                    Status = v.Status,
+                    ContractId = v.ContractId
+                })
+                .FirstOrDefaultAsync();
+
+            if (vehicle == null)
+            {
+                throw new Exception($"Veículo com placa {licensePlate} não encontrado.");
+            }
+
+            return vehicle;
+        }
 
         public async Task<GetVehicleDto> GetVehicleById(int id)
         {

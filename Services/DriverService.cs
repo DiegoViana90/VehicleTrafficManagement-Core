@@ -19,19 +19,19 @@ namespace VehicleTrafficManagement.Services
             throw new System.NotImplementedException();
         }
 
-        public Task AddDriver(DriverDto driverDto)
+        public Task InsertDriver(DriverDto driverDto)
         {
             // Implementar lógica
             throw new System.NotImplementedException();
         }
 
-        public Task UpdateDriver(int id, DriverDto driverDto)
+        public Task UpdateDriverById(int id, DriverDto driverDto)
         {
             // Implementar lógica
             throw new System.NotImplementedException();
         }
 
-        public Task DeleteDriver(int id)
+        public Task DeleteDriverById(int id)
         {
             // Implementar lógica
             throw new System.NotImplementedException();

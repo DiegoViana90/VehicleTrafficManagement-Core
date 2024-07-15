@@ -6,8 +6,8 @@ namespace VehicleTrafficManagement.Interfaces
     {
         Task<IEnumerable<TrafficLogDto>> GetAllTrafficLogs();
         Task<TrafficLogDto> GetTrafficLogById(int id);
-        Task AddTrafficLog(TrafficLogDto trafficLogDto);
-        Task UpdateTrafficLog(int id, TrafficLogDto trafficLogDto);
-        Task DeleteTrafficLog(int id);
+        Task InsertTrafficLog(TrafficLogDto trafficLogDto);
+        Task UpdateTrafficLogById(int id, TrafficLogDto trafficLogDto);
+        Task DeleteTrafficLogById(int id);
     }
 }

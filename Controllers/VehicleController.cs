@@ -8,7 +8,7 @@ using VehicleTrafficManagement.Interfaces;
 namespace VehicleTrafficManagement.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("controller")]
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
@@ -37,8 +37,10 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpPost("InsertVehicle")]
-        [SwaggerOperation(Summary = "Adiciona um novo veículo.",
-         Description = "Adiciona um novo veículo ao sistema.")]
+        [SwaggerOperation(
+            Summary = "Adiciona um novo veículo.",
+            Description = "Adiciona um novo veículo ao sistema."
+        )]
         [SwaggerResponse(201, "Vehicle created successfully.")]
         [SwaggerResponse(400, "Invalid request.")]
         public async Task<IActionResult> InsertVehicle([FromBody] InsertVehicleRequestDto insertVehicleRequestDto)
@@ -55,8 +57,10 @@ namespace VehicleTrafficManagement.Controllers
         }
 
         [HttpGet("GetVehicleByQRCode")]
-        [SwaggerOperation(Summary = "Busca o veículo pelo QRCode.",
-         Description = "Busca o veículo pelo QRCode.")]
+        [SwaggerOperation(
+            Summary = "Busca o veículo pelo QRCode.",
+            Description = "Busca o veículo pelo QRCode."
+        )]
         [SwaggerResponse(200, "Veículo encontrado com sucesso.")]
         [SwaggerResponse(404, "Veículo não encontrado.")]
         [SwaggerResponse(400, "Requisição inválida.")]
@@ -67,51 +71,70 @@ namespace VehicleTrafficManagement.Controllers
             return vehicle;
         }
 
-        // [HttpGet("GetQrCode")]
-        // [SwaggerOperation(Summary = "Adiciona um novo veículo.",
-        //  Description = "Adiciona um novo veículo ao sistema.")]
-        // [SwaggerResponse(201, "Vehicle created successfully.")]
-        // [SwaggerResponse(400, "Invalid request.")]
-        // public IActionResult GetQrCode(string chassis)
-        // {
-        //     var filePath = $"wwwroot/QRCodes/QRCode_{chassis}.png";
-
-        //     if (!System.IO.File.Exists(filePath))
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     var image = System.IO.File.OpenRead(filePath);
-        //     return File(image, "image/png");
-        // }
-    
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetVehicleById(int id)
-    {
-        try
+        [HttpGet("GetVehicleById")]
+        [SwaggerOperation(
+            Summary = "Busca o veículo pelo ID.",
+            Description = "Busca o veículo pelo ID."
+        )]
+        [SwaggerResponse(200, "Veículo encontrado com sucesso.")]
+        [SwaggerResponse(404, "Veículo não encontrado.")]
+        [SwaggerResponse(400, "Requisição inválida.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<IActionResult> GetVehicleById(int id)
         {
-            var vehicle = await _vehicleService.GetVehicleById(id);
-            return Ok(vehicle);
+            try
+            {
+                var vehicle = await _vehicleService.GetVehicleById(id);
+                return Ok(vehicle);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
         }
-        catch (Exception ex)
+
+        [HttpGet("GetVehicleByChassis")]
+        [SwaggerOperation(
+            Summary = "Busca o veículo pelo chassi.",
+            Description = "Busca o veículo pelo chassi."
+        )]
+        [SwaggerResponse(200, "Veículo encontrado com sucesso.")]
+        [SwaggerResponse(404, "Veículo não encontrado.")]
+        [SwaggerResponse(400, "Requisição inválida.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<IActionResult> GetVehicleByChassis(string chassis)
         {
-            return NotFound(new { Message = ex.Message });
+            try
+            {
+                var vehicle = await _vehicleService.GetVehicleByChassis(chassis);
+                return Ok(vehicle);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("GetVehicleByLicensePlate")]
+        [SwaggerOperation(
+            Summary = "Busca o veículo pela placa.",
+            Description = "Busca o veículo pela placa."
+        )]
+        [SwaggerResponse(200, "Veículo encontrado com sucesso.")]
+        [SwaggerResponse(404, "Veículo não encontrado.")]
+        [SwaggerResponse(400, "Requisição inválida.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<IActionResult> GetVehicleByLicensePlate(string licensePlate)
+        {
+            try
+            {
+                var vehicle = await _vehicleService.GetVehicleByLicensePlate(licensePlate);
+                return Ok(vehicle);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
         }
     }
-
-    [HttpGet("GetVehicleByChassis/{chassis}")]
-    public async Task<IActionResult> GetVehicleByChassis(string chassis)
-    {
-        try
-        {
-            var vehicle = await _vehicleService.GetVehicleByChassis(chassis);
-            return Ok(vehicle);
-        }
-        catch (Exception ex)
-        {
-            return NotFound(new { Message = ex.Message });
-        }
-    }
-}
 }
