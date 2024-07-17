@@ -57,6 +57,20 @@ namespace VehicleTrafficManagement
 
             services.AddControllers();
 
+services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:3000", "https://yourdomain.com")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+});
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VehicleTrafficManagement", Version = "v1" });
@@ -74,17 +88,17 @@ namespace VehicleTrafficManagement
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
                     {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
                     }
+                },
+                Array.Empty<string>()
+            }
                 });
             });
         }
@@ -108,6 +122,8 @@ namespace VehicleTrafficManagement
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowSpecificOrigins");
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

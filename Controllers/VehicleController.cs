@@ -45,6 +45,9 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(400, "Invalid request.")]
         public async Task<IActionResult> InsertVehicle([FromBody] InsertVehicleRequestDto insertVehicleRequestDto)
         {
+
+            //DIEGO DO FUTURO: 
+            //HASHEI O CHASSI ANTES DE TRANSFORMALO EM QRCODE E QUANDO FOR LER O QRCODE RETIRAR O HASH.
             try
             {
                 var newVehicleResponseDTO = await _vehicleService.InsertVehicle(insertVehicleRequestDto);

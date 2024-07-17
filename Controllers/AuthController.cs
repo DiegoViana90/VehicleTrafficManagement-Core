@@ -6,7 +6,7 @@ using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
 {
-    [Route("controller")]
+    [Route("api/auth/")]
     [ApiController]
     public class AuthController : ControllerBase
     {

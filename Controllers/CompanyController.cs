@@ -8,7 +8,7 @@ using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
 {
-    [Route("controller")]
+    [Route("api/company/")]
     [ApiController]
     public class CompanyController : ControllerBase
     {
