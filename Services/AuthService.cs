@@ -48,7 +48,12 @@ namespace VehicleTrafficManagement.Services
 
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {
-                throw new Exception("Senha incorreta");
+               throw new Exception("Senha incorreta");
+            }
+
+            if (user.IsBlocked)
+            {  
+                throw new Exception ("Usuário com acesso bloqueado!");
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -76,7 +81,8 @@ namespace VehicleTrafficManagement.Services
                 UserType = user.UserType,
                 IsFirstAccess = user.IsFirstAccess,
                 IsBlocked = user.IsBlocked,
-                CompaniesId = user.CompaniesId
+                CompaniesId = user.CompaniesId,
+                Email = user.Email
             };
         }
 
