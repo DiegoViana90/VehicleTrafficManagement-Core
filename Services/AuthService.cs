@@ -123,9 +123,15 @@ namespace VehicleTrafficManagement.Services
             }
 
             User user = await _userService.GetUserById(updateFirstPasswordRequestDto.UserId);
+            
             if (user == null)
             {
                 throw new Exception("Usuário não encontrado");
+            }
+
+            if (user.IsBlocked)
+            {
+                throw new Exception("Usuário com acesso bloqueado!");
             }
 
             if (!user.IsFirstAccess)
