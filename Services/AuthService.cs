@@ -48,12 +48,12 @@ namespace VehicleTrafficManagement.Services
 
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {
-               throw new Exception("Senha incorreta");
+                throw new Exception("Senha incorreta");
             }
 
             if (user.IsBlocked)
-            {  
-                throw new Exception ("Usuário com acesso bloqueado!");
+            {
+                throw new Exception("Usuário com acesso bloqueado!");
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -128,20 +128,22 @@ namespace VehicleTrafficManagement.Services
                 throw new Exception("Usuário não encontrado");
             }
 
-
-            if (user.IsFirstAccess == true)
+            if (!user.IsFirstAccess)
             {
-                PasswordVerificationResult passwordVerificationResult =
-                    _passwordHasher.VerifyHashedPassword
-                    (user, user.Password, updateFirstPasswordRequestDto.RandomPassword);
-
-                if (passwordVerificationResult == PasswordVerificationResult.Failed)
-                {
-                    throw new Exception("Senha incorreta");
-                }
-                user.IsFirstAccess = false;
-                user.Password = updateFirstPasswordRequestDto.NewPassword;
+                throw new Exception("não é o Primeiro acesso.");
             }
+
+            PasswordVerificationResult passwordVerificationResult =
+            _passwordHasher.VerifyHashedPassword
+            (user, user.Password, updateFirstPasswordRequestDto.RandomPassword);
+
+            if (passwordVerificationResult == PasswordVerificationResult.Failed)
+            {
+                throw new Exception("Senha incorreta");
+            }
+
+            user.Password = _passwordHasher.HashPassword(user, updateFirstPasswordRequestDto.NewPassword);
+            user.IsFirstAccess = false;
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
