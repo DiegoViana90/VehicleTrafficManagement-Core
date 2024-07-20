@@ -14,10 +14,10 @@ namespace VehicleTrafficManagement.Repositories
             _dapperContext = dapperContext;
         }
 
-        public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
+        public async Task<CompanyDTOResult> GetCompanyByTaxNumberAsync(string TaxNumber)
         {
-            var parameters = new Dictionary<string, dynamic> { { "paramCNPJ", CNPJ } };
-            var company = await _dapperContext.ExecuteWithSingleResultAsync<CompanyDTOResult>("public.getcompanybycnpj", parameters);
+            var parameters = new Dictionary<string, dynamic> { { "paramTaxNumber", TaxNumber } };
+            var company = await _dapperContext.ExecuteWithSingleResultAsync<CompanyDTOResult>("public.getcompanybytaxnumber", parameters);
             return company;
         }
 

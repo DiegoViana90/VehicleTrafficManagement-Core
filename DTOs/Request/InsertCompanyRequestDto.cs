@@ -6,7 +6,7 @@ namespace VehicleTrafficManagement.DTOs.Request
     {
         public string Name { get; set; }
         public string TradeName { get; set; }
-        public string CNPJ { get; set; }
+        public string TaxNumber { get; set; }
         public string CEP { get; set; }
         public string Street { get; set; }
         public string PropertyNumber { get; set; }

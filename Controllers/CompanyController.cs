@@ -61,14 +61,14 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(company);
         }
 
-        [HttpGet("GetCompanyByCnpj")]
-        [SwaggerOperation(Summary = "Busca empresa por CNPJ.",
-         Description = "Recupera uma empresa específica pelo CNPJ. FLUXO OK")]
+        [HttpGet("GetCompanyByTaxNumber")]
+        [SwaggerOperation(Summary = "Busca empresa por TaxNumber.",
+         Description = "Recupera uma empresa específica pelo TaxNumber.")]
         [SwaggerResponse(200, "Success", typeof(CompanyDTOResult))]
         [SwaggerResponse(404, "Company not found")]
-        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByCnpj(string CNPJ)
+        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByTaxNumber(string TaxNumber)
         {
-            var company = await _companyService.GetCompanyByCnpjAsync(CNPJ);
+            var company = await _companyService.GetCompanyByTaxNumberAsync(TaxNumber);
             if (company == null)
             {
                 return NotFound();
