@@ -37,7 +37,7 @@ namespace VehicleTrafficManagement.Services
             {
                 Id = company.CompaniesId,
                 TradeName = company.TradeName,
-                CNPJ = company.CNPJ,
+                TaxNumber = company.TaxNumber,
             };
         }
 
@@ -53,27 +53,27 @@ namespace VehicleTrafficManagement.Services
         }
 
 
-        public async Task<CompanyDTOResult> GetCompanyByCnpjAsync(string CNPJ)
+        public async Task<CompanyDTOResult> GetCompanyByTaxNumberAsync(string TaxNumber)
         {
-            CNPJ = Formatter.RemoveMaskCnpj(CNPJ);
-            bool isCNPJValid = Validator.IsCNPJ(CNPJ);
+            TaxNumber = Formatter.RemoveMaskTaxNumber(TaxNumber);
+            bool isTaxNumberValid = Validator.IsValidTaxNumber(TaxNumber);
 
-            if (!isCNPJValid)
+            if (!isTaxNumberValid)
             {
-                throw new ArgumentException("CNPJ Inválido!");
+                throw new ArgumentException("TaxNumber Inválido!");
             }
 
-            return await _companyRepository.GetCompanyByCnpjAsync(CNPJ);
+            return await _companyRepository.GetCompanyByTaxNumberAsync(TaxNumber);
         }
 
         public async Task<string> InsertCompany(InsertCompanyRequestDto insertCompanyRequestDto)
         {
 
-            bool cnpjExists = await CNPJExists(insertCompanyRequestDto.CNPJ);
+            bool taxNumberExists = await TaxNumberExists(insertCompanyRequestDto.TaxNumber);
 
-            if (cnpjExists)
+            if (taxNumberExists)
             {
-                throw new ArgumentException("CNPJ já cadastrado na base!");
+                throw new ArgumentException("TaxNumber já cadastrado na base!");
             }
 
             var companyInformation = new CompanyInformation
@@ -95,13 +95,13 @@ namespace VehicleTrafficManagement.Services
             _context.CompanyInformation.Add(companyInformation);
             await _context.SaveChangesAsync();
             
-            string CNPJ = Formatter.RemoveMaskCnpj(insertCompanyRequestDto.CNPJ);
+            string taxNumber = Formatter.RemoveMaskTaxNumber(insertCompanyRequestDto.TaxNumber);
             
             var company = new Company
             {
                 Name = insertCompanyRequestDto.Name,
                 TradeName = insertCompanyRequestDto.TradeName,
-                CNPJ = CNPJ,
+                TaxNumber = taxNumber,
                 CompanyInformationId = companyInformation.CompanyInformationId
             };
 
@@ -111,9 +111,9 @@ namespace VehicleTrafficManagement.Services
             return company.Name;
         }
 
-        private async Task<bool> CNPJExists(string CNPJ)
+        private async Task<bool> TaxNumberExists(string taxNumber)
         {
-            var company = await GetCompanyByCnpjAsync(CNPJ);
+            var company = await GetCompanyByTaxNumberAsync(taxNumber);
             return company != null;
         }
 
@@ -126,7 +126,7 @@ namespace VehicleTrafficManagement.Services
             }
 
             company.TradeName = companyDto.TradeName;
-            company.CNPJ = companyDto.CNPJ;
+            company.TaxNumber = companyDto.TaxNumber;
 
             _context.Companies.Update(company);
             await _context.SaveChangesAsync();

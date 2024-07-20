@@ -1,12 +1,13 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace VehicleTrafficManagement.Util
 {
     public class Formatter
     {
-        public static string RemoveMaskCnpj(string CNPJ)
+        public static string RemoveMaskTaxNumber(string taxNumber)
         {
-            return CNPJ.Replace("/", "").Replace(".", "").Replace("-", "");
+            return Regex.Replace(taxNumber, @"[^\d]", "");
         }
     }
 }
