@@ -2,17 +2,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
 using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.Interfaces;
 using VehicleTrafficManagement.Services;
-using Microsoft.AspNetCore.Identity;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using VehicleTrafficManagement.Models;
 using VehicleTrafficManagement.Repositories;
+using VehicleTrafficManagement.Models;
 
 namespace VehicleTrafficManagement
 {
@@ -105,7 +105,7 @@ namespace VehicleTrafficManagement
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "VehicleTrafficManagement V1");
-                    c.RoutePrefix = string.Empty;
+                    c.RoutePrefix = string.Empty; 
                 });
             }
 
@@ -119,7 +119,5 @@ namespace VehicleTrafficManagement
                 endpoints.MapControllers();
             });
         }
-
-
     }
 }
