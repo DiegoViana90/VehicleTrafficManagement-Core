@@ -69,6 +69,7 @@ namespace VehicleTrafficManagement.Services
         public async Task<string> InsertCompany(InsertCompanyRequestDto insertCompanyRequestDto)
         {
 
+            insertCompanyRequestDto.TaxNumber = Formatter.RemoveMaskTaxNumber(insertCompanyRequestDto.TaxNumber);
             bool taxNumberExists = await TaxNumberExists(insertCompanyRequestDto.TaxNumber);
 
             if (taxNumberExists)
@@ -95,13 +96,12 @@ namespace VehicleTrafficManagement.Services
             _context.CompanyInformation.Add(companyInformation);
             await _context.SaveChangesAsync();
             
-            string taxNumber = Formatter.RemoveMaskTaxNumber(insertCompanyRequestDto.TaxNumber);
             
             var company = new Company
             {
                 Name = insertCompanyRequestDto.Name,
                 TradeName = insertCompanyRequestDto.TradeName,
-                TaxNumber = taxNumber,
+                TaxNumber = insertCompanyRequestDto.TaxNumber,
                 CompanyInformationId = companyInformation.CompanyInformationId
             };
 
