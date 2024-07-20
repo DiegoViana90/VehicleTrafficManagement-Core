@@ -17,7 +17,7 @@ namespace VehicleTrafficManagement.Repositories
         public async Task<CompanyDTOResult> GetCompanyByTaxNumberAsync(string TaxNumber)
         {
             var parameters = new Dictionary<string, dynamic> { { "paramTaxNumber", TaxNumber } };
-            var company = await _dapperContext.ExecuteWithSingleResultAsync<CompanyDTOResult>("public.getcompanybyTaxNumber", parameters);
+            var company = await _dapperContext.ExecuteWithSingleResultAsync<CompanyDTOResult>("public.getcompanybytaxnumber", parameters);
             return company;
         }
 

@@ -13,13 +13,12 @@ namespace VehicleTrafficManagement.Migrations
                 table: "Companies",
                 newName: "TaxNumber");
 
-
             var dropFunctionSql = @"
             DROP FUNCTION IF EXISTS public.getcompanybycnpj;
             ";
 
             var createFunctionSql = @"
-            CREATE OR REPLACE FUNCTION public.getcompanybytaxnumber(taxnumber text)
+            CREATE OR REPLACE FUNCTION public.getcompanybytaxnumber(""paramTaxNumber"" text)
             RETURNS TABLE(
                 ""CompaniesId"" int,
                 ""Name"" text,
@@ -65,7 +64,7 @@ namespace VehicleTrafficManagement.Migrations
                 FROM ""Companies"" AS cs
                 INNER JOIN ""CompanyInformation"" AS ci
                 ON cs.""CompanyInformationId"" = ci.""CompanyInformationId""
-                WHERE cs.""TaxNumber"" = taxnumber;
+                WHERE cs.""TaxNumber"" = ""paramTaxNumber"";
             $BODY$;
             ";
 
