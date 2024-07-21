@@ -66,9 +66,12 @@ namespace VehicleTrafficManagement.Controllers
          Description = "Recupera uma empresa específica pelo TaxNumber.")]
         [SwaggerResponse(200, "Success", typeof(CompanyDTOResult))]
         [SwaggerResponse(404, "Company not found")]
-        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByTaxNumber(string TaxNumber)
+        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByTaxNumber([FromBody]
+         GetCompanyByTaxNumberRequest getCompanyByTaxNumberRequest)
         {
-            var company = await _companyService.GetCompanyByTaxNumberAsync(TaxNumber);
+            string taxNumber = getCompanyByTaxNumberRequest.TaxNumber;
+
+            var company = await _companyService.GetCompanyByTaxNumberAsync(taxNumber);
             if (company == null)
             {
                 return NotFound();
