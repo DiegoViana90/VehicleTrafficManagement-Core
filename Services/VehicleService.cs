@@ -196,5 +196,19 @@ namespace VehicleTrafficManagement.Services
 
             return vehicle;
         }
+
+        public async Task<IEnumerable<VehicleModelDtoResponse>> GetAllVehicleModel()
+        {
+                 IEnumerable<VehicleModelDtoResponse> vehicleModelList = await _dbContext.VehicleModel
+                .Select(vm => new VehicleModelDtoResponse
+                {VehicleModelId = vm.VehicleModelId,
+                 Manufacturer = vm.Manufacturer,
+                 ModelName = vm.ModelName,
+                 Observations = vm.Observations
+                })
+                 .ToListAsync();
+
+                 return vehicleModelList;
+        }
     }
 }

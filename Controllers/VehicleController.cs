@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Threading.Tasks;
 using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.DTOs.Response;
 using VehicleTrafficManagement.Interfaces;
+using VehicleTrafficManagement.Models;
 
 namespace VehicleTrafficManagement.Controllers
 {
@@ -29,6 +29,23 @@ namespace VehicleTrafficManagement.Controllers
                 await _vehicleService.InsertVehicleModel(insertVehicleModelRequestDto);
                 var message = $"Veículo {insertVehicleModelRequestDto.ModelName} foi cadastrado com sucesso.";
                 return Ok(new { Message = message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("GetAllVehicleModel")]
+        [SwaggerOperation(Summary = "Busca todos os modelos de veículo cadastrado no sistema.")]
+        [SwaggerResponse(201, "ok")]
+        [SwaggerResponse(400, "Invalid request.")]
+        public async Task<ActionResult<IEnumerable<VehicleModelDtoResponse>>>GetAllVehicleModel()
+        {
+            try
+            {var vehicleModelList = await _vehicleService.GetAllVehicleModel();
+               
+                return Ok(vehicleModelList);
             }
             catch (Exception ex)
             {
