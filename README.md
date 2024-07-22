@@ -1,2 +1,2 @@
 Diagrama vehicleTrafficManagement
-[Untitled (1).pdf](https://github.com/user-attachments/files/16333103/Untitled.1.pdf)
+![Diagrama](https://github.com/user-attachments/assets/3d2a719d-6aa0-47c8-a6ec-20d3eca96fb8)
