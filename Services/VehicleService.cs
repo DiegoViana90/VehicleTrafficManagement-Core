@@ -56,9 +56,10 @@ namespace VehicleTrafficManagement.Services
                 throw new Exception($"Veículo com chassi {insertVehicleRequestDto.Chassis} já existe.");
             }
 
-            string qrCodeBase64 = QrGenerator.GenerateQRCode(insertVehicleRequestDto.Chassis);
+            string hashedChassi = QrGenerator.ApplySaltAndHash(insertVehicleRequestDto.Chassis);
+            string qrCodeBase64 = QrGenerator.GenerateQRCode(hashedChassi);
 
-            var newVehicle = new Vehicle
+            Vehicle newVehicle = new Vehicle
             {
                 VehicleModelId = insertVehicleRequestDto.VehicleModelId,
                 LicensePlate = insertVehicleRequestDto.LicensePlate,
@@ -68,7 +69,8 @@ namespace VehicleTrafficManagement.Services
                 Mileage = insertVehicleRequestDto.Mileage,
                 Status = insertVehicleRequestDto.Status,
                 ContractId = insertVehicleRequestDto.ContractId,
-                StringQRCODE = qrCodeBase64
+                StringQRCODE = qrCodeBase64,
+                HashedChassi = hashedChassi,
             };
 
             _dbContext.Vehicles.Add(newVehicle);
@@ -86,9 +88,35 @@ namespace VehicleTrafficManagement.Services
 
         public async Task<GetVehicleDto> GetVehicleByQRCode(string QRCode)
         {
-            string chassi = QrGenerator.DecodeQRCode(QRCode);
-            GetVehicleDto vehicleDto = await GetVehicleByChassis(chassi);
+            string hashedChassi = QrGenerator.DecodeQRCode(QRCode);
+            GetVehicleDto vehicleDto = await GetVehicleByHashedChassi(hashedChassi);
             return vehicleDto;
+        }
+
+         private async Task<GetVehicleDto> GetVehicleByHashedChassi(string hashedChassi)
+        {
+            var vehicle = await _dbContext.Vehicles
+                .Where(v => v.HashedChassi == hashedChassi)
+                .Select(v => new GetVehicleDto
+                {
+                    Id = v.Id,
+                    VehicleModelId = v.VehicleModelId,
+                    LicensePlate = v.LicensePlate,
+                    Chassis = v.Chassis,
+                    Color = v.Color,
+                    FuelType = v.FuelType,
+                    Mileage = v.Mileage,
+                    Status = v.Status,
+                    ContractId = v.ContractId
+                })
+                .FirstOrDefaultAsync();
+
+            if (vehicle == null)
+            {
+                throw new Exception($"Veículo com hashed chassi {hashedChassi} não encontrado.");
+            }
+
+            return vehicle;
         }
 
        public async Task<GetVehicleDto> GetVehicleByLicensePlate(string licensePlate)
