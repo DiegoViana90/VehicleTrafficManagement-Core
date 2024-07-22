@@ -27,5 +27,6 @@ namespace VehicleTrafficManagement.Models
         public Contract? Contract { get; set; }
         public ICollection<Maintenance>? Maintenances { get; set; }
         public string StringQRCODE { get; set; }
+        public string HashedChassi { get; set; }
     }
 }
