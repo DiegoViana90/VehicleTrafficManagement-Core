@@ -61,14 +61,17 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(company);
         }
 
-        [HttpGet("GetCompanyByTaxNumber")]
+        [HttpPost("GetCompanyByTaxNumber")]
         [SwaggerOperation(Summary = "Busca empresa por TaxNumber.",
          Description = "Recupera uma empresa específica pelo TaxNumber.")]
         [SwaggerResponse(200, "Success", typeof(CompanyDTOResult))]
         [SwaggerResponse(404, "Company not found")]
-        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByTaxNumber(string TaxNumber)
+        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByTaxNumber([FromBody]
+         GetCompanyByTaxNumberRequest getCompanyByTaxNumberRequest)
         {
-            var company = await _companyService.GetCompanyByTaxNumberAsync(TaxNumber);
+            string taxNumber = getCompanyByTaxNumberRequest.TaxNumber;
+
+            var company = await _companyService.GetCompanyByTaxNumberAsync(taxNumber);
             if (company == null)
             {
                 return NotFound();
@@ -100,6 +103,25 @@ namespace VehicleTrafficManagement.Controllers
             try
             {
                 await _companyService.UpdateCompanById(id, companyDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPut("UpdateCompanByTaxNumber")]
+        [SwaggerOperation(Summary = "Atualiza uma empresa pelo TaxNumber.",
+         Description = "Atualiza uma empresa existente no sistema.")]
+        [SwaggerResponse(200, "Company updated successfully")]
+        [SwaggerResponse(404, "Company not found")]
+        [SwaggerResponse(400, "Invalid request")]
+        public async Task<ActionResult> UpdateCompanByTaxNumber(UpdateCompanByTaxNumberRequest updateCompanByTaxNumberRequest)
+        {
+            try
+            {
+                await _companyService.UpdateCompanByTaxNumberAsync(updateCompanByTaxNumberRequest);
                 return NoContent();
             }
             catch (KeyNotFoundException)

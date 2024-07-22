@@ -5,6 +5,7 @@ using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.Repositories;
 using VehicleTrafficManagement.Util;
 using VehicleTrafficManagement.DTOs.Request;
+using Microsoft.EntityFrameworkCore;
 
 namespace VehicleTrafficManagement.Services
 {
@@ -95,8 +96,8 @@ namespace VehicleTrafficManagement.Services
 
             _context.CompanyInformation.Add(companyInformation);
             await _context.SaveChangesAsync();
-            
-            
+
+
             var company = new Company
             {
                 Name = insertCompanyRequestDto.Name,
@@ -110,6 +111,58 @@ namespace VehicleTrafficManagement.Services
 
             return company.Name;
         }
+
+        public async Task UpdateCompanByTaxNumberAsync(UpdateCompanByTaxNumberRequest updateCompanByTaxNumberRequest)
+        {
+            CompanyDTOResult companyResult = await GetCompanyByTaxNumberAsync(updateCompanByTaxNumberRequest.TaxNumber);
+            if (companyResult == null)
+            {
+                throw new KeyNotFoundException("Empresa não encontrada.");
+            }
+
+            Company company = new Company
+            {
+                CompaniesId = companyResult.CompaniesId,
+                Name = companyResult.Name,
+                TaxNumber = companyResult.TaxNumber,
+                CompanyInformationId = companyResult.CompanyInformationId,
+                TradeName = updateCompanByTaxNumberRequest.TradeName,
+            };
+
+            CompanyInformation companyInformation = new CompanyInformation
+            {
+                CompanyInformationId = companyResult.CompanyInformationId,
+                CEP = updateCompanByTaxNumberRequest.CEP,
+                Street = updateCompanByTaxNumberRequest.Street,
+                PropertyNumber = updateCompanByTaxNumberRequest.PropertyNumber,
+                District = updateCompanByTaxNumberRequest.District,
+                City = updateCompanByTaxNumberRequest.City,
+                State = updateCompanByTaxNumberRequest.State,
+                Country = updateCompanByTaxNumberRequest.Country,
+                AdressComplement = updateCompanByTaxNumberRequest.AddressComplement,
+                PhoneNumber = updateCompanByTaxNumberRequest.PhoneNumber,
+                Email = updateCompanByTaxNumberRequest.Email,
+                Observations = updateCompanByTaxNumberRequest.Observations
+            };
+
+            var transaction = await _context.Database.BeginTransactionAsync();
+            {
+                try
+                {
+                    _context.Companies.Update(company);
+                    _context.CompanyInformation.Update(companyInformation);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
+
 
         private async Task<bool> TaxNumberExists(string taxNumber)
         {
