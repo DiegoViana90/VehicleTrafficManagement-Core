@@ -114,42 +114,41 @@ namespace VehicleTrafficManagement.Services
 
         public async Task UpdateCompanByTaxNumberAsync(UpdateCompanByTaxNumberRequest updateCompanByTaxNumberRequest)
         {
+            CompanyDTOResult companyResult = await GetCompanyByTaxNumberAsync(updateCompanByTaxNumberRequest.TaxNumber);
+            if (companyResult == null)
+            {
+                throw new KeyNotFoundException("Empresa não encontrada.");
+            }
+
+            Company company = new Company
+            {
+                CompaniesId = companyResult.CompaniesId,
+                Name = companyResult.Name,
+                TaxNumber = companyResult.TaxNumber,
+                CompanyInformationId = companyResult.CompanyInformationId,
+                TradeName = updateCompanByTaxNumberRequest.TradeName,
+            };
+
+            CompanyInformation companyInformation = new CompanyInformation
+            {
+                CompanyInformationId = companyResult.CompanyInformationId,
+                CEP = updateCompanByTaxNumberRequest.CEP,
+                Street = updateCompanByTaxNumberRequest.Street,
+                PropertyNumber = updateCompanByTaxNumberRequest.PropertyNumber,
+                District = updateCompanByTaxNumberRequest.District,
+                City = updateCompanByTaxNumberRequest.City,
+                State = updateCompanByTaxNumberRequest.State,
+                Country = updateCompanByTaxNumberRequest.Country,
+                AdressComplement = updateCompanByTaxNumberRequest.AddressComplement,
+                PhoneNumber = updateCompanByTaxNumberRequest.PhoneNumber,
+                Email = updateCompanByTaxNumberRequest.Email,
+                Observations = updateCompanByTaxNumberRequest.Observations
+            };
 
             var transaction = await _context.Database.BeginTransactionAsync();
             {
                 try
                 {
-                    CompanyDTOResult companyResult = await GetCompanyByTaxNumberAsync(updateCompanByTaxNumberRequest.TaxNumber);
-                    if (companyResult == null)
-                    {
-                        throw new KeyNotFoundException("Empresa não encontrada.");
-                    }
-
-                    Company company = new Company
-                    {
-                        CompaniesId = companyResult.CompaniesId,
-                        Name = companyResult.Name,
-                        TaxNumber = companyResult.TaxNumber,
-                        CompanyInformationId =  companyResult.CompanyInformationId,
-                        TradeName = updateCompanByTaxNumberRequest.TradeName,
-                    };
-
-                    CompanyInformation companyInformation = new CompanyInformation
-                    {
-                        CompanyInformationId = companyResult.CompanyInformationId,
-                        CEP = updateCompanByTaxNumberRequest.CEP,
-                        Street = updateCompanByTaxNumberRequest.Street,
-                        PropertyNumber = updateCompanByTaxNumberRequest.PropertyNumber,
-                        District = updateCompanByTaxNumberRequest.District,
-                        City = updateCompanByTaxNumberRequest.City,
-                        State = updateCompanByTaxNumberRequest.State,
-                        Country = updateCompanByTaxNumberRequest.Country,
-                        AdressComplement = updateCompanByTaxNumberRequest.AddressComplement,
-                        PhoneNumber = updateCompanByTaxNumberRequest.PhoneNumber,
-                        Email = updateCompanByTaxNumberRequest.Email,
-                        Observations = updateCompanByTaxNumberRequest.Observations
-                    };
-
                     _context.Companies.Update(company);
                     _context.CompanyInformation.Update(companyInformation);
                     await _context.SaveChangesAsync();
