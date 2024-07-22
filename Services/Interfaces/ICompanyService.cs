@@ -9,6 +9,7 @@ namespace VehicleTrafficManagement.Interfaces
         Task<CompanyDto> GetCompanyById(int id);
         Task<string> InsertCompany(InsertCompanyRequestDto insertCompanyRequestDto);
         Task UpdateCompanById(int id, CompanyDto companyDto);
+        Task UpdateCompanByTaxNumberAsync(UpdateCompanByTaxNumberRequest updateCompanByTaxNumberRequest);
         Task DeleteCompanyById(int id);
         Task<CompanyDTOResult> GetCompanyByTaxNumberAsync(string TaxNumber);
         Task<IEnumerable<CompanyDTOResult>>  GetCompanyByName(string name);
