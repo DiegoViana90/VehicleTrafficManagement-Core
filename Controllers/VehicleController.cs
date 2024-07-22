@@ -8,7 +8,7 @@ using VehicleTrafficManagement.Models;
 namespace VehicleTrafficManagement.Controllers
 {
     [ApiController]
-    [Route("controller")]
+    [Route("api/vehicle/")]
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
