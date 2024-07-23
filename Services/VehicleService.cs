@@ -95,7 +95,7 @@ namespace VehicleTrafficManagement.Services
             return vehicleDto;
         }
 
-         private async Task<GetVehicleDto> GetVehicleByHashedChassi(string hashedChassi)
+        private async Task<GetVehicleDto> GetVehicleByHashedChassi(string hashedChassi)
         {
             var vehicle = await _dbContext.Vehicles
                 .Where(v => v.HashedChassi == hashedChassi)
@@ -112,7 +112,7 @@ namespace VehicleTrafficManagement.Services
                     ContractId = v.ContractId,
                     ModelYear = v.ModelYear,
                     ManufactureYear = v.ManufactureYear,
-                    
+
                 })
                 .FirstOrDefaultAsync();
 
@@ -124,7 +124,7 @@ namespace VehicleTrafficManagement.Services
             return vehicle;
         }
 
-       public async Task<GetVehicleDto> GetVehicleByLicensePlate(string licensePlate)
+        public async Task<GetVehicleDto> GetVehicleByLicensePlate(string licensePlate)
         {
             var vehicle = await _dbContext.Vehicles
                 .Where(v => v.LicensePlate == licensePlate)
@@ -153,6 +153,34 @@ namespace VehicleTrafficManagement.Services
         }
 
         public async Task<GetVehicleDto> GetVehicleById(int id)
+        {
+            var vehicle = await _dbContext.Vehicles
+                .Where(v => v.Id == id)
+                .Select(v => new GetVehicleDto
+                {
+                    Id = v.Id,
+                    VehicleModelId = v.VehicleModelId,
+                    LicensePlate = v.LicensePlate,
+                    Chassis = v.Chassis,
+                    Color = v.Color,
+                    FuelType = v.FuelType,
+                    Mileage = v.Mileage,
+                    Status = v.Status,
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear
+                })
+                .FirstOrDefaultAsync();
+
+            if (vehicle == null)
+            {
+                throw new Exception($"Veículo com ID {id} não encontrado.");
+            }
+
+            return vehicle;
+        }
+
+        public async Task<GetVehicleDto> GetVehicleModelById(int id)
         {
             var vehicle = await _dbContext.Vehicles
                 .Where(v => v.Id == id)
@@ -210,16 +238,17 @@ namespace VehicleTrafficManagement.Services
 
         public async Task<IEnumerable<VehicleModelDtoResponse>> GetAllVehicleModel()
         {
-                 IEnumerable<VehicleModelDtoResponse> vehicleModelList = await _dbContext.VehicleModel
-                .Select(vm => new VehicleModelDtoResponse
-                {VehicleModelId = vm.VehicleModelId,
-                 Manufacturer = vm.Manufacturer,
-                 ModelName = vm.ModelName,
-                 Observations = vm.Observations
-                })
-                 .ToListAsync();
+            IEnumerable<VehicleModelDtoResponse> vehicleModelList = await _dbContext.VehicleModel
+           .Select(vm => new VehicleModelDtoResponse
+           {
+               VehicleModelId = vm.VehicleModelId,
+               Manufacturer = vm.Manufacturer,
+               ModelName = vm.ModelName,
+               Observations = vm.Observations
+           })
+            .ToListAsync();
 
-                 return vehicleModelList;
+            return vehicleModelList;
         }
     }
 }
