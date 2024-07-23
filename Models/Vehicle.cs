@@ -8,7 +8,7 @@ namespace VehicleTrafficManagement.Models
     public class Vehicle
     {
         public int Id { get; set; }
-        
+
         [Required]
         [ForeignKey("VehicleModel")]
         public int VehicleModelId { get; set; }
@@ -28,5 +28,7 @@ namespace VehicleTrafficManagement.Models
         public ICollection<Maintenance>? Maintenances { get; set; }
         public string StringQRCODE { get; set; }
         public string HashedChassi { get; set; }
+        public string ManufactureYear { get; set; }
+        public string ModelYear { get; set; }
     }
 }

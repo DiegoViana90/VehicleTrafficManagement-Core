@@ -110,7 +110,7 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
-        [HttpGet("GetVehicleByChassis")]
+        [HttpPost("GetVehicleByChassis")]
         [SwaggerOperation(
             Summary = "Busca o veículo pelo chassi.",
             Description = "Busca o veículo pelo chassi."
@@ -119,10 +119,12 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(404, "Veículo não encontrado.")]
         [SwaggerResponse(400, "Requisição inválida.")]
         [SwaggerResponse(500, "Erro interno do servidor.")]
-        public async Task<IActionResult> GetVehicleByChassis(string chassis)
+        public async Task<IActionResult> GetVehicleByChassis
+        (GetVehicleByChassisRequestDTO getVehicleByChassisRequestDTO)
         {
             try
             {
+                string chassis = getVehicleByChassisRequestDTO.Chassis;
                 var vehicle = await _vehicleService.GetVehicleByChassis(chassis);
                 return Ok(vehicle);
             }
@@ -132,7 +134,7 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
-        [HttpGet("GetVehicleByLicensePlate")]
+        [HttpPost("GetVehicleByLicensePlate")]
         [SwaggerOperation(
             Summary = "Busca o veículo pela placa.",
             Description = "Busca o veículo pela placa."
@@ -141,10 +143,12 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(404, "Veículo não encontrado.")]
         [SwaggerResponse(400, "Requisição inválida.")]
         [SwaggerResponse(500, "Erro interno do servidor.")]
-        public async Task<IActionResult> GetVehicleByLicensePlate(string licensePlate)
+        public async Task<IActionResult> GetVehicleByLicensePlate
+        (GetVehicleByLicensePlateRequestDTO getVehicleByLicensePlateRequestDTO)
         {
             try
             {
+                string licensePlate = getVehicleByLicensePlateRequestDTO.LicensePlate;
                 var vehicle = await _vehicleService.GetVehicleByLicensePlate(licensePlate);
                 return Ok(vehicle);
             }

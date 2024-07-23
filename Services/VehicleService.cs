@@ -71,6 +71,8 @@ namespace VehicleTrafficManagement.Services
                 ContractId = insertVehicleRequestDto.ContractId,
                 StringQRCODE = qrCodeBase64,
                 HashedChassi = hashedChassi,
+                ModelYear = insertVehicleRequestDto.ModelYear,
+                ManufactureYear = insertVehicleRequestDto.ManufactureYear,
             };
 
             _dbContext.Vehicles.Add(newVehicle);
@@ -107,7 +109,10 @@ namespace VehicleTrafficManagement.Services
                     FuelType = v.FuelType,
                     Mileage = v.Mileage,
                     Status = v.Status,
-                    ContractId = v.ContractId
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear,
+                    
                 })
                 .FirstOrDefaultAsync();
 
@@ -133,7 +138,9 @@ namespace VehicleTrafficManagement.Services
                     FuelType = v.FuelType,
                     Mileage = v.Mileage,
                     Status = v.Status,
-                    ContractId = v.ContractId
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear
                 })
                 .FirstOrDefaultAsync();
 
@@ -159,7 +166,9 @@ namespace VehicleTrafficManagement.Services
                     FuelType = v.FuelType,
                     Mileage = v.Mileage,
                     Status = v.Status,
-                    ContractId = v.ContractId
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear
                 })
                 .FirstOrDefaultAsync();
 
@@ -185,7 +194,9 @@ namespace VehicleTrafficManagement.Services
                     FuelType = v.FuelType,
                     Mileage = v.Mileage,
                     Status = v.Status,
-                    ContractId = v.ContractId
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear
                 })
                 .FirstOrDefaultAsync();
 
