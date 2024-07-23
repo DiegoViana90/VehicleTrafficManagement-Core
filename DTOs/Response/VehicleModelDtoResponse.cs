@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using VehicleTrafficManagement.Enum;
 
 namespace VehicleTrafficManagement.DTOs.Response
 {
@@ -9,7 +6,7 @@ namespace VehicleTrafficManagement.DTOs.Response
     {
         public int VehicleModelId { get; set; }
         public string ModelName { get; set; }
-        public string Manufacturer { get; set; }
+        public VehicleManufacturer Manufacturer { get; set; }
         public string? Observations { get; set; }
     }
 }
