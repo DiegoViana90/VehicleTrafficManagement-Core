@@ -19,5 +19,8 @@ namespace VehicleTrafficManagement.DTOs.Response
         public int? ContractId { get; set; }
         public string ManufactureYear { get; set; }
         public string ModelYear { get; set; }
+        public string ModelName { get; set; }
+        public VehicleManufacturer Manufacturer { get; set; }
+        public string Observations { get; set; }
     }
 }
