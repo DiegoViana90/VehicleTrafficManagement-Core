@@ -71,6 +71,8 @@ namespace VehicleTrafficManagement.Services
                 ContractId = insertVehicleRequestDto.ContractId,
                 StringQRCODE = qrCodeBase64,
                 HashedChassi = hashedChassi,
+                ModelYear = insertVehicleRequestDto.ModelYear,
+                ManufactureYear = insertVehicleRequestDto.ManufactureYear,
             };
 
             _dbContext.Vehicles.Add(newVehicle);
@@ -93,7 +95,7 @@ namespace VehicleTrafficManagement.Services
             return vehicleDto;
         }
 
-         private async Task<GetVehicleDto> GetVehicleByHashedChassi(string hashedChassi)
+        private async Task<GetVehicleDto> GetVehicleByHashedChassi(string hashedChassi)
         {
             var vehicle = await _dbContext.Vehicles
                 .Where(v => v.HashedChassi == hashedChassi)
@@ -107,7 +109,10 @@ namespace VehicleTrafficManagement.Services
                     FuelType = v.FuelType,
                     Mileage = v.Mileage,
                     Status = v.Status,
-                    ContractId = v.ContractId
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear,
+
                 })
                 .FirstOrDefaultAsync();
 
@@ -119,7 +124,7 @@ namespace VehicleTrafficManagement.Services
             return vehicle;
         }
 
-       public async Task<GetVehicleDto> GetVehicleByLicensePlate(string licensePlate)
+        public async Task<GetVehicleDto> GetVehicleByLicensePlate(string licensePlate)
         {
             var vehicle = await _dbContext.Vehicles
                 .Where(v => v.LicensePlate == licensePlate)
@@ -133,7 +138,9 @@ namespace VehicleTrafficManagement.Services
                     FuelType = v.FuelType,
                     Mileage = v.Mileage,
                     Status = v.Status,
-                    ContractId = v.ContractId
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear
                 })
                 .FirstOrDefaultAsync();
 
@@ -142,7 +149,40 @@ namespace VehicleTrafficManagement.Services
                 throw new Exception($"Veículo com placa {licensePlate} não encontrado.");
             }
 
-            return vehicle;
+            var vehicleModel = await _dbContext.VehicleModel
+                .Where(vm => vm.VehicleModelId == vehicle.VehicleModelId)
+                .Select(vm => new
+                {
+                    vm.ModelName,
+                    vm.Manufacturer,
+                    vm.Observations
+                })
+                .FirstOrDefaultAsync();
+
+            if (vehicleModel == null)
+            {
+                throw new Exception($"Modelo do veículo com ID {vehicle.VehicleModelId} não encontrado.");
+            }
+
+            GetVehicleDto getVehicleDtoresult = new GetVehicleDto
+            {
+                Id = vehicle.Id,
+                VehicleModelId = vehicle.VehicleModelId,
+                LicensePlate = vehicle.LicensePlate,
+                Chassis = vehicle.Chassis,
+                Color = vehicle.Color,
+                FuelType = vehicle.FuelType,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                ContractId = vehicle.ContractId,
+                ModelYear = vehicle.ModelYear,
+                ManufactureYear = vehicle.ManufactureYear,
+                Manufacturer = vehicleModel.Manufacturer,
+                ModelName = vehicleModel.ModelName,
+                Observations = vehicleModel.Observations
+            };
+
+            return getVehicleDtoresult;
         }
 
         public async Task<GetVehicleDto> GetVehicleById(int id)
@@ -159,7 +199,37 @@ namespace VehicleTrafficManagement.Services
                     FuelType = v.FuelType,
                     Mileage = v.Mileage,
                     Status = v.Status,
-                    ContractId = v.ContractId
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear
+                })
+                .FirstOrDefaultAsync();
+
+            if (vehicle == null)
+            {
+                throw new Exception($"Veículo com ID {id} não encontrado.");
+            }
+
+            return vehicle;
+        }
+
+        public async Task<GetVehicleDto> GetVehicleModelById(int id)
+        {
+            var vehicle = await _dbContext.Vehicles
+                .Where(v => v.Id == id)
+                .Select(v => new GetVehicleDto
+                {
+                    Id = v.Id,
+                    VehicleModelId = v.VehicleModelId,
+                    LicensePlate = v.LicensePlate,
+                    Chassis = v.Chassis,
+                    Color = v.Color,
+                    FuelType = v.FuelType,
+                    Mileage = v.Mileage,
+                    Status = v.Status,
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear
                 })
                 .FirstOrDefaultAsync();
 
@@ -185,7 +255,9 @@ namespace VehicleTrafficManagement.Services
                     FuelType = v.FuelType,
                     Mileage = v.Mileage,
                     Status = v.Status,
-                    ContractId = v.ContractId
+                    ContractId = v.ContractId,
+                    ModelYear = v.ModelYear,
+                    ManufactureYear = v.ManufactureYear
                 })
                 .FirstOrDefaultAsync();
 
@@ -194,7 +266,56 @@ namespace VehicleTrafficManagement.Services
                 throw new Exception($"Veículo com chassi {chassis} não encontrado.");
             }
 
-            return vehicle;
+            var vehicleModel = await _dbContext.VehicleModel
+                .Where(vm => vm.VehicleModelId == vehicle.VehicleModelId)
+                .Select(vm => new
+                {
+                    vm.ModelName,
+                    vm.Manufacturer,
+                    vm.Observations
+                })
+                .FirstOrDefaultAsync();
+
+            if (vehicleModel == null)
+            {
+                throw new Exception($"Modelo do veículo com ID {vehicle.VehicleModelId} não encontrado.");
+            }
+
+            GetVehicleDto getVehicleDtoresult = new GetVehicleDto
+            {
+                Id = vehicle.Id,
+                VehicleModelId = vehicle.VehicleModelId,
+                LicensePlate = vehicle.LicensePlate,
+                Chassis = vehicle.Chassis,
+                Color = vehicle.Color,
+                FuelType = vehicle.FuelType,
+                Mileage = vehicle.Mileage,
+                Status = vehicle.Status,
+                ContractId = vehicle.ContractId,
+                ModelYear = vehicle.ModelYear,
+                ManufactureYear = vehicle.ManufactureYear,
+                Manufacturer = vehicleModel.Manufacturer,
+                ModelName = vehicleModel.ModelName,
+                Observations = vehicleModel.Observations
+            };
+
+            return getVehicleDtoresult;
+        }
+
+
+        public async Task<IEnumerable<VehicleModelDtoResponse>> GetAllVehicleModel()
+        {
+            IEnumerable<VehicleModelDtoResponse> vehicleModelList = await _dbContext.VehicleModel
+           .Select(vm => new VehicleModelDtoResponse
+           {
+               VehicleModelId = vm.VehicleModelId,
+               Manufacturer = vm.Manufacturer,
+               ModelName = vm.ModelName,
+               Observations = vm.Observations
+           })
+            .ToListAsync();
+
+            return vehicleModelList;
         }
     }
 }
