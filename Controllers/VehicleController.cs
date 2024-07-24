@@ -73,7 +73,7 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
-        [HttpGet("GetVehicleByQRCode")]
+        [HttpPost("GetVehicleByQRCode")]
         [SwaggerOperation(
             Summary = "Busca o veículo pelo QRCode.",
             Description = "Busca o veículo pelo QRCode."
@@ -82,8 +82,10 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(404, "Veículo não encontrado.")]
         [SwaggerResponse(400, "Requisição inválida.")]
         [SwaggerResponse(500, "Erro interno do servidor.")]
-        public async Task<GetVehicleDto> GetVehicleByQRCode(string QRCode)
+        public async Task<GetVehicleDto> GetVehicleByQRCode
+        (GetVehicleByQrCodetDTORequest getVehicleByQrCodetDTORequest)
         {
+            string QRCode = getVehicleByQrCodetDTORequest.QRCode;
             GetVehicleDto vehicle = await _vehicleService.GetVehicleByQRCode(QRCode);
             return vehicle;
         }
