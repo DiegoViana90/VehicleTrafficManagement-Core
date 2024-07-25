@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VehicleTrafficManagement.Data;
@@ -349,6 +350,31 @@ namespace VehicleTrafficManagement.Services
             .ToListAsync();
 
             return vehicleModelList;
+        }
+
+        public async Task<IEnumerable<GetVehicleDto>> GetAllVehicles()
+        {
+            IEnumerable<GetVehicleDto> vehicleList = await _dbContext.Vehicles
+           .Select(v => new GetVehicleDto
+           {
+               Id = v.Id,
+               VehicleModelId = v.VehicleModelId,
+               LicensePlate = v.LicensePlate,
+               Chassis = v.Chassis,
+               Color = v.Color,
+               FuelType = v.FuelType,
+               Mileage = v.Mileage,
+               Status = v.Status,
+               ContractId = v.ContractId,
+               ModelYear = v.ModelYear,
+               ManufactureYear = v.ManufactureYear,
+               Manufacturer = v.VehicleModel.Manufacturer,
+               ModelName = v.VehicleModel.ModelName,
+               Observations = v.VehicleModel.Observations
+           })
+            .ToListAsync();
+
+            return vehicleList;
         }
     }
 }

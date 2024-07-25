@@ -53,6 +53,25 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
+        [HttpPost("GetAllVehicles")]
+        [SwaggerOperation(Summary = "Busca todos os veículos cadastrado no sistema.")]
+        [SwaggerResponse(201, "ok")]
+        [SwaggerResponse(400, "Invalid request.")]
+        public async Task<ActionResult<IEnumerable<GetVehicleDto>>>GetAllVehicles()
+        {
+            try
+            {var vehicleModelList = await _vehicleService.GetAllVehicles();
+               
+                return Ok(vehicleModelList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        
+
         [HttpPost("InsertVehicle")]
         [SwaggerOperation(
         Summary = "Adiciona um novo veículo.",
