@@ -2,7 +2,10 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.DTOs.Request;
@@ -19,27 +22,31 @@ namespace VehicleTrafficManagement.Services
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
+        private readonly ILogger<AuthService> _logger;
 
         public AuthService(
             ApplicationDbContext context,
             IConfiguration configuration,
             IPasswordHasher<User> passwordHasher,
-            IUserService userService
+            IUserService userService,
+            ILogger<AuthService> logger
         )
         {
             _context = context;
             _passwordHasher = passwordHasher;
             _configuration = configuration;
             _userService = userService;
+            _logger = logger;
         }
 
         public async Task<AuthResponse> Authenticate(string email, string password)
         {
-            Console.WriteLine($"Tentando autenticar usuário com email: {email}");
+            _logger.LogInformation($"Tentando autenticar usuário com email: {email}");
 
             User user = await _userService.GetUserByEmail(email);
             if (user == null)
             {
+                _logger.LogWarning($"Usuário com email: {email} não encontrado.");
                 throw new Exception("Usuário não encontrado");
             }
 
@@ -48,11 +55,13 @@ namespace VehicleTrafficManagement.Services
 
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {
+                _logger.LogWarning($"Falha na verificação da senha para o usuário com email: {email}.");
                 throw new Exception("Senha incorreta");
             }
 
             if (user.IsBlocked)
             {
+                _logger.LogWarning($"Usuário com email: {email} está bloqueado.");
                 throw new Exception("Usuário com acesso bloqueado!");
             }
 
@@ -62,16 +71,18 @@ namespace VehicleTrafficManagement.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.UserType.ToString()),
-        }),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.UserType.ToString()),
+                }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
+
+            _logger.LogInformation($"Usuário com email: {email} autenticado com sucesso.");
 
             return new AuthResponse
             {
@@ -111,10 +122,8 @@ namespace VehicleTrafficManagement.Services
             };
         }
 
-        public async Task UpdateFirstPassword
-        (UpdateFirstPasswordRequestDto updateFirstPasswordRequestDto)
+        public async Task UpdateFirstPassword(UpdateFirstPasswordRequestDto updateFirstPasswordRequestDto)
         {
-
             bool isPasswordValid = Validator.IsPasswordValid(updateFirstPasswordRequestDto.NewPassword);
 
             if (!isPasswordValid)
@@ -140,8 +149,7 @@ namespace VehicleTrafficManagement.Services
             }
 
             PasswordVerificationResult passwordVerificationResult =
-            _passwordHasher.VerifyHashedPassword
-            (user, user.Password, updateFirstPasswordRequestDto.RandomPassword);
+            _passwordHasher.VerifyHashedPassword(user, user.Password, updateFirstPasswordRequestDto.RandomPassword);
 
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {

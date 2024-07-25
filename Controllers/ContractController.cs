@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using VehicleTrafficManagement.Dto;
@@ -6,7 +7,7 @@ using VehicleTrafficManagement.Interfaces;
 namespace VehicleTrafficManagement.Controllers
 {
     [ApiController]
-    [Route("controller")]
+    [Route("api/contract")]
     public class ContractController : ControllerBase
     {
         private readonly IContractService _contractService;
@@ -41,6 +42,7 @@ namespace VehicleTrafficManagement.Controllers
             return await _contractService.GetContractById(id);
         }
 
+        [Authorize/*(Policy = "RequireMasterRole")*/]
         [HttpPost("InsertContract")]
         [SwaggerOperation(
             Summary = "Insere um novo contrato.",
@@ -50,11 +52,19 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(400, "Requisição inválida.")]
         [SwaggerResponse(500, "Erro interno do servidor.")]
         public async Task<IActionResult> InsertContract([FromBody] InsertContractRequestDto contractRequestDto)
-        {
-            await _contractService.InsertContract(contractRequestDto);
-            return Ok();
+        { 
+            try
+            {
+            string insertContractResponse = await _contractService.InsertContract(contractRequestDto);
+            return Ok(insertContractResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [Authorize(Policy = "RequireMasterRole")]
         [HttpPut("UpdateContract")]
         [SwaggerOperation(
             Summary = "Atualiza um contrato.",
@@ -70,6 +80,7 @@ namespace VehicleTrafficManagement.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = "RequireMasterRole")]
         [HttpDelete("DeleteContractById")]
         [SwaggerOperation(
             Summary = "Exclui um contrato.",
