@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using VehicleTrafficManagement.Dto;
+using VehicleTrafficManagement.Dto.Request;
+using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.Interfaces;
 
 namespace VehicleTrafficManagement.Controllers
@@ -29,7 +31,7 @@ namespace VehicleTrafficManagement.Controllers
             return await _contractService.GetAllContracts();
         }
 
-        [HttpGet("GetContractById")]
+        [HttpPost("GetContractById")]
         [SwaggerOperation(
             Summary = "Obtém um contrato pelo ID.",
             Description = "Recupera um contrato específico pelo ID."
@@ -37,12 +39,28 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(200, "Contrato recuperado com sucesso.")]
         [SwaggerResponse(404, "Contrato não encontrado.")]
         [SwaggerResponse(500, "Erro interno do servidor.")]
-        public async Task<ContractDto> GetContractById(int id)
-        {
-            return await _contractService.GetContractById(id);
+        public async Task<ContractDto> GetContractById(GetContractByIdRequest getContractByIdRequest)
+        {   int contractId = getContractByIdRequest.Id;
+            return await _contractService.GetContractById(contractId);
         }
 
-        [Authorize/*(Policy = "RequireMasterRole")*/]
+        [HttpPost("GetContractByCompanyName")]
+        [SwaggerOperation(
+            Summary = "Obtém um contrato pelo Nome da Contratante.",
+            Description = "Recupera um contrato específico pelo Contratante."
+        )]
+        [SwaggerResponse(200, "Contrato recuperado com sucesso.")]
+        [SwaggerResponse(404, "Contrato não encontrado.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<ContractDto> GetContractByCompanyName
+        (
+            GetContractByCompanyNameRequest getContractByCompanyNameRequest
+        )
+
+        {   string companyName = getContractByCompanyNameRequest.Name;
+            return await _contractService.GetContractByCompanyName(companyName);
+        }
+
         [HttpPost("InsertContract")]
         [SwaggerOperation(
             Summary = "Insere um novo contrato.",
@@ -64,7 +82,6 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
-        [Authorize(Policy = "RequireMasterRole")]
         [HttpPut("UpdateContract")]
         [SwaggerOperation(
             Summary = "Atualiza um contrato.",

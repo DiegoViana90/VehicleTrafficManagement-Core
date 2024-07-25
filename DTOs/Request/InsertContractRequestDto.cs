@@ -1,6 +1,6 @@
 using VehicleTrafficManagement.Enum;
 
-namespace VehicleTrafficManagement.Dto
+namespace VehicleTrafficManagement.Dto.Request
 {
     public class InsertContractRequestDto
     {

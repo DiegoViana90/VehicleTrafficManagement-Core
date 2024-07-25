@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using VehicleTrafficManagement.Interfaces;
+using VehicleTrafficManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using VehicleTrafficManagement.Data;
 using VehicleTrafficManagement.Dto;
+using VehicleTrafficManagement.Dto.Request;
 using VehicleTrafficManagement.Enum;
-using VehicleTrafficManagement.Interfaces;
-using VehicleTrafficManagement.Models;
 
 namespace VehicleTrafficManagement.Services
 {
@@ -26,11 +23,63 @@ namespace VehicleTrafficManagement.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ContractDto> GetContractById(int id)
+        public async Task<ContractDto> GetContractById(int contractId)
         {
-            // Implementar lógica
-            throw new NotImplementedException();
+            var contract = await _context.Contracts
+                .Include(c => c.Vehicles) // Inclua os veículos relacionados
+                .FirstOrDefaultAsync(c => c.Id == contractId);
+
+            if (contract == null)
+            {
+                throw new Exception("Contrato não encontrado");
+            }
+
+            ContractDto contractDto = new ContractDto
+            {
+                Id = contract.Id,
+                ServiceProviderCompanyId = contract.ServiceProviderCompanyId,
+                ClientCompanyId = contract.ClientCompanyId,
+                StartDate = contract.StartDate,
+                EndDate = contract.EndDate,
+                Status = contract.Status,
+                VehicleIds = contract.Vehicles.Select(v => v.Id).ToList() // Liste os IDs dos veículos
+            };
+
+            return contractDto;
         }
+
+        public async Task<ContractDto> GetContractByCompanyName(string companyName)
+        {
+            var company = await _context.Companies.FirstOrDefaultAsync(c => c.Name == companyName);
+
+            if (company == null)
+            {
+                throw new Exception("Empresa não encontrada");
+            }
+
+            var contract = await _context.Contracts
+                .Include(c => c.Vehicles)
+                .FirstOrDefaultAsync(c => c.ClientCompanyId == company.CompaniesId);
+
+            if (contract == null)
+            {
+                throw new Exception("Contrato não encontrado");
+            }
+
+            ContractDto contractDto = new ContractDto
+            {
+                Id = contract.Id,
+                ServiceProviderCompanyId = contract.ServiceProviderCompanyId,
+                ClientCompanyId = contract.ClientCompanyId,
+                StartDate = contract.StartDate,
+                EndDate = contract.EndDate,
+                Status = contract.Status,
+                VehicleIds = contract.Vehicles.Select(v => v.Id).ToList()
+            };
+
+            return contractDto;
+        }
+
 
         public async Task<string> InsertContract(InsertContractRequestDto contractRequestDto)
         {
@@ -44,8 +93,8 @@ namespace VehicleTrafficManagement.Services
             {
                 ServiceProviderCompanyId = contractRequestDto.ServiceProviderCompanyId,
                 ClientCompanyId = contractRequestDto.ClientCompanyId,
-                StartDate = contractRequestDto.StartDate,
-                EndDate = contractRequestDto.EndDate,
+                StartDate = DateTime.SpecifyKind(contractRequestDto.StartDate, DateTimeKind.Utc), 
+                EndDate = contractRequestDto.EndDate.HasValue ? DateTime.SpecifyKind(contractRequestDto.EndDate.Value, DateTimeKind.Utc) : (DateTime?)null,
                 Status = contractRequestDto.Status,
                 Vehicles = new List<Vehicle>()
             };
@@ -54,18 +103,17 @@ namespace VehicleTrafficManagement.Services
             {
                 try
                 {
-
                     var vehicles = await _context.Vehicles
                         .Where(v => contractRequestDto.VehicleIds.Contains(v.Id) && v.ContractId != null)
                         .ToListAsync();
 
                     if (vehicles.Any())
                     {
-                         throw new Exception("Um ou mais veículos já estão associados a um contrato.");
+                        throw new Exception("Um ou mais veículos já estão associados a um contrato.");
                     }
 
                     _context.Contracts.Add(contract);
-                    await _context.SaveChangesAsync(); 
+                    await _context.SaveChangesAsync();
 
                     foreach (var vehicleId in contractRequestDto.VehicleIds)
                     {
@@ -73,11 +121,11 @@ namespace VehicleTrafficManagement.Services
                         if (vehicle != null)
                         {
                             vehicle.Status = VehicleStatus.Contract;
-                            vehicle.ContractId = contract.Id; 
+                            vehicle.ContractId = contract.Id;
                             _context.Entry(vehicle).State = EntityState.Modified;
                         }
                         else
-                        throw new Exception("Um ou mais veículos não cadastrados.");
+                            throw new Exception("Um ou mais veículos não cadastrados.");
                     }
 
                     await _context.SaveChangesAsync();
@@ -89,11 +137,12 @@ namespace VehicleTrafficManagement.Services
                 }
                 catch (Exception ex)
                 {
-                    await transaction.RollbackAsync(); 
+                    await transaction.RollbackAsync();
                     return ex.Message;
                 }
             }
         }
+
 
         public async Task UpdateContract(int id, ContractDto contractDto)
         {
