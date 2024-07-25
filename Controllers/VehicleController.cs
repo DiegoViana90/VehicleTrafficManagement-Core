@@ -53,7 +53,7 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
-        [HttpPost("GetAllVehicles")]
+        [HttpGet("GetAllVehicles")]
         [SwaggerOperation(Summary = "Busca todos os veículos cadastrado no sistema.")]
         [SwaggerResponse(201, "ok")]
         [SwaggerResponse(400, "Invalid request.")]
