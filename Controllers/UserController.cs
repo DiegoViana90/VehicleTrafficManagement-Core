@@ -8,7 +8,7 @@ using VehicleTrafficManagement.Models;
 namespace VehicleTrafficManagement.Controllers
 {
     [Route("controller")]
-    [Authorize(Roles = "Master")]
+    // [Authorize(Roles = "Master")]
     [ApiController]
     public class UserController : ControllerBase
     {

@@ -8,6 +8,6 @@ namespace VehicleTrafficManagement.DTOs.Request
     public class GetVehicleByChassisRequestDTO
     {
         public string Chassis { get; set; }      
-        public int CompanyId { get; set; } 
+        public int CompaniesId { get; set; } 
     }
 }

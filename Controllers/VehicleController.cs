@@ -165,7 +165,7 @@ namespace VehicleTrafficManagement.Controllers
             try
             {
                 string chassis = getVehicleByChassisRequestDTO.Chassis;
-                int companyId = getVehicleByChassisRequestDTO.CompanyId;
+                int companyId = getVehicleByChassisRequestDTO.CompaniesId;
                 var vehicle = await _vehicleService.GetVehicleByChassis(chassis, companyId);
                 return Ok(vehicle);
             }
@@ -190,7 +190,7 @@ namespace VehicleTrafficManagement.Controllers
             try
             {
                 string licensePlate = getVehicleByLicensePlateRequestDTO.LicensePlate;
-                int companyId = getVehicleByLicensePlateRequestDTO.CompanyId;
+                int companyId = getVehicleByLicensePlateRequestDTO.CompaniesId;
                 var vehicle = await _vehicleService.GetVehicleByLicensePlate(licensePlate, companyId);
                 return Ok(vehicle);
             }

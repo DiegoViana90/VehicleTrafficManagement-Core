@@ -57,7 +57,7 @@ namespace VehicleTrafficManagement.Services
                 throw new Exception($"Veículo com chassi {insertVehicleRequestDto.Chassis} já existe.");
             }
 
-            var company = await _dbContext.Companies.FindAsync(insertVehicleRequestDto.CompanyId);
+            var company = await _dbContext.Companies.FindAsync(insertVehicleRequestDto.CompaniesId);
             if (company == null)
             {
                  throw new Exception("Empresa não encontrada");
@@ -80,7 +80,7 @@ namespace VehicleTrafficManagement.Services
                 HashedChassi = hashedChassi,
                 ModelYear = insertVehicleRequestDto.ModelYear,
                 ManufactureYear = insertVehicleRequestDto.ManufactureYear,
-                CompaniesId = insertVehicleRequestDto.CompanyId
+                CompaniesId = insertVehicleRequestDto.CompaniesId
             };
 
             _dbContext.Vehicles.Add(newVehicle);
