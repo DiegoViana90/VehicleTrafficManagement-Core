@@ -30,5 +30,9 @@ namespace VehicleTrafficManagement.Models
         public string HashedChassi { get; set; }
         public string ManufactureYear { get; set; }
         public string ModelYear { get; set; }
+
+        [ForeignKey("Company")]
+        public int CompaniesId { get; set; }
+        public Company Company { get; set; }
     }
 }

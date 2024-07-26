@@ -53,6 +53,44 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
+        [HttpGet("GetAllVehicles")]
+        [SwaggerOperation(Summary = "Busca todos os veículos cadastrado no sistema.")]
+        [SwaggerResponse(201, "ok")]
+        [SwaggerResponse(400, "Invalid request.")]
+        public async Task<ActionResult<IEnumerable<GetVehicleDto>>>GetAllVehicles()
+        {
+            try
+            {var vehicleModelList = await _vehicleService.GetAllVehicles();
+               
+                return Ok(vehicleModelList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("GetAllVehiclesFromCompany")]
+        [SwaggerOperation(Summary = "Busca todos os veículos cadastrado no sistema para uma empresa específica")]
+        [SwaggerResponse(201, "ok")]
+        [SwaggerResponse(400, "Invalid request.")]
+        public async Task<ActionResult<IEnumerable<GetVehicleDto>>>GetAllVehiclesFromCompany
+        (GetAllVehiclesFromCompanyRequestDTO getAllVehiclesFromCompanyRequestDTO)
+        {
+            int companyId = getAllVehiclesFromCompanyRequestDTO.CompanyId;
+            try
+            {var vehicleModelList = await _vehicleService.GetAllVehiclesFromCompany(companyId);
+               
+                return Ok(vehicleModelList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        
+
         [HttpPost("InsertVehicle")]
         [SwaggerOperation(
         Summary = "Adiciona um novo veículo.",
@@ -127,7 +165,8 @@ namespace VehicleTrafficManagement.Controllers
             try
             {
                 string chassis = getVehicleByChassisRequestDTO.Chassis;
-                var vehicle = await _vehicleService.GetVehicleByChassis(chassis);
+                int companyId = getVehicleByChassisRequestDTO.CompaniesId;
+                var vehicle = await _vehicleService.GetVehicleByChassis(chassis, companyId);
                 return Ok(vehicle);
             }
             catch (Exception ex)
@@ -151,7 +190,8 @@ namespace VehicleTrafficManagement.Controllers
             try
             {
                 string licensePlate = getVehicleByLicensePlateRequestDTO.LicensePlate;
-                var vehicle = await _vehicleService.GetVehicleByLicensePlate(licensePlate);
+                int companyId = getVehicleByLicensePlateRequestDTO.CompaniesId;
+                var vehicle = await _vehicleService.GetVehicleByLicensePlate(licensePlate, companyId);
                 return Ok(vehicle);
             }
             catch (Exception ex)

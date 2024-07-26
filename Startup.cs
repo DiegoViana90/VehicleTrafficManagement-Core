@@ -34,6 +34,7 @@ namespace VehicleTrafficManagement
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IContractService, ContractService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
@@ -53,6 +54,11 @@ namespace VehicleTrafficManagement
                         ValidateAudience = false
                     };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireMasterRole", policy => policy.RequireRole("Master"));
+            });
 
             services.AddCors(options =>
             {
@@ -79,17 +85,17 @@ namespace VehicleTrafficManagement
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
                     {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] { }
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
                     }
+                },
+                new string[] { }
+            }
                 });
             });
 
@@ -105,7 +111,7 @@ namespace VehicleTrafficManagement
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "VehicleTrafficManagement V1");
-                    c.RoutePrefix = string.Empty; 
+                    c.RoutePrefix = string.Empty;
                 });
             }
 

@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace VehicleTrafficManagement.DTOs.Request
 {
-    public class GetVehicleByLicensePlateRequestDTO
+    public class GetAllVehiclesFromCompanyRequestDTO
     {
-        public string LicensePlate { get; set; }  
-        public int CompaniesId { get; set; }     
+     public int CompanyId { get; set; }   
     }
 }
