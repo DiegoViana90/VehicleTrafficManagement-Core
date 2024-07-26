@@ -7,6 +7,7 @@ namespace VehicleTrafficManagement.DTOs.Request
 {
     public class GetVehicleByLicensePlateRequestDTO
     {
-        public string LicensePlate { get; set; }       
+        public string LicensePlate { get; set; }  
+        public int CompanyId { get; set; }     
     }
 }
