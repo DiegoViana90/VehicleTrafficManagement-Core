@@ -17,5 +17,7 @@ namespace VehicleTrafficManagement.Models
         public int CompanyInformationId { get; set; }
 
         public CompanyInformation CompanyInformation { get; set; }
+
+        public int CompanyRelated { get; set; }
     }
 }

@@ -19,6 +19,19 @@ namespace VehicleTrafficManagement.Controllers
             _companyService = companyService;
         }
 
+        [HttpPost("GetAllCompaniesByCompany")]
+        [SwaggerOperation(Summary = "Busca todas as empresas.",
+        Description = "Recupera uma lista de todas as empresas. FLUXO OK")]
+        [SwaggerResponse(200, "Success", typeof(IEnumerable<CompanyDTOResult>))]
+        public async Task<ActionResult<IEnumerable<CompanyDTOResult>>> GetAllCompaniesByCompany
+        (GetAllCompaniesByCompanyRequestDto getAllCompaniesByCompanyRequestDto)
+        {
+            int companyRelated = getAllCompaniesByCompanyRequestDto.CompanyRelated;       
+            var companies = await _companyService.GetAllCompaniesByCompany(companyRelated);
+            return Ok(companies);
+        }
+
+        
         [HttpGet("GetAllCompanies")]
         [SwaggerOperation(Summary = "Busca todas as empresas.",
         Description = "Recupera uma lista de todas as empresas. FLUXO OK")]
@@ -28,6 +41,7 @@ namespace VehicleTrafficManagement.Controllers
             var companies = await _companyService.GetAllCompanies();
             return Ok(companies);
         }
+
 
         [HttpGet("GetCompanyById")]
         [SwaggerOperation(Summary = "Busca empresa por ID.",
@@ -80,6 +94,27 @@ namespace VehicleTrafficManagement.Controllers
             return Ok(company);
         }
 
+        [HttpPost("GetCompanyByTaxNumberAndCompanyRelated")]
+        [SwaggerOperation(Summary = "Busca empresa por TaxNumber.",
+         Description = "Recupera uma empresa específica pelo TaxNumber.")]
+        [SwaggerResponse(200, "Success", typeof(CompanyDTOResult))]
+        [SwaggerResponse(404, "Company not found")]
+        public async Task<ActionResult<CompanyDTOResult>> GetCompanyByTaxNumberAndCompanyRelated([FromBody]
+         GetCompanyByTaxNumberRequest getCompanyByTaxNumberRequest)
+        {
+            string taxNumber = getCompanyByTaxNumberRequest.TaxNumber;
+            int companyRelated = getCompanyByTaxNumberRequest.CompanyRelated;
+
+            var company = await _companyService.GetCompanyByTaxNumberAndCompanyRelated(taxNumber, companyRelated);
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(company);
+        }
+
+
         [HttpPost("InsertCompany")]
         [SwaggerOperation(Summary = "Adiciona uma nova empresa.",
         Description = "Adiciona uma nova empresa ao sistema.  FLUXO OK")]
@@ -102,7 +137,7 @@ namespace VehicleTrafficManagement.Controllers
         {
             try
             {
-                await _companyService.UpdateCompanById(id, companyDto);
+                await _companyService.UpdateCompanyById(id, companyDto);
                 return NoContent();
             }
             catch (KeyNotFoundException)
@@ -111,17 +146,18 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
-        [HttpPut("UpdateCompanByTaxNumber")]
+        [HttpPut("UpdateCompanyByTaxNumberAndCompanyRelated")]
         [SwaggerOperation(Summary = "Atualiza uma empresa pelo TaxNumber.",
          Description = "Atualiza uma empresa existente no sistema.")]
         [SwaggerResponse(200, "Company updated successfully")]
         [SwaggerResponse(404, "Company not found")]
         [SwaggerResponse(400, "Invalid request")]
-        public async Task<ActionResult> UpdateCompanByTaxNumber(UpdateCompanByTaxNumberRequest updateCompanByTaxNumberRequest)
+        public async Task<ActionResult> UpdateCompanyByTaxNumberAndCompanyRelated
+        (UpdateCompanyByTaxNumberRequest updateCompanyByTaxNumberRequest)
         {
             try
-            {
-                await _companyService.UpdateCompanByTaxNumberAsync(updateCompanByTaxNumberRequest);
+            { 
+                await _companyService.UpdateCompanyByTaxNumberAndCompanyRelatedAsync(updateCompanyByTaxNumberRequest);
                 return NoContent();
             }
             catch (KeyNotFoundException)

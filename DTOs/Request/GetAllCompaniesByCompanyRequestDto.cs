@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 
 namespace VehicleTrafficManagement.DTOs.Request
 {
-
-
-    public class GetCompanyByTaxNumberRequest
+    public class GetAllCompaniesByCompanyRequestDto
     {
-        public string TaxNumber { get; set; }
-        public int CompanyRelated { get; set; }
+     public int CompanyRelated { get; set; }   
     }
 }

@@ -91,9 +91,9 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(400, "Requisição inválida.")]
         [SwaggerResponse(404, "Contrato não encontrado.")]
         [SwaggerResponse(500, "Erro interno do servidor.")]
-        public async Task<IActionResult> UpdateContract(int id, [FromBody] ContractDto contractDto)
+        public async Task<IActionResult> UpdateContract([FromBody] ContractDto contractDto)
         {
-            await _contractService.UpdateContract(id, contractDto);
+            await _contractService.UpdateContract(contractDto);
             return Ok();
         }
 

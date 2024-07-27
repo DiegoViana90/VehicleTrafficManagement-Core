@@ -49,18 +49,20 @@ namespace VehicleTrafficManagement.Services
             {
                 throw new Exception($"Chassi {insertVehicleRequestDto.Chassis} Inválido.");
             }
+
             var existingVehicle = await _dbContext.Vehicles
-                .FirstOrDefaultAsync(v => v.Chassis == insertVehicleRequestDto.Chassis);
+                .FirstOrDefaultAsync(v => v.Chassis == insertVehicleRequestDto.Chassis
+                                          && v.CompaniesId == insertVehicleRequestDto.CompaniesId);
 
             if (existingVehicle != null)
             {
-                throw new Exception($"Veículo com chassi {insertVehicleRequestDto.Chassis} já existe.");
+                throw new Exception($"Veículo com chassi {insertVehicleRequestDto.Chassis} já existe para a empresa {insertVehicleRequestDto.CompaniesId}.");
             }
 
             var company = await _dbContext.Companies.FindAsync(insertVehicleRequestDto.CompaniesId);
             if (company == null)
             {
-                 throw new Exception("Empresa não encontrada");
+                throw new Exception("Empresa não encontrada");
             }
 
             string hashedChassi = QrGenerator.ApplySaltAndHash(insertVehicleRequestDto.Chassis);

@@ -21,5 +21,6 @@ namespace VehicleTrafficManagement.Dto
         public string Observations { get; set; }
         public CompanyStatus CompanyStatus { get; set; }
         public int CompanyInformationId { get; set; }
+        public int CompanyRelated { get; set; }
     }
 }

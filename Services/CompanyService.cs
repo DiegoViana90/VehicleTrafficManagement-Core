@@ -26,6 +26,57 @@ namespace VehicleTrafficManagement.Services
             return companies;
         }
 
+        public async Task<IEnumerable<CompanyDTOResult>> GetAllCompaniesByCompany(int companyRelated)
+        {
+            var companies = await _context.Companies
+                .Where(c => c.CompanyRelated == companyRelated)
+                .ToListAsync();
+
+            if (!companies.Any())
+            {
+                throw new Exception($"Nenhuma empresa encontrada relacionada com o ID {companyRelated}.");
+            }
+
+            var companyInformationIds = companies.Select(c => c.CompanyInformationId).Distinct().ToList();
+            var companiesInformation = await _context.CompanyInformation
+                .Where(ci => companyInformationIds.Contains(ci.CompanyInformationId))
+                .ToListAsync();
+
+            var companyDTOResults = new List<CompanyDTOResult>();
+
+            foreach (var company in companies)
+            {
+                var companyInfo = companiesInformation.FirstOrDefault(ci => ci.CompanyInformationId == company.CompanyInformationId);
+
+                var companyDTO = new CompanyDTOResult
+                {
+                    CompaniesId = company.CompaniesId,
+                    Name = company.Name,
+                    TradeName = company.TradeName,
+                    TaxNumber = company.TaxNumber,
+                    CEP = companyInfo?.CEP,
+                    Street = companyInfo?.Street,
+                    PropertyNumber = companyInfo?.PropertyNumber,
+                    District = companyInfo?.District,
+                    City = companyInfo?.City,
+                    State = companyInfo?.State,
+                    Country = companyInfo?.Country,
+                    AdressComplement = companyInfo?.AdressComplement,
+                    PhoneNumber = companyInfo?.PhoneNumber,
+                    Email = companyInfo?.Email,
+                    Observations = companyInfo?.Observations,
+                    CompanyStatus = companyInfo.CompanyStatus,
+                    CompanyInformationId = company.CompanyInformationId,
+                    CompanyRelated = company.CompanyRelated,
+                };
+
+                companyDTOResults.Add(companyDTO);
+            }
+
+            return companyDTOResults;
+        }
+
+
         public async Task<CompanyDto> GetCompanyById(int id)
         {
             var company = await _context.Companies.FindAsync(id);
@@ -67,110 +118,170 @@ namespace VehicleTrafficManagement.Services
             return await _companyRepository.GetCompanyByTaxNumberAsync(TaxNumber);
         }
 
-        public async Task<string> InsertCompany(InsertCompanyRequestDto insertCompanyRequestDto)
+        public async Task<CompanyDTOResult> GetCompanyByTaxNumberAndCompanyRelated(string taxNumber, int companyRelated)
         {
+            taxNumber = Formatter.RemoveMaskTaxNumber(taxNumber);
+            bool isTaxNumberValid = Validator.IsValidTaxNumber(taxNumber);
 
-            insertCompanyRequestDto.TaxNumber = Formatter.RemoveMaskTaxNumber(insertCompanyRequestDto.TaxNumber);
-            bool taxNumberExists = await TaxNumberExists(insertCompanyRequestDto.TaxNumber);
-
-            if (taxNumberExists)
+            if (!isTaxNumberValid)
             {
-                throw new ArgumentException("TaxNumber já cadastrado na base!");
+                throw new ArgumentException("TaxNumber Inválido!");
             }
 
-            var companyInformation = new CompanyInformation
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(c => c.TaxNumber == taxNumber && c.CompanyRelated == companyRelated);
+
+            if (company == null)
             {
-                CEP = insertCompanyRequestDto.CEP,
-                Street = insertCompanyRequestDto.Street,
-                PropertyNumber = insertCompanyRequestDto.PropertyNumber,
-                District = insertCompanyRequestDto.District,
-                City = insertCompanyRequestDto.City,
-                State = insertCompanyRequestDto.State,
-                Country = insertCompanyRequestDto.Country,
-                AdressComplement = insertCompanyRequestDto.AdressComplement,
-                PhoneNumber = insertCompanyRequestDto.PhoneNumber,
-                Email = insertCompanyRequestDto.Email,
-                Observations = insertCompanyRequestDto.Observations,
-                CompanyStatus = insertCompanyRequestDto.CompanyStatus
+                throw new Exception($"Nenhuma empresa encontrada com o TaxNumber {taxNumber} e CompanyRelated {companyRelated}.");
+            }
+
+            var companyInfo = await _context.CompanyInformation
+                .FirstOrDefaultAsync(ci => ci.CompanyInformationId == company.CompanyInformationId);
+
+            if (companyInfo == null)
+            {
+                throw new Exception($"Nenhuma informação adicional encontrada para a empresa com CompanyInformationId {company.CompanyInformationId}.");
+            }
+
+            var companyDTO = new CompanyDTOResult
+            {
+                CompaniesId = company.CompaniesId,
+                Name = company.Name,
+                TradeName = company.TradeName,
+                TaxNumber = company.TaxNumber,
+                CEP = companyInfo.CEP,
+                Street = companyInfo.Street,
+                PropertyNumber = companyInfo.PropertyNumber,
+                District = companyInfo.District,
+                City = companyInfo.City,
+                State = companyInfo.State,
+                Country = companyInfo.Country,
+                AdressComplement = companyInfo.AdressComplement,
+                PhoneNumber = companyInfo.PhoneNumber,
+                Email = companyInfo.Email,
+                Observations = companyInfo.Observations,
+                CompanyStatus = companyInfo.CompanyStatus,
+                CompanyInformationId = company.CompanyInformationId,
+                CompanyRelated = company.CompanyRelated,
             };
 
-            _context.CompanyInformation.Add(companyInformation);
-            await _context.SaveChangesAsync();
-
-
-            var company = new Company
-            {
-                Name = insertCompanyRequestDto.Name,
-                TradeName = insertCompanyRequestDto.TradeName,
-                TaxNumber = insertCompanyRequestDto.TaxNumber,
-                CompanyInformationId = companyInformation.CompanyInformationId
-            };
-
-            _context.Companies.Add(company);
-            await _context.SaveChangesAsync();
-
-            return company.Name;
+            return companyDTO;
         }
 
-        public async Task UpdateCompanByTaxNumberAsync(UpdateCompanByTaxNumberRequest updateCompanByTaxNumberRequest)
+
+        public async Task<string> InsertCompany(InsertCompanyRequestDto insertCompanyRequestDto)
         {
-            CompanyDTOResult companyResult = await GetCompanyByTaxNumberAsync(updateCompanByTaxNumberRequest.TaxNumber);
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                insertCompanyRequestDto.TaxNumber = Formatter.RemoveMaskTaxNumber(insertCompanyRequestDto.TaxNumber);
+                bool taxNumberExists = await TaxNumberExists(insertCompanyRequestDto.TaxNumber, insertCompanyRequestDto.CompanyRelated);
+
+                if (taxNumberExists)
+                {
+                    throw new ArgumentException("TaxNumber já cadastrado na base!");
+                }
+
+                var companyInformation = new CompanyInformation
+                {
+                    CEP = insertCompanyRequestDto.CEP,
+                    Street = insertCompanyRequestDto.Street,
+                    PropertyNumber = insertCompanyRequestDto.PropertyNumber,
+                    District = insertCompanyRequestDto.District,
+                    City = insertCompanyRequestDto.City,
+                    State = insertCompanyRequestDto.State,
+                    Country = insertCompanyRequestDto.Country,
+                    AdressComplement = insertCompanyRequestDto.AdressComplement,
+                    PhoneNumber = insertCompanyRequestDto.PhoneNumber,
+                    Email = insertCompanyRequestDto.Email,
+                    Observations = insertCompanyRequestDto.Observations,
+                    CompanyStatus = insertCompanyRequestDto.CompanyStatus
+                };
+
+                _context.CompanyInformation.Add(companyInformation);
+                await _context.SaveChangesAsync();
+
+                var company = new Company
+                {
+                    Name = insertCompanyRequestDto.Name,
+                    TradeName = insertCompanyRequestDto.TradeName,
+                    TaxNumber = insertCompanyRequestDto.TaxNumber,
+                    CompanyInformationId = companyInformation.CompanyInformationId,
+                    CompanyRelated = insertCompanyRequestDto.CompanyRelated
+                };
+
+                _context.Companies.Add(company);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return company.Name;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception("Erro ao inserir a empresa: " + ex.Message);
+            }
+        }
+
+        private async Task<bool> TaxNumberExists(string taxNumber, int companyRelated)
+        {
+            return await _context.Companies
+                .AnyAsync(c => c.TaxNumber == taxNumber && c.CompanyRelated == companyRelated);
+        }
+
+        public async Task UpdateCompanyByTaxNumberAndCompanyRelatedAsync(UpdateCompanyByTaxNumberRequest updateCompanyByTaxNumberRequest)
+        {
+            CompanyDTOResult companyResult = await GetCompanyByTaxNumberAndCompanyRelated(updateCompanyByTaxNumberRequest.TaxNumber, updateCompanyByTaxNumberRequest.CompanyRelated);
             if (companyResult == null)
             {
                 throw new KeyNotFoundException("Empresa não encontrada.");
             }
 
-            Company company = new Company
+            var existingCompany = await _context.Companies.FindAsync(companyResult.CompaniesId);
+            if (existingCompany == null)
             {
-                CompaniesId = companyResult.CompaniesId,
-                Name = companyResult.Name,
-                TaxNumber = companyResult.TaxNumber,
-                CompanyInformationId = companyResult.CompanyInformationId,
-                TradeName = updateCompanByTaxNumberRequest.TradeName,
-            };
+                throw new KeyNotFoundException("Empresa não encontrada no contexto.");
+            }
 
-            CompanyInformation companyInformation = new CompanyInformation
+            existingCompany.TradeName = updateCompanyByTaxNumberRequest.TradeName;
+
+            var existingCompanyInformation = await _context.CompanyInformation.FindAsync(companyResult.CompanyInformationId);
+            if (existingCompanyInformation == null)
             {
-                CompanyInformationId = companyResult.CompanyInformationId,
-                CEP = updateCompanByTaxNumberRequest.CEP,
-                Street = updateCompanByTaxNumberRequest.Street,
-                PropertyNumber = updateCompanByTaxNumberRequest.PropertyNumber,
-                District = updateCompanByTaxNumberRequest.District,
-                City = updateCompanByTaxNumberRequest.City,
-                State = updateCompanByTaxNumberRequest.State,
-                Country = updateCompanByTaxNumberRequest.Country,
-                AdressComplement = updateCompanByTaxNumberRequest.AddressComplement,
-                PhoneNumber = updateCompanByTaxNumberRequest.PhoneNumber,
-                Email = updateCompanByTaxNumberRequest.Email,
-                Observations = updateCompanByTaxNumberRequest.Observations
-            };
+                throw new KeyNotFoundException("Informações da empresa não encontradas no contexto.");
+            }
+
+            existingCompanyInformation.CEP = updateCompanyByTaxNumberRequest.CEP;
+            existingCompanyInformation.Street = updateCompanyByTaxNumberRequest.Street;
+            existingCompanyInformation.PropertyNumber = updateCompanyByTaxNumberRequest.PropertyNumber;
+            existingCompanyInformation.District = updateCompanyByTaxNumberRequest.District;
+            existingCompanyInformation.City = updateCompanyByTaxNumberRequest.City;
+            existingCompanyInformation.State = updateCompanyByTaxNumberRequest.State;
+            existingCompanyInformation.Country = updateCompanyByTaxNumberRequest.Country;
+            existingCompanyInformation.AdressComplement = updateCompanyByTaxNumberRequest.AddressComplement;
+            existingCompanyInformation.PhoneNumber = updateCompanyByTaxNumberRequest.PhoneNumber;
+            existingCompanyInformation.Email = updateCompanyByTaxNumberRequest.Email;
+            existingCompanyInformation.Observations = updateCompanyByTaxNumberRequest.Observations;
+            existingCompanyInformation.CompanyStatus = updateCompanyByTaxNumberRequest.CompanyStatus;
 
             var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                try
-                {
-                    _context.Companies.Update(company);
-                    _context.CompanyInformation.Update(companyInformation);
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-                }
-
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    throw;
-                }
+                _context.Companies.Update(existingCompany);
+                _context.CompanyInformation.Update(existingCompanyInformation);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
         }
 
 
-        private async Task<bool> TaxNumberExists(string taxNumber)
-        {
-            var company = await GetCompanyByTaxNumberAsync(taxNumber);
-            return company != null;
-        }
-
-        public async Task UpdateCompanById(int id, CompanyDto companyDto)
+        public async Task UpdateCompanyById(int id, CompanyDto companyDto)
         {
             var company = await _context.Companies.FindAsync(id);
             if (company == null)

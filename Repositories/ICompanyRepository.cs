@@ -6,7 +6,7 @@ namespace VehicleTrafficManagement.Repositories
 {
     public interface ICompanyRepository
     {
-        Task<CompanyDTOResult> GetCompanyByTaxNumberAsync(string TaxNumber);
+        Task<CompanyDTOResult> GetCompanyByTaxNumberAsync(string taxNumber);
         Task<IEnumerable<CompanyDTOResult>> GetAllCompanies();
         Task<IEnumerable<CompanyDTOResult>> GetCompanyByName(string name); 
     }
