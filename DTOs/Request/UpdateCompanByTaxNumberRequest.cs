@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VehicleTrafficManagement.Enum;
 
 namespace VehicleTrafficManagement.DTOs.Request
 {
-    public class UpdateCompanByTaxNumberRequest
+    public class UpdateCompanyByTaxNumberRequest
     {
         public string TaxNumber { get; set; }
         public string Name { get; set; }
@@ -21,6 +22,8 @@ namespace VehicleTrafficManagement.DTOs.Request
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string? Observations { get; set; }
+        public CompanyStatus CompanyStatus { get; set; }
+        public int CompanyRelated { get; set; }
  }
 
 }

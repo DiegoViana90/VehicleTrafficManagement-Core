@@ -19,5 +19,6 @@ namespace VehicleTrafficManagement.DTOs.Request
         public string Email { get; set; }
         public string? Observations { get; set; }
         public CompanyStatus CompanyStatus{ get; set; } = 0;
+        public int CompanyRelated { get; set; }
     }
 }

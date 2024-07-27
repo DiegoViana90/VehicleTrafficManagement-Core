@@ -7,6 +7,6 @@ namespace VehicleTrafficManagement.DTOs.Request
 {
     public class GetAllVehiclesFromCompanyRequestDTO
     {
-     public int CompanyId { get; set; }   
+     public int CompaniesId { get; set; }   
     }
 }

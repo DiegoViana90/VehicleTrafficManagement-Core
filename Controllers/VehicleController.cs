@@ -77,7 +77,7 @@ namespace VehicleTrafficManagement.Controllers
         public async Task<ActionResult<IEnumerable<GetVehicleDto>>>GetAllVehiclesFromCompany
         (GetAllVehiclesFromCompanyRequestDTO getAllVehiclesFromCompanyRequestDTO)
         {
-            int companyId = getAllVehiclesFromCompanyRequestDTO.CompanyId;
+            int companyId = getAllVehiclesFromCompanyRequestDTO.CompaniesId;
             try
             {var vehicleModelList = await _vehicleService.GetAllVehiclesFromCompany(companyId);
                
