@@ -13,7 +13,7 @@ namespace VehicleTrafficManagement.Interfaces
         Task DeleteCompanyById(int id);
         Task<CompanyDTOResult> GetCompanyByTaxNumberAsync(string TaxNumber);
         Task<CompanyDTOResult> GetCompanyByTaxNumberAndCompanyRelated(string taxNumber, int companyRelated);
-        Task<IEnumerable<CompanyDTOResult>>  GetCompanyByName(string name);
+        Task<CompanyDTOResult> GetCompanyByName(string name, int companyRelated);
         Task UpdateCompanyByTaxNumberAndCompanyRelatedAsync(UpdateCompanyByTaxNumberRequest updateCompanByTaxNumberRequest);
     }
 }

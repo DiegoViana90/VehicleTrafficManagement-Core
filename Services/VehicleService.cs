@@ -98,17 +98,17 @@ namespace VehicleTrafficManagement.Services
             return newVehicleResponseDto;
         }
 
-        public async Task<GetVehicleDto> GetVehicleByQRCode(string QRCode)
+        public async Task<GetVehicleDto> GetVehicleByQRCode(string QRCode, int companyId)
         {
             string hashedChassi = QRCode;
-            GetVehicleDto vehicleDto = await GetVehicleByHashedChassi(hashedChassi);
+            GetVehicleDto vehicleDto = await GetVehicleByHashedChassi(hashedChassi, companyId);
             return vehicleDto;
         }
 
-        private async Task<GetVehicleDto> GetVehicleByHashedChassi(string hashedChassi)
+        private async Task<GetVehicleDto> GetVehicleByHashedChassi(string hashedChassi, int companyId)
         {
             var vehicle = await _dbContext.Vehicles
-                .Where(v => v.HashedChassi == hashedChassi)
+                .Where(v => v.HashedChassi == hashedChassi && v.CompaniesId == companyId)
                 .Select(v => new
                 {
                     v.Id,

@@ -51,9 +51,10 @@ namespace VehicleTrafficManagement.Services
             return contractDto;
         }
 
-        public async Task<ContractDto> GetContractByCompanyName(string companyName)
+        public async Task<ContractDto> GetContractByCompanyName(string companyName, int companiesId)
         {
-            var company = await _context.Companies.FirstOrDefaultAsync(c => c.Name == companyName);
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(c => c.Name == companyName && c.CompanyRelated == companiesId);
 
             if (company == null)
             {
@@ -62,7 +63,12 @@ namespace VehicleTrafficManagement.Services
 
             var contract = await _context.Contracts
                 .Include(c => c.Vehicles)
-                .FirstOrDefaultAsync(c => c.ClientCompanyId == company.CompaniesId && c.Status == ContractStatus.Active);
+                .FirstOrDefaultAsync
+                (
+                c => c.ClientCompanyId == company.CompaniesId && 
+                c.Status == ContractStatus.Active && 
+                c.ServiceProviderCompanyId == companiesId
+                );
 
             if (contract == null)
             {

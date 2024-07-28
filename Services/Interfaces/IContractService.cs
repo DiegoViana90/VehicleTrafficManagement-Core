@@ -7,7 +7,7 @@ namespace VehicleTrafficManagement.Interfaces
     {
         Task<IEnumerable<ContractDto>> GetAllContracts();
         Task<ContractDto> GetContractById(int contractId);
-        Task<ContractDto> GetContractByCompanyName(string companyName);
+        Task<ContractDto> GetContractByCompanyName(string companyName, int companyId);
         Task<string> InsertContract(InsertContractRequestDto contractRequestDto);
         Task<string> UpdateContract(ContractDto contractDto);
         Task DeleteContractById(int id);

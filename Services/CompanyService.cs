@@ -93,15 +93,45 @@ namespace VehicleTrafficManagement.Services
             };
         }
 
-        public async Task<IEnumerable<CompanyDTOResult>> GetCompanyByName(string name)
-        {
-            var companies = await _companyRepository.GetCompanyByName(name);
-            if (companies == null || !companies.Any())
+        public async Task<CompanyDTOResult> GetCompanyByName(string name, int companyRelated)
+        {           
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(c => c.Name == name && c.CompanyRelated == companyRelated);
+
+            if (company == null)
             {
-                return Enumerable.Empty<CompanyDTOResult>();
+                return null;
             }
 
-            return companies;
+            var companyInformation = await _context.CompanyInformation
+                .FirstOrDefaultAsync(ci => ci.CompanyInformationId == company.CompanyInformationId);
+
+            if (companyInformation == null)
+            {
+                return null;
+            }
+
+            return new CompanyDTOResult
+            {
+                CompaniesId = company.CompaniesId,
+                Name = company.Name,
+                TradeName = company.TradeName,
+                TaxNumber = company.TaxNumber,
+                CEP = companyInformation.CEP,
+                Street = companyInformation.Street,
+                PropertyNumber = companyInformation.PropertyNumber,
+                District = companyInformation.District,
+                City = companyInformation.City,
+                State = companyInformation.State,
+                Country = companyInformation.Country,
+                AdressComplement = companyInformation.AdressComplement,
+                PhoneNumber = companyInformation.PhoneNumber,
+                Email = companyInformation.Email,
+                Observations = companyInformation.Observations,
+                CompanyStatus = companyInformation.CompanyStatus,
+                CompanyInformationId = company.CompanyInformationId,
+                CompanyRelated = company.CompanyRelated
+            };
         }
 
 
