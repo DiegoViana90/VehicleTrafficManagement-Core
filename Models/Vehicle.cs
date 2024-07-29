@@ -34,5 +34,7 @@ namespace VehicleTrafficManagement.Models
         [ForeignKey("Company")]
         public int CompaniesId { get; set; }
         public Company Company { get; set; }
+        public string RENAVAM { get; set; }
+        public decimal VehicleValue { get; set; }
     }
 }

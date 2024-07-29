@@ -16,5 +16,7 @@ namespace VehicleTrafficManagement.DTOs.Request
         public string ModelYear { get; set; }
         public int? ContractId { get; set; }
         public int CompaniesId { get; set; }
+        public string RENAVAM { get; set; }
+        public decimal VehicleValue { get; set; }
     }
 }

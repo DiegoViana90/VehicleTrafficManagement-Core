@@ -56,7 +56,8 @@ namespace VehicleTrafficManagement.Services
 
             if (existingVehicle != null)
             {
-                throw new Exception($"Veículo com chassi {insertVehicleRequestDto.Chassis} já existe para a empresa {insertVehicleRequestDto.CompaniesId}.");
+                throw new Exception
+                ($"Veículo com chassi {insertVehicleRequestDto.Chassis} já existe para a empresa {insertVehicleRequestDto.CompaniesId}.");
             }
 
             var company = await _dbContext.Companies.FindAsync(insertVehicleRequestDto.CompaniesId);
@@ -82,7 +83,9 @@ namespace VehicleTrafficManagement.Services
                 HashedChassi = hashedChassi,
                 ModelYear = insertVehicleRequestDto.ModelYear,
                 ManufactureYear = insertVehicleRequestDto.ManufactureYear,
-                CompaniesId = insertVehicleRequestDto.CompaniesId
+                CompaniesId = insertVehicleRequestDto.CompaniesId,
+                RENAVAM = insertVehicleRequestDto.RENAVAM,
+                VehicleValue = insertVehicleRequestDto.VehicleValue
             };
 
             _dbContext.Vehicles.Add(newVehicle);
@@ -121,7 +124,9 @@ namespace VehicleTrafficManagement.Services
                     v.Status,
                     v.ContractId,
                     v.ModelYear,
-                    v.ManufactureYear
+                    v.ManufactureYear,
+                    v.RENAVAM,
+                    v.VehicleValue
                 })
                 .FirstOrDefaultAsync();
 
@@ -160,9 +165,9 @@ namespace VehicleTrafficManagement.Services
                 ManufactureYear = vehicle.ManufactureYear,
                 Manufacturer = vehicleModel.Manufacturer,
                 ModelName = vehicleModel.ModelName,
-                Observations = vehicleModel.Observations
+                Observations = vehicleModel.Observations,
+                RENAVAM = vehicle.RENAVAM
             };
-
             return getVehicleDtoResult;
         }
 
@@ -189,7 +194,9 @@ namespace VehicleTrafficManagement.Services
                     Status = v.Status,
                     ContractId = v.ContractId,
                     ModelYear = v.ModelYear,
-                    ManufactureYear = v.ManufactureYear
+                    ManufactureYear = v.ManufactureYear,
+                    RENAVAM = v.RENAVAM
+
                 })
                 .FirstOrDefaultAsync();
 
@@ -228,7 +235,8 @@ namespace VehicleTrafficManagement.Services
                 ManufactureYear = vehicle.ManufactureYear,
                 Manufacturer = vehicleModel.Manufacturer,
                 ModelName = vehicleModel.ModelName,
-                Observations = vehicleModel.Observations
+                Observations = vehicleModel.Observations,
+                RENAVAM = vehicle.RENAVAM,
             };
 
             return getVehicleDtoresult;
@@ -250,7 +258,8 @@ namespace VehicleTrafficManagement.Services
                     Status = v.Status,
                     ContractId = v.ContractId,
                     ModelYear = v.ModelYear,
-                    ManufactureYear = v.ManufactureYear
+                    ManufactureYear = v.ManufactureYear,
+                    RENAVAM = v.RENAVAM
                 })
                 .FirstOrDefaultAsync();
 
@@ -312,7 +321,8 @@ namespace VehicleTrafficManagement.Services
                     Status = v.Status,
                     ContractId = v.ContractId,
                     ModelYear = v.ModelYear,
-                    ManufactureYear = v.ManufactureYear
+                    ManufactureYear = v.ManufactureYear,
+                    RENAVAM = v.RENAVAM
                 })
                 .FirstOrDefaultAsync();
 
@@ -351,7 +361,8 @@ namespace VehicleTrafficManagement.Services
                 ManufactureYear = vehicle.ManufactureYear,
                 Manufacturer = vehicleModel.Manufacturer,
                 ModelName = vehicleModel.ModelName,
-                Observations = vehicleModel.Observations
+                Observations = vehicleModel.Observations,
+                RENAVAM = vehicle.RENAVAM
             };
 
             return getVehicleDtoresult;
@@ -391,7 +402,9 @@ namespace VehicleTrafficManagement.Services
                ManufactureYear = v.ManufactureYear,
                Manufacturer = v.VehicleModel.Manufacturer,
                ModelName = v.VehicleModel.ModelName,
-               Observations = v.VehicleModel.Observations
+               Observations = v.VehicleModel.Observations,
+               VehicleValue = v.VehicleValue,
+               RENAVAM = v.RENAVAM
            })
             .ToListAsync();
 
@@ -416,7 +429,9 @@ namespace VehicleTrafficManagement.Services
                     ManufactureYear = v.ManufactureYear,
                     Manufacturer = v.VehicleModel.Manufacturer,
                     ModelName = v.VehicleModel.ModelName,
-                    Observations = v.VehicleModel.Observations
+                    Observations = v.VehicleModel.Observations,
+                    VehicleValue = v.VehicleValue,
+                    RENAVAM = v.RENAVAM
                 })
                 .ToListAsync();
 

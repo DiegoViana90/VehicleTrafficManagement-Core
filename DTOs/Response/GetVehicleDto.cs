@@ -22,5 +22,7 @@ namespace VehicleTrafficManagement.DTOs.Response
         public string ModelName { get; set; }
         public VehicleManufacturer Manufacturer { get; set; }
         public string Observations { get; set; }
+        public string RENAVAM { get; set; }
+        public decimal VehicleValue { get; set; }
     }
 }
