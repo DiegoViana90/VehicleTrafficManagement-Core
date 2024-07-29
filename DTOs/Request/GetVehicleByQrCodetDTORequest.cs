@@ -7,6 +7,7 @@ namespace VehicleTrafficManagement.DTOs.Request
 {
     public class GetVehicleByQrCodetDTORequest
     {
-        public string QRCode { get; set; }       
+        public string QRCode { get; set; }
+        public int CompaniesId { get; set; }       
     }
 }

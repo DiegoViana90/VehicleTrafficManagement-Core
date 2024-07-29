@@ -14,7 +14,7 @@ namespace VehicleTrafficManagement.Interfaces
         Task<GetVehicleDto> GetVehicleByChassis(string chassis, int companyId);
         Task<GetVehicleDto> GetVehicleByLicensePlate(string licensePlate, int companyId);
         Task InsertVehicleModel(InsertVehicleModelRequestDto insertVehicleModelRequestDto);
-        Task<GetVehicleDto> GetVehicleByQRCode(string QRCode);   
+        Task<GetVehicleDto> GetVehicleByQRCode(string QRCode, int companyId);   
         Task<IEnumerable<GetVehicleDto>> GetAllVehiclesFromCompany(int companyId);
     }
 }

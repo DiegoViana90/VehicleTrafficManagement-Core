@@ -124,7 +124,8 @@ namespace VehicleTrafficManagement.Controllers
         (GetVehicleByQrCodetDTORequest getVehicleByQrCodetDTORequest)
         {
             string QRCode = getVehicleByQrCodetDTORequest.QRCode;
-            GetVehicleDto vehicle = await _vehicleService.GetVehicleByQRCode(QRCode);
+            int companyId = getVehicleByQrCodetDTORequest.CompaniesId;
+            GetVehicleDto vehicle = await _vehicleService.GetVehicleByQRCode(QRCode, companyId);
             return vehicle;
         }
 

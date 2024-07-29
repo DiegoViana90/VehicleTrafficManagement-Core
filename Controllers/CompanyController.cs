@@ -64,9 +64,9 @@ namespace VehicleTrafficManagement.Controllers
         Description = "Recupera uma empresa específica pelo nome. FLUXO OK")]
         [SwaggerResponse(200, "Success", typeof(CompanyDto))]
         [SwaggerResponse(404, "Company not found")]
-        public async Task<ActionResult<CompanyDto>> GetCompanyByName(string name)
+        public async Task<ActionResult<CompanyDto>> GetCompanyByName(string name, int companyRelated)
         {
-            var company = await _companyService.GetCompanyByName(name);
+            var company = await _companyService.GetCompanyByName(name, companyRelated);
             if (company == null)
             {
                 return NotFound("Empresa não encontrada.");

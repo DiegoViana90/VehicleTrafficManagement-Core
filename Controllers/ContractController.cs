@@ -57,8 +57,10 @@ namespace VehicleTrafficManagement.Controllers
             GetContractByCompanyNameRequest getContractByCompanyNameRequest
         )
 
-        {   string companyName = getContractByCompanyNameRequest.Name;
-            return await _contractService.GetContractByCompanyName(companyName);
+        {   
+            string companyName = getContractByCompanyNameRequest.Name;
+            int companyId = getContractByCompanyNameRequest.CompaniesId;
+            return await _contractService.GetContractByCompanyName(companyName, companyId);
         }
 
         [HttpPost("InsertContract")]
@@ -76,7 +78,7 @@ namespace VehicleTrafficManagement.Controllers
             string insertContractResponse = await _contractService.InsertContract(contractRequestDto);
             return Ok(insertContractResponse);
             }
-            catch (Exception ex)
+            catch (Exception ex)    
             {
                 return BadRequest(ex.Message);
             }
