@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VehicleTrafficManagement.Data;
@@ -11,9 +12,10 @@ using VehicleTrafficManagement.Data;
 namespace VehicleTrafficManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240730113408_RenavamandVehicleValue")]
+    partial class RenavamandVehicleValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -399,35 +401,6 @@ namespace VehicleTrafficManagement.Migrations
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("VehicleTrafficManagement.Models.VehicleHistoric", b =>
-                {
-                    b.Property<int>("VehicleHistoricId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("VehicleHistoricId"));
-
-                    b.Property<int?>("ContractId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("InclusionDateTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("RemovalDateTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("VehicleHistoricId");
-
-                    b.HasIndex("ContractId");
-
-                    b.HasIndex("VehicleId");
-
-                    b.ToTable("VehicleHistoric");
-                });
-
             modelBuilder.Entity("VehicleTrafficManagement.Models.VehicleModel", b =>
                 {
                     b.Property<int>("VehicleModelId")
@@ -565,23 +538,6 @@ namespace VehicleTrafficManagement.Migrations
                     b.Navigation("Contract");
 
                     b.Navigation("VehicleModel");
-                });
-
-            modelBuilder.Entity("VehicleTrafficManagement.Models.VehicleHistoric", b =>
-                {
-                    b.HasOne("VehicleTrafficManagement.Models.Contract", "Contract")
-                        .WithMany()
-                        .HasForeignKey("ContractId");
-
-                    b.HasOne("VehicleTrafficManagement.Models.Vehicle", "Vehicle")
-                        .WithMany()
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contract");
-
-                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("VehicleTrafficManagement.Models.Contract", b =>

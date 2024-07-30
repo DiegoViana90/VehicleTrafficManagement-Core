@@ -20,6 +20,7 @@ namespace VehicleTrafficManagement.Data
         public DbSet<Maintenance> Maintenances { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<VehicleModel> VehicleModel { get; set; }
+        public DbSet<VehicleHistoric> VehicleHistoric { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
