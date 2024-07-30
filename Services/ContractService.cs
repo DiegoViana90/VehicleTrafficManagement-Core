@@ -45,7 +45,7 @@ namespace VehicleTrafficManagement.Services
                 StartDate = contract.StartDate,
                 EndDate = contract.EndDate,
                 Status = contract.Status,
-                VehicleIds = contract.Vehicles.Select(v => v.Id).ToList() // Liste os IDs dos veículos
+                VehicleIds = contract.Vehicles.Select(v => v.Id).ToList()
             };
 
             return contractDto;
@@ -65,8 +65,8 @@ namespace VehicleTrafficManagement.Services
                 .Include(c => c.Vehicles)
                 .FirstOrDefaultAsync
                 (
-                c => c.ClientCompanyId == company.CompaniesId && 
-                c.Status == ContractStatus.Active && 
+                c => c.ClientCompanyId == company.CompaniesId &&
+                c.Status == ContractStatus.Active &&
                 c.ServiceProviderCompanyId == companiesId
                 );
 
@@ -131,6 +131,15 @@ namespace VehicleTrafficManagement.Services
                             vehicle.Status = VehicleStatus.Contract;
                             vehicle.ContractId = contract.Id;
                             _context.Entry(vehicle).State = EntityState.Modified;
+
+                            var vehicleHistoric = new VehicleHistoric
+                            {
+                                VehicleId = vehicle.Id,
+                                ContractId = contract.Id,
+                                InclusionDateTime = DateTime.UtcNow,
+                                RemovalDateTime = null
+                            };
+                            _context.VehicleHistoric.Add(vehicleHistoric);
                         }
                         else
                         {
@@ -189,6 +198,16 @@ namespace VehicleTrafficManagement.Services
                         vehicle.Status = VehicleStatus.Stopped;
                         vehicle.ContractId = null;
                         _context.Entry(vehicle).State = EntityState.Modified;
+
+                        var vehicleHistoric = await _context.VehicleHistoric
+                            .Where(vh => vh.VehicleId == vehicle.Id && vh.ContractId == contractDto.Id && vh.RemovalDateTime == null)
+                            .FirstOrDefaultAsync();
+
+                        if (vehicleHistoric != null)
+                        {
+                            vehicleHistoric.RemovalDateTime = DateTime.UtcNow;
+                            _context.Entry(vehicleHistoric).State = EntityState.Modified;
+                        }
                     }
 
                     foreach (var vehicleId in vehicleIdsToAdd)
@@ -204,6 +223,15 @@ namespace VehicleTrafficManagement.Services
                             vehicle.Status = VehicleStatus.Contract;
                             vehicle.ContractId = contract.Id;
                             _context.Entry(vehicle).State = EntityState.Modified;
+
+                            var vehicleHistoric = new VehicleHistoric
+                            {
+                                VehicleId = vehicle.Id,
+                                ContractId = contract.Id,
+                                InclusionDateTime = DateTime.UtcNow,
+                                RemovalDateTime = null
+                            };
+                            _context.VehicleHistoric.Add(vehicleHistoric);
                         }
                         else
                         {
@@ -233,6 +261,7 @@ namespace VehicleTrafficManagement.Services
                 }
             }
         }
+
 
         public async Task DeleteContractById(int id)
         {
