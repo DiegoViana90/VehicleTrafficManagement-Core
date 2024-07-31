@@ -40,11 +40,12 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerOperation(Summary = "Busca todos os modelos de veículo cadastrado no sistema.")]
         [SwaggerResponse(201, "ok")]
         [SwaggerResponse(400, "Invalid request.")]
-        public async Task<ActionResult<IEnumerable<VehicleModelDtoResponse>>>GetAllVehicleModel()
+        public async Task<ActionResult<IEnumerable<VehicleModelDtoResponse>>> GetAllVehicleModel()
         {
             try
-            {var vehicleModelList = await _vehicleService.GetAllVehicleModel();
-               
+            {
+                var vehicleModelList = await _vehicleService.GetAllVehicleModel();
+
                 return Ok(vehicleModelList);
             }
             catch (Exception ex)
@@ -57,11 +58,12 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerOperation(Summary = "Busca todos os veículos cadastrado no sistema.")]
         [SwaggerResponse(201, "ok")]
         [SwaggerResponse(400, "Invalid request.")]
-        public async Task<ActionResult<IEnumerable<GetVehicleDto>>>GetAllVehicles()
+        public async Task<ActionResult<IEnumerable<GetVehicleDto>>> GetAllVehicles()
         {
             try
-            {var vehicleModelList = await _vehicleService.GetAllVehicles();
-               
+            {
+                var vehicleModelList = await _vehicleService.GetAllVehicles();
+
                 return Ok(vehicleModelList);
             }
             catch (Exception ex)
@@ -74,13 +76,14 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerOperation(Summary = "Busca todos os veículos cadastrado no sistema para uma empresa específica")]
         [SwaggerResponse(201, "ok")]
         [SwaggerResponse(400, "Invalid request.")]
-        public async Task<ActionResult<IEnumerable<GetVehicleDto>>>GetAllVehiclesFromCompany
+        public async Task<ActionResult<IEnumerable<GetVehicleDto>>> GetAllVehiclesFromCompany
         (GetAllVehiclesFromCompanyRequestDTO getAllVehiclesFromCompanyRequestDTO)
         {
             int companyId = getAllVehiclesFromCompanyRequestDTO.CompaniesId;
             try
-            {var vehicleModelList = await _vehicleService.GetAllVehiclesFromCompany(companyId);
-               
+            {
+                var vehicleModelList = await _vehicleService.GetAllVehiclesFromCompany(companyId);
+
                 return Ok(vehicleModelList);
             }
             catch (Exception ex)
@@ -89,7 +92,7 @@ namespace VehicleTrafficManagement.Controllers
             }
         }
 
-        
+
 
         [HttpPost("InsertVehicle")]
         [SwaggerOperation(
@@ -194,6 +197,28 @@ namespace VehicleTrafficManagement.Controllers
                 int companyId = getVehicleByLicensePlateRequestDTO.CompaniesId;
                 var vehicle = await _vehicleService.GetVehicleByLicensePlate(licensePlate, companyId);
                 return Ok(vehicle);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("GetVehicleHistoric")]
+        [SwaggerOperation(
+            Summary = "Busca o histórico do veículo buscado pelo vehicleId, chassi ou licensePlate",
+            Description = "Exibe a entrada e saída do veículo em cada contrato"
+        )]
+        [SwaggerResponse(200, "Histórico encontrado com sucesso.")]
+        [SwaggerResponse(404, "Histórico não encontrado.")]
+        [SwaggerResponse(400, "Requisição inválida.")]
+        [SwaggerResponse(500, "Erro interno do servidor.")]
+        public async Task<IActionResult> GetVehicleHistoric(GetVehicleHistoricRequest request)
+        {
+            try
+            {
+                var vehicleHistoric = await _vehicleService.GetVehicleHistoric(request);
+                return Ok(vehicleHistoric);
             }
             catch (Exception ex)
             {
