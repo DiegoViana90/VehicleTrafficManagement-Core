@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using VehicleTrafficManagement.DTOs;
 using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.DTOs.Response;
 
@@ -12,6 +13,7 @@ namespace VehicleTrafficManagement.Interfaces
         Task<GetVehicleDto> GetVehicleById(int id);
         Task<GetVehicleDto> GetVehicleModelById(int id);
         Task<GetVehicleDto> GetVehicleByChassis(string chassis, int companyId);
+        Task<IEnumerable<GetVehicleHistoricResponse>>  GetVehicleHistoric(GetVehicleHistoricRequest getVehicleHistoricRequest);
         Task<GetVehicleDto> GetVehicleByLicensePlate(string licensePlate, int companyId);
         Task InsertVehicleModel(InsertVehicleModelRequestDto insertVehicleModelRequestDto);
         Task<GetVehicleDto> GetVehicleByQRCode(string QRCode, int companyId);   

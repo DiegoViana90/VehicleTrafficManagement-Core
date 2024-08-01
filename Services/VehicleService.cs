@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VehicleTrafficManagement.Data;
+using VehicleTrafficManagement.DTOs;
 using VehicleTrafficManagement.DTOs.Request;
 using VehicleTrafficManagement.DTOs.Response;
 using VehicleTrafficManagement.Interfaces;
@@ -372,6 +373,47 @@ namespace VehicleTrafficManagement.Services
             };
 
             return getVehicleDtoresult;
+        }
+
+        public async Task<IEnumerable<GetVehicleHistoricResponse>> GetVehicleHistoric(GetVehicleHistoricRequest request)
+        {
+            IQueryable<VehicleHistoric> query = _dbContext.VehicleHistoric
+                .Include(v => v.Vehicle)
+                .Include(v => v.Contract)
+                .ThenInclude(c => c.ClientCompany);
+
+            if (request.VehicleId.HasValue)
+            {
+                query = query.Where(v => v.VehicleId == request.VehicleId.Value);
+            }
+            else if (!string.IsNullOrEmpty(request.Chassi))
+            {
+                query = query.Where(v => v.Vehicle.Chassis == request.Chassi);
+            }
+            else if (!string.IsNullOrEmpty(request.LicensePlate))
+            {
+                query = query.Where(v => v.Vehicle.LicensePlate == request.LicensePlate);
+            }
+            else
+            {
+                throw new Exception("Um VehicleId, Chassi ou LicensePlate deve ser fornecido.");
+            }
+
+            var vehicleHistoricList = await query
+                .Select(v => new GetVehicleHistoricResponse
+                {
+                    VehicleHistoricId = v.VehicleHistoricId,
+                    LicensePlate = v.Vehicle.LicensePlate,
+                    Chassi = v.Vehicle.Chassis,
+                    ContractId = v.ContractId,
+                    CompanyName = v.Contract.ClientCompany.Name,
+                    CompanyTaxNumber = v.Contract.ClientCompany.TaxNumber,
+                    InclusionDateTime = v.InclusionDateTime,
+                    RemovalDateTime = v.RemovalDateTime
+                })
+                .ToListAsync();
+
+            return vehicleHistoricList;
         }
 
 
