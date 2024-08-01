@@ -9,7 +9,6 @@ namespace VehicleTrafficManagement.Models
         public Vehicle Vehicle { get; set; }
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         public string FineNumber { get; set; }
-        public string LicensePlate { get; set; }
         public DateTime FineDateTime { get; set; }
         public DateTime FineDueDate { get; set; }
         public EnforcingAgency EnforcingAgency { get; set; }

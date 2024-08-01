@@ -5,8 +5,8 @@ namespace VehicleTrafficManagement.Dto
   public class FineDto
     {   
         public DateTime RegistrationDate { get; set; } = DateTime.Now;   
+        public int VehicleId { get; set; }
         public string FineNumber { get; set; }
-        public string LicensePlate { get; set; }
         public DateTime FineDateTime  { get; set; }
         public DateTime FineDueDate { get; set; }
         public EnforcingAgency EnforcingAgency { get; set; }

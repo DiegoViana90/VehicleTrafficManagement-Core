@@ -31,6 +31,7 @@ namespace VehicleTrafficManagement
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IFineService, FineService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyService, CompanyService>();
