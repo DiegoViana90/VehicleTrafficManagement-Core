@@ -1,12 +1,20 @@
-using System;
+using VehicleTrafficManagement.Enum;
 
 namespace VehicleTrafficManagement.Dto
 {
-    public class FineDto
-    {
-        public int Id { get; set; }
-        public int VehicleId { get; set; }
-        public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
+  public class FineDto
+    {   
+        public DateTime RegistrationDate { get; set; } = DateTime.Now;   
+        public string FineNumber { get; set; }
+        public string LicensePlate { get; set; }
+        public DateTime FineDateTime  { get; set; }
+        public DateTime FineDueDate { get; set; }
+        public EnforcingAgency EnforcingAgency { get; set; }
+        public string FineLocation  { get; set; }
+        public decimal FineAmount { get; set; }
+        public decimal DiscountedFineAmount { get; set; }
+        public decimal FinalFineAmount { get; set; } 
+        public FineStatus FineStatus { get; set; }
+        public string? Description { get; set; }
     }
 }

@@ -91,3 +91,28 @@ namespace VehicleTrafficManagement.Enum;
         BYD = 49,
         Haval = 50
     }
+    public enum EnforcingAgency
+    {
+        ANAC = 0,             
+        ANTAQ = 1,            
+        ANTT = 2,             
+        CONCESSIONARIA = 3,   
+        DER = 4,              
+        DETRAN = 5,           
+        DNIT = 6,             
+        IBAMA = 7,            
+        Guarda_Municipal = 8,  
+        PM = 9,               
+        PRE = 10,             
+        PRF = 11,             
+        Outros = 99           
+    }
+    public enum FineStatus
+    {
+        Active = 0,           
+        SentToClient = 1,     
+        Paid = 2,             
+        Overdue = 3           
+    }
+
+
