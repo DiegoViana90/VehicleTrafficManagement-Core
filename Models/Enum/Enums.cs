@@ -104,7 +104,8 @@ namespace VehicleTrafficManagement.Enum;
         Guarda_Municipal = 8,  
         PM = 9,               
         PRE = 10,             
-        PRF = 11,             
+        PRF = 11,       
+        AMC=12,      
         Outros = 99           
     }
     public enum FineStatus
