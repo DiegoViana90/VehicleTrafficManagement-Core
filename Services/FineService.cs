@@ -12,6 +12,7 @@ public class FineService : IFineService
     {
         _context = context;
     }
+
     public Task<IEnumerable<FineDto>> GetAllFines()
     {
         // Implementar lógica
@@ -26,7 +27,6 @@ public class FineService : IFineService
 
     public async Task InsertFine(FineDto fineDto)
     {
-        
         Fine fine = new Fine
         {
             FineNumber = fineDto.FineNumber,
@@ -36,6 +36,7 @@ public class FineService : IFineService
             FineLocation = fineDto.FineLocation,
             FineAmount = fineDto.FineAmount,
             DiscountedFineAmount = fineDto.DiscountedFineAmount,
+            InterestFineAmount = fineDto.InterestFineAmount,
             FinalFineAmount = fineDto.FinalFineAmount,
             FineStatus = fineDto.FineStatus,
             Description = fineDto.Description,
@@ -59,4 +60,3 @@ public class FineService : IFineService
         throw new System.NotImplementedException();
     }
 }
-

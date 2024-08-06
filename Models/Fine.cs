@@ -14,7 +14,8 @@ namespace VehicleTrafficManagement.Models
         public EnforcingAgency EnforcingAgency { get; set; }
         public string FineLocation { get; set; }
         public decimal FineAmount { get; set; }
-        public decimal DiscountedFineAmount { get; set; }
+        public decimal? DiscountedFineAmount { get; set; }
+        public decimal? InterestFineAmount { get; set; }
         public decimal FinalFineAmount { get; set; }
         public FineStatus FineStatus { get; set; }
         public string? Description { get; set; }

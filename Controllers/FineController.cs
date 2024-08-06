@@ -53,8 +53,15 @@ namespace VehicleTrafficManagement.Controllers
         [SwaggerResponse(500, "Erro interno do servidor.")]
         public async Task<IActionResult> InsertFine([FromBody] FineDto fineDto)
         {
-            await _fineService.InsertFine(fineDto);
-            return Ok();
+            try
+            {
+                await _fineService.InsertFine(fineDto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
         }
 
         [HttpPut("UpdateFineById")]
