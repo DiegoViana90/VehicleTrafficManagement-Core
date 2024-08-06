@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VehicleTrafficManagement.Dto;
+using VehicleTrafficManagement.DTOs.Request;
 
 namespace VehicleTrafficManagement.Interfaces
 {
@@ -11,5 +12,7 @@ namespace VehicleTrafficManagement.Interfaces
         Task InsertFine(FineDto fineDto);
         Task UpdateFineById(int id, FineDto fineDto);
         Task DeleteFineById(int id);
+        Task<FineDto> GetFineByFineNumberAndVehicleId(FineNumberAndVehicleIdRequest fineNumberAndVehicleIdRequest);
+        Task UpdateFine(FineDto fineDto);
     }
 }
