@@ -72,9 +72,9 @@ namespace VehicleTrafficManagement.Controllers
 
         [HttpPost("InsertFine")]
         [SwaggerOperation(
-        Summary = "Insere uma nova multa.",
-        Description = "Adiciona uma nova multa ao sistema."
-    )]
+    Summary = "Insere uma nova multa.",
+    Description = "Adiciona uma nova multa ao sistema."
+)]
         [SwaggerResponse(201, "Multa criada com sucesso.")]
         [SwaggerResponse(400, "Requisição inválida.")]
         [SwaggerResponse(409, "Multa com este número já existe.")]
@@ -83,6 +83,7 @@ namespace VehicleTrafficManagement.Controllers
         {
             try
             {
+                fineDto.FineDueDate = fineDto.FineDueDate.Date;
                 await _fineService.InsertFine(fineDto);
                 return StatusCode(201);
             }
@@ -96,6 +97,7 @@ namespace VehicleTrafficManagement.Controllers
                 return StatusCode(500, new { message = "Erro interno do servidor." });
             }
         }
+
 
 
         [HttpPut("UpdateFineById")]
@@ -127,12 +129,13 @@ namespace VehicleTrafficManagement.Controllers
         {
             try
             {
-                FineNumberAndVehicleIdRequest getRequest = new FineNumberAndVehicleIdRequest
+                fineDto.FineDueDate = fineDto.FineDueDate.Date; // Garantir que FineDueDate seja apenas a data
+                var getRequest = new FineNumberAndVehicleIdRequest
                 {
                     FineNumber = fineDto.FineNumber,
                     VehicleId = fineDto.VehicleId
                 };
-                
+
                 var existingFine = await _fineService.GetFineByFineNumberAndVehicleId(getRequest);
                 if (existingFine == null)
                 {
