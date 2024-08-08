@@ -33,6 +33,7 @@ public class FineService : IFineService
             && f.VehicleId == fineNumberAndVehicleIdRequest.VehicleId)
             .Select(f => new FineDto
             {
+                FineId = f.FineId,
                 FineNumber = f.FineNumber,
                 FineDateTime = f.FineDateTime,
                 FineDueDate = f.FineDueDate,

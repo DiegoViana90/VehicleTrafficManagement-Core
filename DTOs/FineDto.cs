@@ -4,6 +4,7 @@ namespace VehicleTrafficManagement.Dto
 {
     public class FineDto
     {
+        public int FineId { get; set; }
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         public int VehicleId { get; set; }
         public string FineNumber { get; set; }
